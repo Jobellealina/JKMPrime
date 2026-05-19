@@ -972,7 +972,7 @@
   <script type="module">
     import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.4/firebase-app.js";
     import { getAuth, signInAnonymously, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.12.4/firebase-auth.js";
-    import { getFirestore, collection, doc, setDoc, deleteDoc, onSnapshot, updateDoc, getDocs, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.12.4/firebase-firestore.js";
+    import { getDatabase, ref, set, remove, onValue, get } from "https://www.gstatic.com/firebasejs/10.12.4/firebase-database.js";
 
     const FIREBASE_CONFIG = {
     apiKey: "AIzaSyAyCSmhRm6G05KoLiEFV-QK4fSZ67ql0UM",
@@ -1107,7 +1107,7 @@
       try {
         const app = initializeApp(FIREBASE_CONFIG);
         const auth = getAuth(app);
-        state.db = getFirestore(app);
+        state.db = getDatabase(app);
         try {
           await signInAnonymously(auth);
         } catch (authError) {
@@ -1119,46 +1119,46 @@
           state.firebaseReady = !!user || !!state.db;
           setSyncLabel();
         });
-        await seedFirestoreDefaults();
-        subscribeFirestore();
+        await seedFirebaseDefaults();
+        subscribeFirebaseRealtime();
       } catch (error) {
         console.warn("Firebase disabled:", error);
         setSyncLabel();
       }
     }
 
-    async function seedFirestoreDefaults() {
+    async function seedFirebaseDefaults() {
       if (!state.db) return;
       const seedCollection = async (name, rows) => {
-        const snap = await getDocs(collection(state.db, name));
-        if (!snap.empty) return;
-        await Promise.all(rows.map(row => setDoc(doc(state.db, name, row.id), { ...row, seededAt: serverTimestamp(), updatedAt: serverTimestamp() })));
+        const snap = await get(ref(state.db, name));
+        if (snap.exists()) return;
+        const payload = Object.fromEntries(rows.map(row => [row.id, { ...row, seededAt: new Date().toISOString(), updatedAt: new Date().toISOString() }]));
+        await set(ref(state.db, name), payload);
       };
       await seedCollection("materials", seedMaterials);
       await seedCollection("equipment", seedEquipment);
     }
 
-    function subscribeFirestore() {
+    function subscribeFirebaseRealtime() {
       if (!state.db) return;
-      onSnapshot(collection(state.db, "orders"), snap => {
-        state.orders = snap.docs.map(d => ({ ...d.data(), firestoreId: d.id }));
+      subscribeRealtimeList("orders", "orders", []);
+      subscribeRealtimeList("materials", "materials", seedMaterials);
+      subscribeRealtimeList("expenses", "expenses", []);
+      subscribeRealtimeList("equipment", "equipment", seedEquipment);
+      subscribeRealtimeList("reconciliation", "reconciliation", []);
+    }
+
+    function subscribeRealtimeList(path, stateKey, fallback = []) {
+      onValue(ref(state.db, path), snap => {
+        const value = snap.val();
+        state[stateKey] = value ? Object.entries(value).map(([key, row]) => ({ ...row, firebaseId: key })) : fallback;
         renderAll();
-      });
-      onSnapshot(collection(state.db, "materials"), snap => {
-        state.materials = snap.empty ? seedMaterials : snap.docs.map(d => ({ ...d.data(), firestoreId: d.id }));
-        renderAll();
-      });
-      onSnapshot(collection(state.db, "expenses"), snap => {
-        state.expenses = snap.docs.map(d => ({ ...d.data(), firestoreId: d.id }));
-        renderAll();
-      });
-      onSnapshot(collection(state.db, "equipment"), snap => {
-        state.equipment = snap.empty ? seedEquipment : snap.docs.map(d => ({ ...d.data(), firestoreId: d.id }));
-        renderAll();
-      });
-      onSnapshot(collection(state.db, "reconciliation"), snap => {
-        state.reconciliation = snap.docs.map(d => ({ ...d.data(), firestoreId: d.id }));
-        renderAll();
+        state.firebaseReady = true;
+        setSyncLabel();
+      }, error => {
+        console.error(`Firebase realtime listener failed for ${path}:`, error);
+        state.firebaseReady = false;
+        setSyncLabel(`Firebase error: ${error.code || error.message}`);
       });
     }
 
@@ -1167,33 +1167,39 @@
       setSyncLabel();
     }
 
-    function setSyncLabel() {
+    function setSyncLabel(message = "") {
       const label = el("syncLabel");
-      label.textContent = state.firebaseReady ? "Firebase Realtime" : "Connecting";
+      label.textContent = message || (state.firebaseReady ? "Firebase Realtime" : "Connecting");
     }
 
     async function syncDoc(type, payload) {
       if (!state.db) {
-        await SwalFire.fire("Firebase not connected", "Check Firestore setup/rules before saving shared data.", "warning");
-        return;
+        await SwalFire.fire("Firebase not connected", "Check Realtime Database setup/rules before saving shared data.", "warning");
+        return false;
       }
       try {
-        if (payload.firestoreId) await updateDoc(doc(state.db, type, payload.firestoreId), payload);
-        else await setDoc(doc(state.db, type, payload.id), { ...payload, updatedAt: serverTimestamp() });
+        const id = payload.firebaseId || payload.firestoreId || payload.id;
+        await set(ref(state.db, `${type}/${id}`), { ...payload, id, updatedAt: new Date().toISOString() });
+        return true;
       } catch (error) {
-        console.warn("Firestore sync skipped:", error);
+        console.error("Firebase realtime sync failed:", error);
+        await SwalFire.fire("Firebase save failed", error.message || "Check Realtime Database rules.", "error");
+        return false;
       }
     }
 
     async function removeDoc(type, id, firestoreId = null) {
       if (!state.db) {
-        await SwalFire.fire("Firebase not connected", "Check Firestore setup/rules before deleting shared data.", "warning");
-        return;
+        await SwalFire.fire("Firebase not connected", "Check Realtime Database setup/rules before deleting shared data.", "warning");
+        return false;
       }
       try {
-        await deleteDoc(doc(state.db, type, firestoreId || id));
+        await remove(ref(state.db, `${type}/${firestoreId || id}`));
+        return true;
       } catch (error) {
-        console.warn("Firestore delete skipped:", error);
+        console.error("Firebase realtime delete failed:", error);
+        await SwalFire.fire("Firebase delete failed", error.message || "Check Realtime Database rules.", "error");
+        return false;
       }
     }
 
@@ -1424,12 +1430,12 @@
         role: state.role,
         createdAt: new Date().toISOString()
       };
-      state.orders.unshift(order);
+      const saved = await syncDoc("orders", order);
+      if (!saved) return;
       deductStock(order);
       state.cart = [];
       el("cashInput").value = "";
       el("customerName").value = "";
-      await syncDoc("orders", order);
       logActivity(`Checked out ${order.id}`);
       renderReceipt(order);
       renderAll();
