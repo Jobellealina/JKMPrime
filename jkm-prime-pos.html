@@ -1602,7 +1602,9 @@
       el("kjContribution").textContent = peso.format(kj);
       el("equipmentCount").textContent = state.equipment.length;
       el("equipmentTotal").textContent = peso.format(mark + kj);
-      el("equipmentRows").innerHTML = state.equipment.map((item, index) => `
+      el("equipmentRows").innerHTML = state.equipment.map((item, index) => {
+        const itemKey = item.firebaseId || item.id;
+        return `
         <tr>
           <td>${index + 1}</td>
           <td><strong>${safe(item.item)}</strong></td>
@@ -1611,17 +1613,19 @@
           <td>${safe(item.dateLabel || new Date(item.createdAt || Date.now()).toLocaleString())}</td>
           <td>
             <div class="d-flex gap-1 flex-wrap">
-              <button class="btn btn-sm btn-outline-primary fw-bold" data-edit-equipment="${item.id}">Edit</button>
-              <button class="btn btn-sm btn-outline-danger fw-bold" data-delete-equipment="${item.id}">Delete</button>
+              <button type="button" class="btn btn-sm btn-outline-primary fw-bold" data-edit-equipment="${safe(itemKey)}">Edit</button>
+              <button type="button" class="btn btn-sm btn-outline-danger fw-bold" data-delete-equipment="${safe(itemKey)}">Delete</button>
             </div>
           </td>
-        </tr>`).join("") || `<tr><td colspan="6" class="text-center text-secondary py-4">No equipment or material contributions yet.</td></tr>`;
-      document.querySelectorAll("[data-edit-equipment]").forEach(btn => btn.addEventListener("click", () => equipmentModal(state.equipment.find(e => e.id === btn.dataset.editEquipment))));
+        </tr>`;
+      }).join("") || `<tr><td colspan="6" class="text-center text-secondary py-4">No equipment or material contributions yet.</td></tr>`;
+      document.querySelectorAll("[data-edit-equipment]").forEach(btn => btn.addEventListener("click", () => equipmentModal(state.equipment.find(e => (e.firebaseId || e.id) === btn.dataset.editEquipment))));
       document.querySelectorAll("[data-delete-equipment]").forEach(btn => btn.addEventListener("click", () => deleteEquipment(btn.dataset.deleteEquipment)));
     }
 
     async function equipmentModal(item = null) {
       const current = item || { id: `EQ-${Date.now()}`, item: "", amount: 0, contributedBy: "Mark", dateLabel: new Date().toLocaleString(), createdAt: new Date().toISOString() };
+      if (!current.id) current.id = current.firebaseId || `EQ-${Date.now()}`;
       const res = await SwalFire.fire({
         title: item ? "Edit Equipment / Material" : "Add Equipment / Material",
         html: `
@@ -1642,7 +1646,7 @@
         })
       });
       if (!res.value?.item || !res.value.amount) return;
-      const index = state.equipment.findIndex(e => e.id === res.value.id);
+      const index = state.equipment.findIndex(e => (e.firebaseId || e.id) === (res.value.firebaseId || res.value.id));
       if (index >= 0) state.equipment[index] = res.value;
       else state.equipment.push(res.value);
       await syncDoc("equipment", res.value);
@@ -1651,7 +1655,7 @@
     }
 
     async function deleteEquipment(id) {
-      const item = state.equipment.find(e => e.id === id);
+      const item = state.equipment.find(e => (e.firebaseId || e.id) === id);
       if (!item) return;
       const result = await SwalFire.fire({
         title: "Delete equipment/material?",
@@ -1662,8 +1666,9 @@
         confirmButtonColor: "#d64f4f"
       });
       if (!result.isConfirmed) return;
-      state.equipment = state.equipment.filter(e => e.id !== id);
-      await removeDoc("equipment", id, item.firestoreId);
+      state.equipment = state.equipment.filter(e => (e.firebaseId || e.id) !== id);
+      const deleted = await removeDoc("equipment", item.id, item.firebaseId || item.id);
+      if (!deleted) return;
       logActivity(`Deleted equipment/material ${item.item}`);
       renderAll();
     }
