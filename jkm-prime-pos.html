@@ -1,0 +1,2126 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>JKM Prime Digital Prints POS</title>
+  <link rel="icon" type="image/svg+xml" href="logo.png">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link href="https://cdn.jsdelivr.net/npm/sweetalert2@11.12.4/dist/sweetalert2.min.css" rel="stylesheet">
+  <style>
+    :root {
+      --navy: #0b1f3a;
+      --navy-2: #12345c;
+      --sky: #eaf4ff;
+      --ink: #102033;
+      --muted: #607188;
+      --line: #d5e4f6;
+      --green: #168a52;
+      --yellow: #f2b705;
+      --red: #d64f4f;
+      --blue: #2877d1;
+      --panel: #ffffff;
+      --shadow: 0 14px 42px rgba(11, 31, 58, .10);
+      --radius: 8px;
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      min-height: 100vh;
+      background: var(--sky);
+      color: var(--ink);
+      font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      letter-spacing: 0;
+    }
+    button, input, select, textarea { letter-spacing: 0; }
+    .app-shell {
+      display: grid;
+      grid-template-columns: 280px minmax(0, 1fr);
+      min-height: 100vh;
+    }
+    .app-shell.locked { display: none; }
+    .login-gate {
+      min-height: 100vh;
+      background: #f7fbff;
+      display: grid;
+      grid-template-columns: minmax(360px, 600px) minmax(0, 1fr);
+      color: var(--ink);
+    }
+    .login-gate.hidden { display: none; }
+    .login-aside {
+      background: var(--navy);
+      color: white;
+      padding: clamp(42px, 5vw, 70px);
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      gap: 28px;
+    }
+    .login-aside h1 {
+      margin: 28px 0 12px;
+      font-size: clamp(3rem, 5.4vw, 4.4rem);
+      font-weight: 900;
+      line-height: 1;
+    }
+    .login-aside .logo-img {
+      width: 58px;
+      height: 58px;
+    }
+    .login-aside p { color: #c9def7; max-width: 500px; font-size: 1.08rem; line-height: 1.45; }
+    .login-feature-list {
+      display: grid;
+      gap: 16px;
+      color: #e6f2ff;
+      font-weight: 800;
+      font-size: 1rem;
+    }
+    .login-feature-list span {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+    .login-main {
+      display: grid;
+      place-items: center;
+      padding: 24px;
+    }
+    .login-card {
+      width: min(100%, 550px);
+      background: white;
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      box-shadow: 0 20px 60px rgba(11,31,58,.12);
+      padding: 30px;
+    }
+    .login-card h2 {
+      margin: 0;
+      color: var(--navy);
+      font-size: 1.9rem;
+      font-weight: 900;
+    }
+    .login-card .subtext {
+      margin: 6px 0 20px;
+      color: var(--muted);
+      font-size: 1.02rem;
+      line-height: 1.42;
+    }
+    .sidebar {
+      position: sticky;
+      top: 0;
+      height: 100vh;
+      background: var(--navy);
+      color: white;
+      padding: 18px;
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+      z-index: 5;
+    }
+    .brand-lockup {
+      display: grid;
+      grid-template-columns: 46px 1fr;
+      gap: 12px;
+      align-items: center;
+      min-height: 58px;
+    }
+    .brand-mark {
+      width: 46px;
+      height: 46px;
+      border-radius: 8px;
+      display: grid;
+      place-items: center;
+      background: #ffffff;
+      color: var(--navy);
+      font-weight: 900;
+      box-shadow: inset 0 -5px 0 rgba(40,119,209,.14);
+    }
+    .logo-img {
+      width: 46px;
+      height: 46px;
+      border-radius: 8px;
+      display: block;
+      object-fit: cover;
+      box-shadow: inset 0 -5px 0 rgba(40,119,209,.14);
+    }
+    .brand-title { font-weight: 900; line-height: 1.05; font-size: 1.02rem; }
+    .brand-sub { color: #bfd5ee; font-size: .78rem; margin-top: 4px; }
+    .role-chip {
+      background: rgba(255,255,255,.10);
+      border: 1px solid rgba(255,255,255,.16);
+      border-radius: var(--radius);
+      padding: 10px 12px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 10px;
+      color: #dcecff;
+      font-size: .88rem;
+    }
+    .nav-stack { display: grid; gap: 7px; }
+    .nav-btn {
+      width: 100%;
+      border: 0;
+      border-radius: var(--radius);
+      background: transparent;
+      color: #d8e7f8;
+      padding: 12px;
+      display: flex;
+      align-items: center;
+      gap: 11px;
+      font-weight: 700;
+      text-align: left;
+      min-height: 45px;
+    }
+    .nav-btn:hover, .nav-btn.active {
+      background: #ffffff;
+      color: var(--navy);
+    }
+    .nav-btn svg, .icon { width: 19px; height: 19px; flex: 0 0 auto; }
+    .sidebar-footer {
+      margin-top: auto;
+      display: grid;
+      gap: 10px;
+      color: #b8cde6;
+      font-size: .82rem;
+    }
+    .main {
+      min-width: 0;
+      padding: 22px;
+    }
+    .topbar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 14px;
+      margin-bottom: 18px;
+    }
+    .page-title { margin: 0; font-size: clamp(1.3rem, 2vw, 2rem); font-weight: 900; color: var(--navy); }
+    .top-actions { display: flex; gap: 9px; align-items: center; flex-wrap: wrap; justify-content: flex-end; }
+    .panel {
+      background: var(--panel);
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+    }
+    .panel-pad { padding: 16px; }
+    .dashboard-stack {
+      display: grid;
+      gap: 14px;
+    }
+    .metric-grid {
+      display: grid;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      gap: 14px;
+    }
+    .metric {
+      padding: 15px;
+      min-height: 104px;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+    }
+    .metric span { color: var(--muted); font-size: .82rem; font-weight: 800; text-transform: uppercase; }
+    .metric strong { font-size: clamp(1.25rem, 2vw, 1.8rem); color: var(--navy); }
+    .content-grid {
+      display: grid;
+      grid-template-columns: minmax(0, 1.35fr) minmax(320px, .65fr);
+      gap: 14px;
+    }
+    .view { display: none; }
+    .view.active { display: block; }
+    .category-tabs {
+      display: flex;
+      overflow-x: auto;
+      gap: 8px;
+      padding-bottom: 8px;
+      margin-bottom: 11px;
+    }
+    .category-tabs .btn {
+      white-space: nowrap;
+      border-radius: 999px;
+      font-weight: 800;
+    }
+    .product-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(168px, 1fr));
+      gap: 10px;
+      max-height: calc(100vh - 250px);
+      overflow: auto;
+      padding-right: 4px;
+    }
+    .product-btn {
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      background: white;
+      padding: 12px;
+      text-align: left;
+      min-height: 112px;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      transition: transform .12s ease, box-shadow .12s ease;
+    }
+    .product-btn:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 10px 24px rgba(40,119,209,.16);
+      border-color: #9bc7f5;
+    }
+    .product-btn .name { display: block; font-weight: 900; color: var(--navy); line-height: 1.18; }
+    .product-btn .cat { display: block; color: var(--muted); font-size: .72rem; margin-top: 6px; line-height: 1.2; }
+    .product-btn .price { font-weight: 900; color: var(--blue); margin-top: 10px; }
+    .cart-panel {
+      position: sticky;
+      top: 22px;
+      max-height: calc(100vh - 44px);
+      display: grid;
+      grid-template-rows: auto minmax(160px, 1fr) auto;
+      overflow: hidden;
+    }
+    .cart-list { overflow: auto; padding: 12px; display: grid; gap: 9px; }
+    .cart-item {
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      padding: 10px;
+      display: grid;
+      gap: 9px;
+    }
+    .qty-row { display: flex; justify-content: space-between; align-items: center; gap: 10px; }
+    .qty-controls { display: flex; align-items: center; gap: 6px; }
+    .qty-controls button, .icon-btn {
+      width: 34px;
+      height: 34px;
+      border-radius: var(--radius);
+      display: inline-grid;
+      place-items: center;
+      border: 1px solid var(--line);
+      background: #f8fbff;
+      color: var(--navy);
+    }
+    .cart-total {
+      border-top: 1px solid var(--line);
+      padding: 14px;
+      background: #f8fbff;
+      display: grid;
+      gap: 10px;
+    }
+    .big-total {
+      display: flex;
+      justify-content: space-between;
+      align-items: baseline;
+      font-weight: 900;
+      color: var(--navy);
+      font-size: 1.3rem;
+    }
+    .data-table { width: 100%; border-collapse: separate; border-spacing: 0; }
+    .data-table th {
+      background: #f4f9ff;
+      color: var(--navy);
+      font-size: .8rem;
+      text-transform: uppercase;
+      border-bottom: 1px solid var(--line);
+    }
+    .data-table th, .data-table td { padding: 11px 12px; vertical-align: middle; }
+    .data-table td { border-bottom: 1px solid #edf4fc; }
+    .status-badge {
+      display: inline-flex;
+      align-items: center;
+      min-height: 26px;
+      border-radius: 999px;
+      padding: 4px 10px;
+      font-weight: 900;
+      font-size: .76rem;
+    }
+    .status-Pending { background: #fff3cd; color: #8a6500; }
+    .status-In-Progress { background: #dbeafe; color: #174b8a; }
+    .status-Printing { background: #e8dcff; color: #5c2da4; }
+    .status-Completed { background: #d7f6e5; color: #146c43; }
+    .low-stock { color: var(--red); font-weight: 900; }
+    .chart-wrap {
+      min-width: 0;
+      height: 340px;
+      display: grid;
+      grid-template-rows: auto minmax(0, 1fr);
+      overflow: hidden;
+    }
+    .chart-box {
+      position: relative;
+      min-width: 0;
+      min-height: 0;
+      height: 100%;
+    }
+    .chart-box canvas {
+      display: block;
+      width: 100% !important;
+      height: 100% !important;
+      max-height: 270px;
+    }
+    .profit-share-grid {
+      display: grid;
+      grid-template-columns: repeat(5, minmax(145px, 1fr));
+      gap: 10px;
+    }
+    .share-card {
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      background: #f8fbff;
+      padding: 12px;
+      min-height: 86px;
+    }
+    .share-card span {
+      display: block;
+      color: var(--muted);
+      font-size: .78rem;
+      font-weight: 900;
+      text-transform: uppercase;
+    }
+    .share-card strong {
+      display: block;
+      color: var(--navy);
+      font-size: 1.22rem;
+      margin-top: 8px;
+    }
+    body.loading-active {
+      overflow: hidden;
+    }
+    .loading-screen {
+      position: fixed;
+      inset: 0;
+      display: none;
+      justify-content: center;
+      align-items: center;
+      z-index: 999999;
+      background: white;
+      transition: .4s;
+    }
+    .loading-screen.show {
+      display: flex;
+    }
+    .cmyk-loader {
+      position: relative;
+      width: 90px;
+      height: 90px;
+      animation: rotateLoader 1.5s linear infinite;
+    }
+    .c {
+      position: absolute;
+      width: 35px;
+      height: 35px;
+      border-radius: 50%;
+      mix-blend-mode: multiply;
+    }
+    .cyan { background: #00cfff; top: 0; left: 25px; }
+    .magenta { background: #ff00aa; left: 0; top: 25px; }
+    .yellow { background: #ffe600; right: 0; top: 25px; }
+    .black { background: #111; bottom: 0; left: 25px; }
+    @keyframes rotateLoader {
+      0% { transform: rotate(0deg); }
+      100% { transform: rotate(360deg); }
+    }
+    .admin-split {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 14px;
+      margin-bottom: 14px;
+    }
+    .print-area { display: none; }
+    .receipt-paper, .quotation-paper {
+      width: 105mm;
+      margin: 0 auto;
+      background: white;
+      color: #111;
+      font-family: "Segoe UI", Arial, sans-serif;
+      padding: 8mm;
+    }
+    .quotation-paper { width: 190mm; min-height: 250mm; padding: 14mm; }
+    .receipt-paper h2, .quotation-paper h2 { margin: 0; font-size: 18px; text-align: center; }
+    .receipt-paper .mini, .quotation-paper .mini { font-size: 11px; color: #444; }
+    .print-table { width: 100%; border-collapse: collapse; margin-top: 12px; font-size: 12px; }
+    .print-table th, .print-table td { border-bottom: 1px solid #ddd; padding: 6px 4px; }
+    .tracking-card {
+      max-width: 760px;
+      margin: 28px auto;
+    }
+    .tracking-steps {
+      display: grid;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      gap: 8px;
+      margin-top: 16px;
+    }
+    .step {
+      min-height: 78px;
+      border-radius: var(--radius);
+      border: 1px solid var(--line);
+      background: #f8fbff;
+      display: grid;
+      place-items: center;
+      text-align: center;
+      font-weight: 900;
+      color: var(--muted);
+      padding: 8px;
+    }
+    .step.active { background: var(--navy); color: white; border-color: var(--navy); }
+    .swal2-popup { border-radius: var(--radius); }
+    .professional-modal {
+      border: 1px solid var(--line);
+      box-shadow: 0 22px 70px rgba(11, 31, 58, .16);
+      padding: 22px;
+    }
+    .professional-modal .swal2-title {
+      color: var(--navy);
+      font-weight: 900;
+      font-size: 1.45rem;
+      padding-top: 4px;
+    }
+    .professional-modal .swal2-html-container {
+      margin: 12px 0 0;
+      color: var(--ink);
+    }
+    .professional-modal .swal2-input,
+    .professional-modal .swal2-select {
+      width: 100%;
+      height: 48px;
+      margin: 8px 0;
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      box-shadow: none;
+      font-size: .96rem;
+    }
+    .login-modal {
+      max-width: 440px;
+      padding: 0;
+      overflow: hidden;
+    }
+    .login-panel {
+      text-align: left;
+      padding: 22px;
+    }
+    .login-head {
+      background: var(--navy);
+      color: white;
+      padding: 22px;
+      text-align: left;
+    }
+    .login-head .brand-mark {
+      width: 42px;
+      height: 42px;
+      margin-bottom: 12px;
+    }
+    .login-head h2 {
+      margin: 0;
+      font-size: 1.35rem;
+      font-weight: 900;
+    }
+    .login-head p {
+      margin: 5px 0 0;
+      color: #c9def7;
+      font-size: .9rem;
+    }
+    .login-field { position: relative; margin-bottom: 12px; }
+    .login-field label {
+      display: block;
+      color: var(--muted);
+      font-size: .78rem;
+      font-weight: 900;
+      text-transform: uppercase;
+      margin-bottom: 6px;
+    }
+    .login-field input {
+      width: 100%;
+      height: 48px;
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      padding: 0 42px 0 12px;
+      outline: none;
+      font-weight: 700;
+    }
+    .login-field input:focus {
+      border-color: var(--blue);
+      box-shadow: 0 0 0 3px rgba(40,119,209,.12);
+    }
+    .password-toggle {
+      position: absolute;
+      right: 8px;
+      bottom: 7px;
+      width: 34px;
+      height: 34px;
+      border: 0;
+      border-radius: var(--radius);
+      display: grid;
+      place-items: center;
+      background: #eef6ff;
+      color: var(--navy);
+    }
+    .login-note {
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      background: #f8fbff;
+      padding: 10px 12px;
+      color: var(--muted);
+      font-size: .86rem;
+      margin-top: 8px;
+    }
+    .login-error {
+      display: none;
+      border-radius: var(--radius);
+      background: #fff1f1;
+      color: #a83232;
+      border: 1px solid #ffd0d0;
+      padding: 10px 12px;
+      font-weight: 800;
+      font-size: .88rem;
+      margin-bottom: 12px;
+    }
+    .login-error.show { display: block; }
+    .qr-card {
+      display: grid;
+      gap: 12px;
+      justify-items: center;
+    }
+    .qr-frame {
+      width: 240px;
+      min-height: 240px;
+      display: grid;
+      place-items: center;
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      background: white;
+      padding: 10px;
+    }
+    .qr-link {
+      width: 100%;
+      word-break: break-all;
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      background: #f8fbff;
+      color: var(--muted);
+      padding: 10px;
+      font-size: .84rem;
+    }
+    .mobile-menu { display: none; }
+    @media (max-width: 1120px) {
+      .metric-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+      .content-grid, .admin-split { grid-template-columns: 1fr; }
+      .chart-wrap { height: 320px; }
+      .profit-share-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+      .cart-panel { position: static; max-height: none; }
+      .product-grid { max-height: none; }
+    }
+    @media (max-width: 820px) {
+      .login-gate { grid-template-columns: 1fr; }
+      .login-aside { min-height: 280px; }
+      .app-shell { grid-template-columns: 1fr; }
+      .sidebar {
+        position: fixed;
+        inset: 0 auto 0 0;
+        width: min(86vw, 310px);
+        transform: translateX(-105%);
+        transition: transform .18s ease;
+      }
+      .sidebar.open { transform: translateX(0); }
+      .main { padding: 14px; }
+      .mobile-menu { display: inline-grid; }
+      .topbar { align-items: flex-start; }
+      .top-actions { justify-content: flex-start; }
+      .metric-grid { grid-template-columns: 1fr; }
+      .profit-share-grid { grid-template-columns: 1fr; }
+      .tracking-steps { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+    }
+    @media (max-width: 560px) {
+      .product-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+      .product-btn { min-height: 126px; padding: 10px; }
+      .topbar { flex-direction: column; }
+      .data-table th, .data-table td { padding: 9px 8px; font-size: .84rem; }
+    }
+    @media print {
+      body { background: white; }
+      .app-shell { display: block; }
+      .sidebar, .main { display: none !important; }
+      .print-area { display: block; }
+      @page { size: A6; margin: 0; }
+      body.quotation-print @page { size: A4; margin: 0; }
+      body.quotation-print .receipt-paper { display: none; }
+      body.receipt-print .quotation-paper { display: none; }
+    }
+  </style>
+</head>
+<body>
+  <div class="loading-screen" id="loadingScreen" aria-label="Loading">
+    <div class="cmyk-loader">
+      <span class="c cyan"></span>
+      <span class="c magenta"></span>
+      <span class="c yellow"></span>
+      <span class="c black"></span>
+    </div>
+  </div>
+
+  <section class="login-gate" id="loginGate">
+    <aside class="login-aside">
+      <div>
+        <img class="logo-img" alt="JKM Prime logo" src="logo.png">
+        <h1>JKM Prime Digital Prints</h1>
+        <p>Admin workspace for POS, inventory, sales, expenses, monthly archive, and reconciliation.</p>
+      </div>
+      <div class="login-feature-list">
+        <span><i data-lucide="badge-check" class="icon"></i> Admin-only secured access</span>
+        <span><i data-lucide="chart-no-axes-combined" class="icon"></i> Automatic monthly profit sharing</span>
+        <span><i data-lucide="qr-code" class="icon"></i> Public order tracking without login</span>
+      </div>
+      <small>Commercial POS + Business Management System</small>
+    </aside>
+    <main class="login-main">
+      <form class="login-card" id="adminLoginForm">
+        <h2>Admin Login</h2>
+        <p class="subtext">Sign in to access dashboard, POS, live orders, and monthly records.</p>
+        <div class="login-error" id="loginError">Invalid JKM Prime admin credentials.</div>
+        <div class="login-field">
+          <label for="loginUsername">Username</label>
+          <input id="loginUsername" autocomplete="username" value="JKM Prime" placeholder="Username">
+        </div>
+        <div class="login-field">
+          <label for="loginPassword">Password</label>
+          <input id="loginPassword" type="password" autocomplete="current-password" placeholder="Password">
+          <button type="button" class="password-toggle" id="toggleLoginPassword" title="Show password"><i data-lucide="eye"></i></button>
+        </div>
+        <div class="d-grid gap-2 mt-3">
+          <button class="btn btn-primary btn-lg fw-bold" type="submit"><i data-lucide="log-in" class="icon"></i> Login</button>
+          <button class="btn btn-outline-dark fw-bold" type="button" id="publicTrackBtn"><i data-lucide="qr-code" class="icon"></i> Track Order</button>
+        </div>
+        <div class="login-note">Customers do not need an account. Use Track Order to check order status.</div>
+      </form>
+    </main>
+  </section>
+
+  <div class="app-shell locked" id="appShell">
+    <aside class="sidebar" id="sidebar">
+      <div class="brand-lockup">
+        <img class="logo-img" alt="JKM Prime logo" src="logo.png">
+        <div>
+          <div class="brand-title">JKM Prime<br>Digital Prints</div>
+          <div class="brand-sub">Commercial POS + Business Suite</div>
+        </div>
+      </div>
+      <div class="role-chip">
+        <span id="roleLabel">Locked</span>
+        <span class="status-badge status-In-Progress" id="syncLabel">Local</span>
+      </div>
+      <nav class="nav-stack" id="navStack"></nav>
+      <div class="sidebar-footer">
+        <button class="btn btn-outline-light w-100 fw-bold" id="logoutBtn"><i data-lucide="log-out" class="icon"></i> Logout</button>
+        <div id="clockText"></div>
+      </div>
+    </aside>
+    <main class="main">
+      <div class="topbar">
+        <div class="d-flex align-items-center gap-2">
+          <button class="icon-btn mobile-menu" id="menuBtn" title="Menu"><i data-lucide="menu"></i></button>
+          <h1 class="page-title" id="pageTitle">Dashboard</h1>
+        </div>
+        <div class="top-actions">
+          <button class="btn btn-primary fw-bold" id="newOrderBtn"><i data-lucide="shopping-cart" class="icon"></i> POS</button>
+          <button class="btn btn-outline-primary fw-bold" id="quoteBtn"><i data-lucide="file-text" class="icon"></i> Quotation</button>
+          <button class="btn btn-outline-dark fw-bold" id="trackBtn"><i data-lucide="qr-code" class="icon"></i> Track</button>
+        </div>
+      </div>
+
+      <section class="view" id="dashboardView">
+        <div class="dashboard-stack">
+          <div class="metric-grid">
+            <div class="panel metric"><span>Today Income</span><strong id="todayIncome">₱0</strong></div>
+            <div class="panel metric"><span>Weekly Summary</span><strong id="weekIncome">₱0</strong></div>
+            <div class="panel metric"><span>Monthly Revenue</span><strong id="monthIncome">₱0</strong></div>
+            <div class="panel metric"><span>Monthly Expenses</span><strong id="monthExpenses">₱0</strong></div>
+          </div>
+          <div class="panel panel-pad">
+            <div class="d-flex justify-content-between align-items-center gap-2 flex-wrap mb-3">
+              <h5 class="fw-black m-0">This Month Profit Share</h5>
+              <span class="status-badge status-In-Progress" id="dashboardNetProfit">Net Profit ₱0</span>
+            </div>
+            <div class="profit-share-grid" id="dashboardShareCards"></div>
+          </div>
+          <div class="admin-split">
+            <div class="panel panel-pad chart-wrap">
+              <h5 class="fw-black mb-3">Daily Income</h5>
+              <div class="chart-box"><canvas id="dailyChart"></canvas></div>
+            </div>
+            <div class="panel panel-pad chart-wrap">
+              <h5 class="fw-black mb-3">Sales by Category</h5>
+              <div class="chart-box"><canvas id="categoryChart"></canvas></div>
+            </div>
+          </div>
+          <div class="admin-split">
+            <div class="panel panel-pad chart-wrap">
+              <h5 class="fw-black mb-3">Top Products</h5>
+              <div class="chart-box"><canvas id="topChart"></canvas></div>
+            </div>
+            <div class="panel panel-pad">
+              <h5 class="fw-black mb-3">User Monitoring</h5>
+              <div class="table-responsive">
+                <table class="data-table">
+                  <thead><tr><th>User</th><th>Role</th><th>Action</th><th>Time</th></tr></thead>
+                  <tbody id="activityRows"></tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section class="view" id="posView">
+        <div class="content-grid">
+          <div class="panel panel-pad">
+            <div class="d-flex justify-content-between align-items-center gap-2 flex-wrap mb-2">
+              <h5 class="m-0 fw-black">Product Grid</h5>
+              <input class="form-control" style="max-width:280px" id="productSearch" placeholder="Search service">
+            </div>
+            <div class="category-tabs" id="categoryTabs"></div>
+            <div class="product-grid" id="productGrid"></div>
+          </div>
+          <div class="panel cart-panel">
+            <div class="panel-pad border-bottom">
+              <h5 class="m-0 fw-black">Current Cart</h5>
+              <small class="text-secondary" id="orderIdText"></small>
+            </div>
+            <div class="cart-list" id="cartList"></div>
+            <div class="cart-total">
+              <div class="big-total"><span>Total</span><span id="cartTotal">₱0</span></div>
+              <div class="row g-2">
+                <div class="col-6"><input class="form-control form-control-lg" id="cashInput" inputmode="decimal" placeholder="Cash"></div>
+                <div class="col-6"><input class="form-control form-control-lg" id="customerName" placeholder="Customer"></div>
+              </div>
+              <div class="big-total fs-5"><span>Change</span><span id="changeText">₱0</span></div>
+              <div class="d-grid gap-2">
+                <button class="btn btn-success btn-lg fw-bold" id="checkoutBtn"><i data-lucide="badge-check" class="icon"></i> Checkout</button>
+                <button class="btn btn-outline-secondary fw-bold" id="clearCartBtn"><i data-lucide="trash-2" class="icon"></i> Clear Cart</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section class="view" id="ordersView">
+        <div class="panel panel-pad">
+          <div class="d-flex justify-content-between align-items-center gap-2 flex-wrap mb-3">
+            <h5 class="m-0 fw-black">Live Orders</h5>
+            <button class="btn btn-outline-primary fw-bold" id="refreshOrdersBtn"><i data-lucide="refresh-cw" class="icon"></i> Refresh</button>
+          </div>
+          <div class="row g-2 mb-3">
+            <div class="col-md-4"><input class="form-control" id="orderNameFilter" placeholder="Filter by customer name"></div>
+            <div class="col-md-3"><input class="form-control" id="orderMonthFilter" type="month"></div>
+            <div class="col-md-3"><input class="form-control" id="orderDateFilter" type="date"></div>
+            <div class="col-md-2 d-grid"><button class="btn btn-outline-secondary fw-bold" id="clearOrderFiltersBtn">Clear</button></div>
+          </div>
+          <div class="table-responsive">
+            <table class="data-table">
+              <thead><tr><th>Order ID</th><th>Customer</th><th>Total</th><th>Status</th><th>Date</th><th>Actions</th></tr></thead>
+              <tbody id="ordersRows"></tbody>
+            </table>
+          </div>
+        </div>
+      </section>
+
+      <section class="view" id="inventoryView">
+        <div class="panel panel-pad">
+          <div class="d-flex justify-content-between align-items-center gap-2 flex-wrap mb-3">
+            <div>
+              <h5 class="m-0 fw-black">Materials Inventory</h5>
+              <small class="text-secondary">Tracks paper, ink, blanks, packaging, and print supplies.</small>
+            </div>
+            <button class="btn btn-primary fw-bold" id="addMaterialBtn"><i data-lucide="plus" class="icon"></i> Add Material</button>
+          </div>
+          <div class="table-responsive">
+            <table class="data-table">
+              <thead><tr><th>Material</th><th>Unit</th><th>Qty / Pack</th><th>Stock</th><th>Price / Pack</th><th>Status</th><th>Actions</th></tr></thead>
+              <tbody id="materialRows"></tbody>
+            </table>
+          </div>
+        </div>
+      </section>
+
+      <section class="view" id="equipmentView">
+        <div class="panel panel-pad">
+          <div class="d-flex justify-content-between align-items-center gap-2 flex-wrap mb-3">
+            <div>
+              <h5 class="m-0 fw-black">Materials & Equipment</h5>
+              <small class="text-secondary">Tracks capital contributions for equipment, supplies, and starting materials.</small>
+            </div>
+            <button class="btn btn-primary fw-bold" id="addEquipmentBtn"><i data-lucide="plus" class="icon"></i> Add Item</button>
+          </div>
+          <div class="metric-grid">
+            <div class="panel metric"><span>Mark Total Contribution</span><strong id="markContribution">₱0</strong></div>
+            <div class="panel metric"><span>Kaye & Jobelle Total Contribution</span><strong id="kjContribution">₱0</strong></div>
+            <div class="panel metric"><span>Total Capital Items</span><strong id="equipmentCount">0</strong></div>
+            <div class="panel metric"><span>Total Contributions</span><strong id="equipmentTotal">₱0</strong></div>
+          </div>
+          <div class="table-responsive">
+            <table class="data-table">
+              <thead><tr><th>#</th><th>Item</th><th>Amount (₱)</th><th>Contributed By</th><th>Date</th><th>Actions</th></tr></thead>
+              <tbody id="equipmentRows"></tbody>
+            </table>
+          </div>
+        </div>
+      </section>
+
+      <section class="view" id="expensesView">
+        <div class="panel panel-pad">
+          <div class="d-flex justify-content-between align-items-center gap-2 flex-wrap mb-3">
+            <div>
+              <h5 class="m-0 fw-black">Expense Log</h5>
+              <small class="text-secondary">Expenses are included in monthly net profit and owner share computation.</small>
+            </div>
+            <button class="btn btn-primary fw-bold" id="addExpenseBtn"><i data-lucide="plus" class="icon"></i> Add Expense</button>
+          </div>
+          <div class="metric-grid">
+            <div class="panel metric"><span>This Month Expenses</span><strong id="expenseMonthTotal">₱0</strong></div>
+            <div class="panel metric"><span>Today Expenses</span><strong id="expenseTodayTotal">₱0</strong></div>
+            <div class="panel metric"><span>Expense Entries</span><strong id="expenseCount">0</strong></div>
+            <div class="panel metric"><span>Highest Expense</span><strong id="expenseHighest">₱0</strong></div>
+          </div>
+          <div class="table-responsive">
+            <table class="data-table">
+              <thead><tr><th>Date</th><th>Category</th><th>Description</th><th>Amount</th><th>Logged By</th><th>Actions</th></tr></thead>
+              <tbody id="expenseRows"></tbody>
+            </table>
+          </div>
+        </div>
+      </section>
+
+      <section class="view" id="reconcileView">
+        <div class="panel panel-pad">
+          <div class="d-flex justify-content-between align-items-center gap-2 flex-wrap mb-3">
+            <div>
+              <h5 class="m-0 fw-black">JKM PRIME DIGITAL PRINTS — Monthly Summary & Reconciliation</h5>
+              <small class="text-secondary">Shares auto-compute: Mark 30%, Kaye 30%, Jobelle 30%, Maintenance 10%.</small>
+            </div>
+            <span class="status-badge status-In-Progress">Auto Generated</span>
+          </div>
+          <div class="profit-share-grid mb-3" id="reconShareCards"></div>
+          <h5 class="fw-black mb-2">Monthly Archive</h5>
+          <p class="text-secondary mb-3">Automatic archive from May 2026 onward, including sales, expenses, net profit, and member shares.</p>
+          <div class="table-responsive">
+            <table class="data-table">
+              <thead><tr><th>Month</th><th>Total Sales (₱)</th><th>Total Expenses (₱)</th><th>Net Profit (₱)</th><th>Mark (30%)</th><th>Kaye (30%)</th><th>Jobelle (30%)</th><th>Maintenance (10%)</th></tr></thead>
+              <tbody id="reconRows"></tbody>
+            </table>
+          </div>
+        </div>
+      </section>
+
+      <section class="view" id="quotationView">
+        <div class="content-grid">
+          <div class="panel panel-pad">
+            <h5 class="fw-black mb-3">Quotation Generator</h5>
+            <div class="row g-2 mb-3">
+              <div class="col-md-6"><input class="form-control" id="quoteCustomer" placeholder="Customer / Business name"></div>
+              <div class="col-md-6"><input class="form-control" id="quoteValidity" type="date"></div>
+            </div>
+            <div class="row g-2 mb-3">
+              <div class="col-md-5"><select class="form-select" id="quoteProduct"></select></div>
+              <div class="col-md-2"><input class="form-control" id="quoteQty" type="number" min="1" value="1"></div>
+              <div class="col-md-3"><input class="form-control" id="quotePrice" type="number" min="0" step="1" placeholder="Price"></div>
+              <div class="col-md-2 d-grid"><button class="btn btn-primary fw-bold" id="addQuoteItemBtn">Add</button></div>
+            </div>
+            <div class="table-responsive">
+              <table class="data-table">
+                <thead><tr><th>Item</th><th>Qty</th><th>Price</th><th>Total</th><th></th></tr></thead>
+                <tbody id="quoteRows"></tbody>
+              </table>
+            </div>
+          </div>
+          <div class="panel panel-pad">
+            <h5 class="fw-black mb-3">Quotation Total</h5>
+            <div class="big-total mb-3"><span>Total</span><span id="quoteTotal">₱0</span></div>
+            <div class="d-grid gap-2">
+              <button class="btn btn-success btn-lg fw-bold" id="printQuoteBtn"><i data-lucide="printer" class="icon"></i> Print Quotation</button>
+              <button class="btn btn-outline-secondary fw-bold" id="clearQuoteBtn"><i data-lucide="eraser" class="icon"></i> Clear</button>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section class="view" id="customerView">
+        <div class="panel panel-pad tracking-card">
+          <div class="text-center">
+            <h3 class="fw-black text-primary">Order Tracking</h3>
+            <p class="text-secondary mb-3">Scan a QR code or enter your order ID.</p>
+          </div>
+          <div class="row g-2 mb-3">
+            <div class="col-md-9"><input class="form-control form-control-lg" id="trackingInput" placeholder="Example: JKM-20260519-001"></div>
+            <div class="col-md-3 d-grid"><button class="btn btn-primary btn-lg fw-bold" id="trackingBtn">Track</button></div>
+          </div>
+          <div class="text-center mb-3" id="qrBox"></div>
+          <div id="trackingResult"></div>
+          <div class="tracking-steps">
+            <div class="step" data-step="Pending">Pending</div>
+            <div class="step" data-step="In Progress">In Progress</div>
+            <div class="step" data-step="Printing">Printing</div>
+            <div class="step" data-step="Completed">Completed</div>
+          </div>
+        </div>
+      </section>
+    </main>
+  </div>
+
+  <div class="print-area">
+    <div class="receipt-paper" id="receiptPaper"></div>
+    <div class="quotation-paper" id="quotationPaper"></div>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11.12.4/dist/sweetalert2.all.min.js"></script>
+  <script src="https://cdn.socket.io/4.7.5/socket.io.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.3/dist/chart.umd.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/qrcode@1.5.3/build/qrcode.min.js"></script>
+  <script src="https://unpkg.com/lucide@latest/dist/umd/lucide.min.js"></script>
+  <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.4/firebase-app.js";
+    import { getAuth, signInAnonymously, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.12.4/firebase-auth.js";
+    import { getFirestore, collection, doc, setDoc, deleteDoc, onSnapshot, updateDoc, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.12.4/firebase-firestore.js";
+
+    const FIREBASE_CONFIG = {
+    apiKey: "AIzaSyAyCSmhRm6G05KoLiEFV-QK4fSZ67ql0UM",
+  authDomain: "jkm-project-tracking.firebaseapp.com",
+  databaseURL: "https://jkm-project-tracking-default-rtdb.firebaseio.com",
+  projectId: "jkm-project-tracking",
+  storageBucket: "jkm-project-tracking.firebasestorage.app",
+  messagingSenderId: "971289237705",
+  appId: "1:971289237705:web:cba8199d385afafafd9518"
+};
+    const SOCKET_URL = "http://localhost:3000";
+    const LOGIN_USERNAME = "JKM Prime";
+    const LOGIN_PASSWORD = "Jkmprime@2026";
+    const ARCHIVE_START_MONTH = "2026-05";
+    const SwalFire = Swal.mixin({
+      confirmButtonColor: "#0b1f3a",
+      cancelButtonColor: "#607188",
+      buttonsStyling: true,
+      background: "#ffffff",
+      backdrop: "rgba(234, 244, 255, .94)",
+      customClass: {
+        popup: "professional-modal"
+      }
+    });
+    window.SwalFire = SwalFire;
+
+    const peso = new Intl.NumberFormat("en-PH", { style: "currency", currency: "PHP", maximumFractionDigits: 0 });
+    const statuses = ["Pending", "In Progress", "Printing", "Completed"];
+    const productCatalog = [
+      ["PHOTO PRINTING", "Wallet Size", 15], ["PHOTO PRINTING", "3R", 20], ["PHOTO PRINTING", "4R", 25], ["PHOTO PRINTING", "5R", 30], ["PHOTO PRINTING", "A4 Photo Print", 60], ["PHOTO PRINTING", "Polaroid Print", 60],
+      ["RUSH ID PRINTING", "Package 1", 35], ["RUSH ID PRINTING", "Package 2", 50], ["RUSH ID PRINTING", "Package 3", 45], ["RUSH ID PRINTING", "Package 4", 45], ["RUSH ID PRINTING", "Package 5", 65],
+      ["DOCUMENT PRINTING", "Short Bond Paper", 7], ["DOCUMENT PRINTING", "A4", 8], ["DOCUMENT PRINTING", "Long", 10],
+      ["CUSTOMIZED T-SHIRT", "Small Logo Print (XS-XL)", 320], ["CUSTOMIZED T-SHIRT", "Single Large Print", 350], ["CUSTOMIZED T-SHIRT", "Front + Back Print", 450], ["CUSTOMIZED T-SHIRT", "Full Front + Full Back", 550],
+      ["CUSTOMIZED MUG", "No Box", 90], ["CUSTOMIZED MUG", "With Box", 120], ["CUSTOMIZED MUG", "Magic Mug", 200],
+      ["CUSTOMIZED JACKET", "Custom Size", 400],
+      ["CUSTOMIZED TUMBLER", "Regular", 180], ["CUSTOMIZED TUMBLER", "Premium", 220],
+      ["CUSTOMIZED REF MAGNETS", "ATM", 25], ["CUSTOMIZED REF MAGNETS", "3x3", 45], ["CUSTOMIZED REF MAGNETS", "3R", 50], ["CUSTOMIZED REF MAGNETS", "4R", 60], ["CUSTOMIZED REF MAGNETS", "5R", 70], ["CUSTOMIZED REF MAGNETS", "Custom", 80],
+      ["CUSTOMIZED TOTE BAG - FLAT", "XS", 149], ["CUSTOMIZED TOTE BAG - FLAT", "S", 159], ["CUSTOMIZED TOTE BAG - FLAT", "M", 169], ["CUSTOMIZED TOTE BAG - FLAT", "L", 179],
+      ["CUSTOMIZED TOTE BAG - WITH BASE", "XS", 159], ["CUSTOMIZED TOTE BAG - WITH BASE", "S", 169], ["CUSTOMIZED TOTE BAG - WITH BASE", "M", 179], ["CUSTOMIZED TOTE BAG - WITH BASE", "L", 189],
+      ["CUSTOMIZED WALLET", "XS", 59], ["CUSTOMIZED WALLET", "S", 69], ["CUSTOMIZED WALLET", "M", 79], ["CUSTOMIZED WALLET", "L", 89],
+      ["CUSTOMIZED BADGE", "Ref Magnet", 45], ["CUSTOMIZED BADGE", "Ref Pin", 45], ["CUSTOMIZED BADGE", "Ref Mirror", 45],
+      ["OTHERS", "Desk Calendar", 150], ["OTHERS", "A4 Sintra Board", 140], ["OTHERS", "A3 Sintra Board", 290], ["OTHERS", "Notebook", 150], ["OTHERS", "Planner", 150]
+    ].map((p, index) => ({ id: `P${String(index + 1).padStart(3, "0")}`, category: p[0], name: p[1], price: p[2] }));
+
+    const seedMaterials = [
+      { id: "M001", name: "Photo Paper", unit: "packs", quantityPerPack: 100, stock: 15, pricePerPack: 380, lowStock: 4 },
+      { id: "M002", name: "Ink", unit: "ml / bottles", quantityPerPack: 1000, stock: 9, pricePerPack: 650, lowStock: 3 },
+      { id: "M003", name: "T-shirt blanks", unit: "pcs", quantityPerPack: 10, stock: 24, pricePerPack: 900, lowStock: 8 },
+      { id: "M004", name: "Mug blanks", unit: "pcs", quantityPerPack: 12, stock: 18, pricePerPack: 720, lowStock: 6 },
+      { id: "M005", name: "Tote bag blanks", unit: "pcs", quantityPerPack: 10, stock: 20, pricePerPack: 520, lowStock: 6 },
+      { id: "M006", name: "Bond Paper", unit: "reams", quantityPerPack: 500, stock: 12, pricePerPack: 260, lowStock: 3 },
+      { id: "M007", name: "Sintra Board", unit: "sheets", quantityPerPack: 10, stock: 8, pricePerPack: 1100, lowStock: 3 }
+    ];
+
+    const seedEquipment = [
+      { id: "EQ001", item: "2pcs Epson L3210 Printer", amount: 20000, contributedBy: "Mark", dateLabel: "5/9/2026, 11:55:12 PM" },
+      { id: "EQ002", item: "Canon G4770", amount: 14000, contributedBy: "Kaye & Jobelle", dateLabel: "5/9/2026, 11:56:11 PM" },
+      { id: "EQ003", item: "Epson L3250", amount: 13000, contributedBy: "Kaye & Jobelle", dateLabel: "5/9/2026, 11:56:26 PM" },
+      { id: "EQ004", item: "Epson L3210", amount: 9000, contributedBy: "Kaye & Jobelle", dateLabel: "5/9/2026, 11:56:40 PM" },
+      { id: "EQ005", item: "Heat Press", amount: 9045, contributedBy: "Mark", dateLabel: "5/9/2026, 11:59:54 PM" },
+      { id: "EQ006", item: "Binding Machine", amount: 5000, contributedBy: "Mark", dateLabel: "5/10/2026, 12:00:05 AM" },
+      { id: "EQ007", item: "Ream Cutter", amount: 3400, contributedBy: "Mark", dateLabel: "5/10/2026, 12:00:19 AM" },
+      { id: "EQ008", item: "Badge Maker", amount: 2299, contributedBy: "Kaye & Jobelle", dateLabel: "5/10/2026, 12:01:04 AM" },
+      { id: "EQ009", item: "Long Arm Stapler", amount: 1534, contributedBy: "Kaye & Jobelle", dateLabel: "5/10/2026, 12:01:15 AM" },
+      { id: "EQ010", item: "Ink", amount: 8000, contributedBy: "Kaye & Jobelle", dateLabel: "5/10/2026, 12:01:42 AM" },
+      { id: "EQ011", item: "Double Sided Photo Paper Glossy", amount: 3000, contributedBy: "Kaye & Jobelle", dateLabel: "5/10/2026, 12:02:13 AM" },
+      { id: "EQ012", item: "Binding Machine", amount: 1500, contributedBy: "Kaye & Jobelle", dateLabel: "5/10/2026, 12:02:45 AM" },
+      { id: "EQ013", item: "Shopee Orders", amount: 12500, contributedBy: "Mark", dateLabel: "5/17/2026, 8:16:58 AM" },
+      { id: "EQ014", item: "Heavy Duty Corner Puncher", amount: 4258, contributedBy: "Kaye & Jobelle", dateLabel: "5/19/2026, 3:22:58 PM" }
+    ];
+
+    const state = {
+      role: null,
+      user: null,
+      view: "dashboard",
+      category: "ALL",
+      cart: [],
+      quote: [],
+      orders: [],
+      materials: [],
+      equipment: [],
+      expenses: [],
+      reconciliation: [],
+      activities: [],
+      orderFilters: { name: "", month: "", date: "" },
+      firebaseReady: false,
+      socketReady: false,
+      db: null,
+      socket: null,
+      charts: {}
+    };
+
+    const store = {
+      get(key, fallback) {
+        try { return JSON.parse(localStorage.getItem(`jkm_${key}`)) ?? fallback; }
+        catch { return fallback; }
+      },
+      set(key, value) { localStorage.setItem(`jkm_${key}`, JSON.stringify(value)); }
+    };
+
+    const el = id => document.getElementById(id);
+    const safe = text => String(text ?? "").replace(/[&<>"']/g, ch => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[ch]));
+    const todayKey = date => new Date(date).toISOString().slice(0, 10);
+    const monthKey = date => new Date(date).toISOString().slice(0, 7);
+    const nextOrderId = () => {
+      const stamp = new Date().toISOString().slice(0,10).replaceAll("-", "");
+      const count = state.orders.filter(o => String(o.id).includes(stamp)).length + 1;
+      return `JKM-${stamp}-${String(count).padStart(3, "0")}`;
+    };
+    const cartTotal = () => state.cart.reduce((sum, item) => sum + item.price * item.qty, 0);
+    const quoteTotal = () => state.quote.reduce((sum, item) => sum + item.price * item.qty, 0);
+
+    function loadLocalData() {
+      state.orders = store.get("orders", []);
+      state.materials = store.get("materials", seedMaterials);
+      state.equipment = store.get("equipment", seedEquipment);
+      if (!state.equipment.length) state.equipment = seedEquipment;
+      state.expenses = store.get("expenses", []);
+      state.reconciliation = store.get("reconciliation", []);
+      state.activities = store.get("activities", []);
+      state.cart = store.get("cart", []);
+    }
+
+    function persistLocal() {
+      store.set("orders", state.orders);
+      store.set("materials", state.materials);
+      store.set("equipment", state.equipment);
+      store.set("expenses", state.expenses);
+      store.set("reconciliation", state.reconciliation);
+      store.set("activities", state.activities.slice(0, 50));
+      store.set("cart", state.cart);
+    }
+
+    async function initFirebase() {
+      if (Object.values(FIREBASE_CONFIG).some(v => String(v).startsWith("PASTE_"))) {
+        setSyncLabel();
+        return;
+      }
+      try {
+        const app = initializeApp(FIREBASE_CONFIG);
+        const auth = getAuth(app);
+        state.db = getFirestore(app);
+        await signInAnonymously(auth);
+        onAuthStateChanged(auth, user => {
+          state.firebaseReady = !!user;
+          setSyncLabel();
+        });
+        subscribeFirestore();
+      } catch (error) {
+        console.warn("Firebase disabled:", error);
+        setSyncLabel();
+      }
+    }
+
+    function subscribeFirestore() {
+      if (!state.db) return;
+      onSnapshot(collection(state.db, "orders"), snap => {
+        state.orders = snap.docs.map(d => ({ ...d.data(), firestoreId: d.id }));
+        persistLocal();
+        renderAll();
+      });
+      onSnapshot(collection(state.db, "materials"), snap => {
+        if (snap.empty) return;
+        state.materials = snap.docs.map(d => ({ ...d.data(), firestoreId: d.id }));
+        persistLocal();
+        renderAll();
+      });
+      onSnapshot(collection(state.db, "expenses"), snap => {
+        state.expenses = snap.docs.map(d => ({ ...d.data(), firestoreId: d.id }));
+        persistLocal();
+        renderAll();
+      });
+      onSnapshot(collection(state.db, "equipment"), snap => {
+        if (snap.empty) return;
+        state.equipment = snap.docs.map(d => ({ ...d.data(), firestoreId: d.id }));
+        persistLocal();
+        renderAll();
+      });
+      onSnapshot(collection(state.db, "reconciliation"), snap => {
+        state.reconciliation = snap.docs.map(d => ({ ...d.data(), firestoreId: d.id }));
+        persistLocal();
+        renderAll();
+      });
+    }
+
+    function initSocket() {
+      try {
+        state.socket = io(SOCKET_URL, { transports: ["websocket"], timeout: 1200, autoConnect: true });
+        state.socket.on("connect", () => { state.socketReady = true; setSyncLabel(); });
+        state.socket.on("disconnect", () => { state.socketReady = false; setSyncLabel(); });
+        state.socket.on("order:update", order => upsertOrder(order, false));
+        state.socket.on("inventory:update", material => upsertMaterial(material, false));
+      } catch (error) {
+        state.socketReady = false;
+        setSyncLabel();
+      }
+    }
+
+    function setSyncLabel() {
+      const label = el("syncLabel");
+      const parts = [];
+      if (state.firebaseReady) parts.push("Firebase");
+      if (state.socketReady) parts.push("Socket");
+      label.textContent = parts.length ? parts.join(" + ") : "Local";
+    }
+
+    async function syncDoc(type, payload) {
+      persistLocal();
+      if (state.socketReady) {
+        state.socket.emit(type === "materials" ? "inventory:update" : `${type}:update`, payload);
+        state.socket.emit("admin:action", { user: state.user, role: state.role, type, payload, at: new Date().toISOString() });
+      }
+      if (!state.db) return;
+      try {
+        if (payload.firestoreId) await updateDoc(doc(state.db, type, payload.firestoreId), payload);
+        else await setDoc(doc(state.db, type, payload.id), { ...payload, updatedAt: serverTimestamp() });
+      } catch (error) {
+        console.warn("Firestore sync skipped:", error);
+      }
+    }
+
+    async function removeDoc(type, id, firestoreId = null) {
+      persistLocal();
+      if (state.socketReady) state.socket.emit(`${type}:delete`, { id });
+      if (!state.db) return;
+      try {
+        await deleteDoc(doc(state.db, type, firestoreId || id));
+      } catch (error) {
+        console.warn("Firestore delete skipped:", error);
+      }
+    }
+
+    function logActivity(action) {
+      state.activities.unshift({ id: crypto.randomUUID(), user: state.user || "JKM Prime", role: state.role || "Admin", action, time: new Date().toISOString() });
+      state.activities = state.activities.slice(0, 50);
+      persistLocal();
+      renderActivities();
+    }
+
+    function allowedViews(role) {
+      if (role === "Admin") return ["dashboard", "pos", "orders", "inventory", "equipment", "expenses", "reconcile", "quotation", "customer"];
+      return ["customer"];
+    }
+
+    function navItems() {
+      return [
+        ["dashboard", "Dashboard", "layout-dashboard", ["Admin"]],
+        ["pos", "POS Ordering", "shopping-cart", ["Admin"]],
+        ["orders", "Live Orders", "receipt-text", ["Admin"]],
+        ["inventory", "Inventory", "boxes", ["Admin"]],
+        ["equipment", "Materials & Equipment", "printer", ["Admin"]],
+        ["expenses", "Expenses", "wallet-cards", ["Admin"]],
+        ["reconcile", "Reconciliation", "calculator", ["Admin"]],
+        ["quotation", "Quotation", "file-text", ["Admin"]],
+        ["customer", "Order Tracking", "qr-code", ["Admin", "Public"]]
+      ].filter(item => item[3].includes(state.role));
+    }
+
+    function renderNav() {
+      el("roleLabel").textContent = `${state.user || "JKM Prime"} · ${state.role}`;
+      const views = allowedViews(state.role);
+      el("newOrderBtn").style.display = views.includes("pos") ? "" : "none";
+      el("quoteBtn").style.display = views.includes("quotation") ? "" : "none";
+      el("trackBtn").style.display = views.includes("customer") ? "" : "none";
+      el("navStack").innerHTML = navItems().map(([id, label, icon]) => `
+        <button class="nav-btn ${state.view === id ? "active" : ""}" data-view="${id}">
+          <i data-lucide="${icon}"></i><span>${label}</span>
+        </button>`).join("");
+      document.querySelectorAll("[data-view]").forEach(btn => btn.addEventListener("click", () => showView(btn.dataset.view)));
+      lucide.createIcons();
+    }
+
+    function showView(view) {
+      const views = allowedViews(state.role);
+      state.view = views.includes(view) ? view : views[0];
+      document.querySelectorAll(".view").forEach(v => v.classList.remove("active"));
+      el(`${state.view}View`).classList.add("active");
+      el("pageTitle").textContent = navItems().find(i => i[0] === state.view)?.[1] || "JKM Prime";
+      el("sidebar").classList.remove("open");
+      renderNav();
+      renderAll();
+    }
+
+    function setAppAccess(role, user = "Customer") {
+      state.role = role;
+      state.user = user;
+      el("loginGate").classList.toggle("hidden", role !== null);
+      el("appShell").classList.toggle("locked", role === null);
+      if (role) showView(allowedViews(role)[0]);
+      lucide.createIcons();
+    }
+
+    function handleAdminLogin(event) {
+      event.preventDefault();
+      const username = el("loginUsername").value.trim();
+      const password = el("loginPassword").value;
+      const errorBox = el("loginError");
+      if (username !== LOGIN_USERNAME || password !== LOGIN_PASSWORD) {
+        errorBox.classList.add("show");
+        return;
+      }
+      errorBox.classList.remove("show");
+      showCmykLoading().then(() => {
+        const session = { user: username, role: "Admin" };
+        store.set("session", session);
+        state.user = username;
+        state.role = "Admin";
+        logActivity("Logged in as Admin");
+        setAppAccess("Admin", username);
+      });
+    }
+
+    function toggleLoginPassword() {
+      const input = el("loginPassword");
+      const btn = el("toggleLoginPassword");
+      const isHidden = input.type === "password";
+      input.type = isHidden ? "text" : "password";
+      btn.innerHTML = `<i data-lucide="${isHidden ? "eye-off" : "eye"}"></i>`;
+      btn.title = isHidden ? "Hide password" : "Show password";
+      lucide.createIcons();
+    }
+
+    function openPublicTracking() {
+      localStorage.removeItem("jkm_session");
+      logActivity("Opened public order tracking");
+      setAppAccess("Public", "Customer");
+      showView("customer");
+    }
+
+    function showCmykLoading(duration = 900) {
+      el("loadingScreen").classList.add("show");
+      document.body.classList.add("loading-active");
+      return new Promise(resolve => {
+        setTimeout(() => {
+          el("loadingScreen").classList.remove("show");
+          document.body.classList.remove("loading-active");
+          resolve();
+        }, duration);
+      });
+    }
+    async function loginFlow(force = false) {
+      const session = store.get("session", null);
+      if (session && session.role === "Admin" && !force) {
+        setAppAccess("Admin", session.user || LOGIN_USERNAME);
+        logActivity("Session restored");
+        return;
+      }
+      setAppAccess(null);
+      el("loginPassword").focus();
+    }
+
+    function renderProducts() {
+      const categories = ["ALL", ...new Set(productCatalog.map(p => p.category))];
+      el("categoryTabs").innerHTML = categories.map(cat => `<button class="btn ${state.category === cat ? "btn-primary" : "btn-outline-primary"}" data-cat="${safe(cat)}">${safe(cat)}</button>`).join("");
+      document.querySelectorAll("[data-cat]").forEach(btn => btn.addEventListener("click", () => { state.category = btn.dataset.cat; renderProducts(); }));
+      const q = el("productSearch").value.toLowerCase();
+      const products = productCatalog.filter(p => (state.category === "ALL" || p.category === state.category) && `${p.category} ${p.name}`.toLowerCase().includes(q));
+      el("productGrid").innerHTML = products.map(p => `
+        <button class="product-btn" data-product="${p.id}">
+          <span><span class="name">${safe(p.name)}</span><span class="cat">${safe(p.category)}</span></span>
+          <span class="price">${peso.format(p.price)}</span>
+        </button>`).join("");
+      document.querySelectorAll("[data-product]").forEach(btn => btn.addEventListener("click", () => addToCart(btn.dataset.product)));
+      lucide.createIcons();
+    }
+
+    function addToCart(productId) {
+      const product = productCatalog.find(p => p.id === productId);
+      const existing = state.cart.find(item => item.id === productId);
+      if (existing) existing.qty += 1;
+      else state.cart.push({ ...product, qty: 1 });
+      logActivity(`Added ${product.name} to cart`);
+      persistLocal();
+      renderCart();
+    }
+
+    function changeQty(productId, delta) {
+      const item = state.cart.find(i => i.id === productId);
+      if (!item) return;
+      item.qty += delta;
+      if (item.qty <= 0) state.cart = state.cart.filter(i => i.id !== productId);
+      persistLocal();
+      renderCart();
+    }
+
+    function renderCart() {
+      el("orderIdText").textContent = `Next order: ${nextOrderId()}`;
+      if (!state.cart.length) {
+        el("cartList").innerHTML = `<div class="text-center text-secondary py-5">Tap products to add items.</div>`;
+      } else {
+        el("cartList").innerHTML = state.cart.map(item => `
+          <div class="cart-item">
+            <div class="d-flex justify-content-between gap-2">
+              <div><strong>${safe(item.name)}</strong><div class="text-secondary small">${safe(item.category)}</div></div>
+              <strong>${peso.format(item.price * item.qty)}</strong>
+            </div>
+            <div class="qty-row">
+              <div class="qty-controls">
+                <button data-dec="${item.id}" title="Decrease"><i data-lucide="minus"></i></button>
+                <strong>${item.qty}</strong>
+                <button data-inc="${item.id}" title="Increase"><i data-lucide="plus"></i></button>
+              </div>
+              <button class="icon-btn" data-remove="${item.id}" title="Remove"><i data-lucide="x"></i></button>
+            </div>
+          </div>`).join("");
+      }
+      el("cartTotal").textContent = peso.format(cartTotal());
+      updateChange();
+      document.querySelectorAll("[data-inc]").forEach(b => b.addEventListener("click", () => changeQty(b.dataset.inc, 1)));
+      document.querySelectorAll("[data-dec]").forEach(b => b.addEventListener("click", () => changeQty(b.dataset.dec, -1)));
+      document.querySelectorAll("[data-remove]").forEach(b => b.addEventListener("click", () => { state.cart = state.cart.filter(i => i.id !== b.dataset.remove); persistLocal(); renderCart(); }));
+      lucide.createIcons();
+    }
+
+    function updateChange() {
+      const cash = Number(el("cashInput").value || 0);
+      el("changeText").textContent = peso.format(Math.max(0, cash - cartTotal()));
+    }
+
+    function deductStock(order) {
+      const usageMap = {
+        "PHOTO PRINTING": ["Photo Paper", .01, "Ink", .005],
+        "RUSH ID PRINTING": ["Photo Paper", .01, "Ink", .005],
+        "DOCUMENT PRINTING": ["Bond Paper", .002, "Ink", .003],
+        "CUSTOMIZED T-SHIRT": ["T-shirt blanks", 1, "Ink", .025],
+        "CUSTOMIZED MUG": ["Mug blanks", 1, "Ink", .015],
+        "CUSTOMIZED TOTE BAG": ["Tote bag blanks", 1, "Ink", .015],
+        "OTHERS": ["Sintra Board", .1, "Ink", .01]
+      };
+      order.items.forEach(item => {
+        const key = Object.keys(usageMap).find(k => item.category.includes(k));
+        const usage = usageMap[key] || ["Ink", .005];
+        for (let i = 0; i < usage.length; i += 2) {
+          const mat = state.materials.find(m => m.name === usage[i]);
+          if (mat) {
+            mat.stock = Math.max(0, Number(mat.stock) - Number(usage[i + 1]) * item.qty);
+            syncDoc("materials", mat);
+          }
+        }
+      });
+    }
+
+    async function checkout() {
+      if (!state.cart.length) return SwalFire.fire("Cart is empty", "Add at least one product first.", "info");
+      const total = cartTotal();
+      const cash = Number(el("cashInput").value || 0);
+      if (cash < total) return SwalFire.fire("Insufficient cash", "Cash input must cover the total amount.", "warning");
+      const order = {
+        id: nextOrderId(),
+        customer: el("customerName").value.trim() || "Walk-in Customer",
+        items: structuredClone(state.cart),
+        total,
+        cash,
+        change: cash - total,
+        status: "Pending",
+        admin: state.user,
+        role: state.role,
+        createdAt: new Date().toISOString()
+      };
+      state.orders.unshift(order);
+      deductStock(order);
+      state.cart = [];
+      el("cashInput").value = "";
+      el("customerName").value = "";
+      await syncDoc("orders", order);
+      logActivity(`Checked out ${order.id}`);
+      renderReceipt(order);
+      renderAll();
+      await SwalFire.fire({
+        title: "Checkout complete",
+        html: `<strong>${order.id}</strong><br>Total: ${peso.format(order.total)}<br>Change: ${peso.format(order.change)}`,
+        icon: "success",
+        showCancelButton: true,
+        confirmButtonText: "Print Receipt",
+        cancelButtonText: "Done"
+      }).then(res => { if (res.isConfirmed) printReceipt(order); });
+    }
+
+    function renderReceipt(order) {
+      const rows = order.items.map(i => `<tr><td>${safe(i.name)} x ${i.qty}</td><td style="text-align:right">${peso.format(i.price * i.qty)}</td></tr>`).join("");
+      el("receiptPaper").innerHTML = `
+        <h2>JKM PRIME DIGITAL PRINTS</h2>
+        <div class="mini" style="text-align:center">Official Receipt · A6 Print Format</div>
+        <hr>
+        <div class="mini">Order ID: <strong>${safe(order.id)}</strong></div>
+        <div class="mini">Customer: ${safe(order.customer)}</div>
+        <div class="mini">Date/Time: ${new Date(order.createdAt).toLocaleString()}</div>
+        <table class="print-table"><tbody>${rows}</tbody></table>
+        <table class="print-table">
+          <tr><td>Total</td><td style="text-align:right"><strong>${peso.format(order.total)}</strong></td></tr>
+          <tr><td>Cash</td><td style="text-align:right">${peso.format(order.cash)}</td></tr>
+          <tr><td>Change</td><td style="text-align:right">${peso.format(order.change)}</td></tr>
+        </table>
+        <p class="mini" style="text-align:center;margin-top:14px">Thank you for choosing JKM Prime Digital Prints.</p>`;
+    }
+
+    function printReceipt(order) {
+      renderReceipt(order);
+      document.body.classList.add("receipt-print");
+      document.body.classList.remove("quotation-print");
+      window.print();
+      setTimeout(() => document.body.classList.remove("receipt-print"), 300);
+    }
+
+    function renderOrders() {
+      const filteredOrders = state.orders.filter(order => {
+        const nameMatch = !state.orderFilters.name || String(order.customer || "").toLowerCase().includes(state.orderFilters.name.toLowerCase());
+        const monthMatch = !state.orderFilters.month || monthKey(order.createdAt) === state.orderFilters.month;
+        const dateMatch = !state.orderFilters.date || todayKey(order.createdAt) === state.orderFilters.date;
+        return nameMatch && monthMatch && dateMatch;
+      });
+      el("ordersRows").innerHTML = filteredOrders.map(order => `
+        <tr>
+          <td><strong>${safe(order.id)}</strong></td>
+          <td>${safe(order.customer)}</td>
+          <td>${peso.format(order.total)}</td>
+          <td><span class="status-badge status-${order.status.replaceAll(" ", "-")}">${safe(order.status)}</span></td>
+          <td>${new Date(order.createdAt).toLocaleString()}</td>
+          <td>
+            <div class="d-flex gap-1 flex-wrap">
+              <select class="form-select form-select-sm" data-status="${order.id}" style="width:140px">${statuses.map(s => `<option ${s === order.status ? "selected" : ""}>${s}</option>`).join("")}</select>
+              <button class="icon-btn" data-print="${order.id}" title="Print"><i data-lucide="printer"></i></button>
+              <button class="icon-btn" data-qr="${order.id}" title="QR"><i data-lucide="qr-code"></i></button>
+              <button class="icon-btn" data-delete-order="${order.id}" title="Delete order"><i data-lucide="trash-2"></i></button>
+            </div>
+          </td>
+        </tr>`).join("") || `<tr><td colspan="6" class="text-center text-secondary py-4">No orders match the selected filters.</td></tr>`;
+      document.querySelectorAll("[data-status]").forEach(sel => sel.addEventListener("change", () => updateOrderStatus(sel.dataset.status, sel.value)));
+      document.querySelectorAll("[data-print]").forEach(btn => btn.addEventListener("click", () => printReceipt(state.orders.find(o => o.id === btn.dataset.print))));
+      document.querySelectorAll("[data-qr]").forEach(btn => btn.addEventListener("click", () => showOrderQr(btn.dataset.qr)));
+      document.querySelectorAll("[data-delete-order]").forEach(btn => btn.addEventListener("click", () => deleteOrder(btn.dataset.deleteOrder)));
+      lucide.createIcons();
+    }
+
+    async function updateOrderStatus(id, status) {
+      const order = state.orders.find(o => o.id === id);
+      if (!order) return;
+      order.status = status;
+      order.updatedAt = new Date().toISOString();
+      await syncDoc("orders", order);
+      logActivity(`Updated ${id} to ${status}`);
+      renderAll();
+    }
+
+    async function deleteOrder(id) {
+      const order = state.orders.find(o => o.id === id);
+      if (!order) return;
+      const result = await SwalFire.fire({
+        title: "Delete this order?",
+        html: `<div class="text-start">
+          <strong>${safe(order.id)}</strong><br>
+          ${safe(order.customer)} · ${peso.format(order.total)}<br>
+          <span class="text-secondary">Use this only when the order was encoded by mistake.</span>
+        </div>`,
+        icon: "warning",
+        showCancelButton: true,
+        confirmButtonText: "Delete Order",
+        confirmButtonColor: "#d64f4f"
+      });
+      if (!result.isConfirmed) return;
+      state.orders = state.orders.filter(o => o.id !== id);
+      await removeDoc("orders", id, order.firestoreId);
+      logActivity(`Deleted order ${id}`);
+      renderAll();
+    }
+
+    function upsertOrder(order, emit = true) {
+      const index = state.orders.findIndex(o => o.id === order.id);
+      if (index >= 0) state.orders[index] = order;
+      else state.orders.unshift(order);
+      persistLocal();
+      renderAll();
+      if (emit) syncDoc("orders", order);
+    }
+
+    function upsertMaterial(material, emit = true) {
+      const index = state.materials.findIndex(m => m.id === material.id);
+      if (index >= 0) state.materials[index] = material;
+      else state.materials.push(material);
+      persistLocal();
+      renderAll();
+      if (emit) syncDoc("materials", material);
+    }
+
+    function renderMaterials() {
+      el("materialRows").innerHTML = state.materials.map(m => {
+        const low = Number(m.stock) <= Number(m.lowStock);
+        return `<tr>
+          <td><strong>${safe(m.name)}</strong></td>
+          <td>${safe(m.unit)}</td>
+          <td>${safe(m.quantityPerPack)}</td>
+          <td>${Number(m.stock).toFixed(Number(m.stock) % 1 ? 2 : 0)}</td>
+          <td>${peso.format(m.pricePerPack)}</td>
+          <td>${low ? `<span class="low-stock">Low stock alert</span>` : `<span class="text-success fw-bold">Healthy</span>`}</td>
+          <td>
+            <div class="d-flex gap-1 flex-wrap">
+              <button class="btn btn-sm btn-outline-primary fw-bold" data-edit-material="${m.id}">Edit</button>
+              <button class="btn btn-sm btn-outline-danger fw-bold" data-delete-material="${m.id}">Delete</button>
+            </div>
+          </td>
+        </tr>`;
+      }).join("");
+      document.querySelectorAll("[data-edit-material]").forEach(btn => btn.addEventListener("click", () => materialModal(state.materials.find(m => m.id === btn.dataset.editMaterial))));
+      document.querySelectorAll("[data-delete-material]").forEach(btn => btn.addEventListener("click", () => deleteMaterial(btn.dataset.deleteMaterial)));
+    }
+
+    async function deleteMaterial(id) {
+      const material = state.materials.find(m => m.id === id);
+      if (!material) return;
+      const result = await SwalFire.fire({
+        title: "Delete inventory item?",
+        text: material.name,
+        icon: "warning",
+        showCancelButton: true,
+        confirmButtonText: "Delete",
+        confirmButtonColor: "#d64f4f"
+      });
+      if (!result.isConfirmed) return;
+      state.materials = state.materials.filter(m => m.id !== id);
+      await removeDoc("materials", id, material.firestoreId);
+      logActivity(`Deleted material ${material.name}`);
+      renderAll();
+    }
+
+    function renderEquipment() {
+      const mark = state.equipment.filter(e => e.contributedBy === "Mark").reduce((sum, e) => sum + Number(e.amount || 0), 0);
+      const kj = state.equipment.filter(e => e.contributedBy === "Kaye & Jobelle").reduce((sum, e) => sum + Number(e.amount || 0), 0);
+      el("markContribution").textContent = peso.format(mark);
+      el("kjContribution").textContent = peso.format(kj);
+      el("equipmentCount").textContent = state.equipment.length;
+      el("equipmentTotal").textContent = peso.format(mark + kj);
+      el("equipmentRows").innerHTML = state.equipment.map((item, index) => `
+        <tr>
+          <td>${index + 1}</td>
+          <td><strong>${safe(item.item)}</strong></td>
+          <td>${peso.format(item.amount)}</td>
+          <td>${safe(item.contributedBy)}</td>
+          <td>${safe(item.dateLabel || new Date(item.createdAt || Date.now()).toLocaleString())}</td>
+          <td>
+            <div class="d-flex gap-1 flex-wrap">
+              <button class="btn btn-sm btn-outline-primary fw-bold" data-edit-equipment="${item.id}">Edit</button>
+              <button class="btn btn-sm btn-outline-danger fw-bold" data-delete-equipment="${item.id}">Delete</button>
+            </div>
+          </td>
+        </tr>`).join("") || `<tr><td colspan="6" class="text-center text-secondary py-4">No equipment or material contributions yet.</td></tr>`;
+      document.querySelectorAll("[data-edit-equipment]").forEach(btn => btn.addEventListener("click", () => equipmentModal(state.equipment.find(e => e.id === btn.dataset.editEquipment))));
+      document.querySelectorAll("[data-delete-equipment]").forEach(btn => btn.addEventListener("click", () => deleteEquipment(btn.dataset.deleteEquipment)));
+    }
+
+    async function equipmentModal(item = null) {
+      const current = item || { id: `EQ-${Date.now()}`, item: "", amount: 0, contributedBy: "Mark", dateLabel: new Date().toLocaleString(), createdAt: new Date().toISOString() };
+      const res = await SwalFire.fire({
+        title: item ? "Edit Equipment / Material" : "Add Equipment / Material",
+        html: `
+          <input id="equipItem" class="swal2-input" placeholder="Item" value="${safe(current.item)}">
+          <input id="equipAmount" class="swal2-input" type="number" min="0" step="1" placeholder="Amount" value="${current.amount}">
+          <select id="equipBy" class="swal2-select">
+            <option ${current.contributedBy === "Mark" ? "selected" : ""}>Mark</option>
+            <option ${current.contributedBy === "Kaye & Jobelle" ? "selected" : ""}>Kaye & Jobelle</option>
+          </select>
+          <input id="equipDate" class="swal2-input" placeholder="Date label" value="${safe(current.dateLabel || new Date().toLocaleString())}">`,
+        preConfirm: () => ({
+          ...current,
+          item: document.getElementById("equipItem").value.trim(),
+          amount: Number(document.getElementById("equipAmount").value || 0),
+          contributedBy: document.getElementById("equipBy").value,
+          dateLabel: document.getElementById("equipDate").value.trim() || new Date().toLocaleString(),
+          updatedAt: new Date().toISOString()
+        })
+      });
+      if (!res.value?.item || !res.value.amount) return;
+      const index = state.equipment.findIndex(e => e.id === res.value.id);
+      if (index >= 0) state.equipment[index] = res.value;
+      else state.equipment.push(res.value);
+      await syncDoc("equipment", res.value);
+      logActivity(`${item ? "Edited" : "Added"} equipment/material ${res.value.item}`);
+      renderAll();
+    }
+
+    async function deleteEquipment(id) {
+      const item = state.equipment.find(e => e.id === id);
+      if (!item) return;
+      const result = await SwalFire.fire({
+        title: "Delete equipment/material?",
+        text: item.item,
+        icon: "warning",
+        showCancelButton: true,
+        confirmButtonText: "Delete",
+        confirmButtonColor: "#d64f4f"
+      });
+      if (!result.isConfirmed) return;
+      state.equipment = state.equipment.filter(e => e.id !== id);
+      await removeDoc("equipment", id, item.firestoreId);
+      logActivity(`Deleted equipment/material ${item.item}`);
+      renderAll();
+    }
+
+    function monthlySales(month = monthKey(new Date())) {
+      return state.orders
+        .filter(o => monthKey(o.createdAt) === month)
+        .reduce((sum, order) => sum + Number(order.total || 0), 0);
+    }
+
+    function monthlyExpenses(month = monthKey(new Date())) {
+      return state.expenses
+        .filter(expense => monthKey(expense.date || expense.createdAt) === month)
+        .reduce((sum, expense) => sum + Number(expense.amount || 0), 0);
+    }
+
+    function archiveMonths() {
+      const months = new Set([ARCHIVE_START_MONTH, monthKey(new Date())]);
+      const [startYear, startMonth] = ARCHIVE_START_MONTH.split("-").map(Number);
+      const cursor = new Date(startYear, startMonth - 1, 1);
+      const now = new Date();
+      const end = new Date(now.getFullYear(), now.getMonth(), 1);
+      while (cursor <= end) {
+        months.add(`${cursor.getFullYear()}-${String(cursor.getMonth() + 1).padStart(2, "0")}`);
+        cursor.setMonth(cursor.getMonth() + 1);
+      }
+      state.orders.forEach(order => months.add(monthKey(order.createdAt)));
+      state.expenses.forEach(expense => months.add(monthKey(expense.date || expense.createdAt)));
+      state.reconciliation.forEach(row => months.add(row.month));
+      return [...months].filter(Boolean).sort().reverse();
+    }
+
+    function shareBreakdown(sales, expenses) {
+      const net = Number(sales || 0) - Number(expenses || 0);
+      return {
+        net,
+        mark: net * .30,
+        kaye: net * .30,
+        jobelle: net * .30,
+        maintenance: net * .10
+      };
+    }
+
+    function renderShareCards(targetId, sales, expenses) {
+      const shares = shareBreakdown(sales, expenses);
+      el(targetId).innerHTML = [
+        ["Mark", "30%", shares.mark],
+        ["Kaye", "30%", shares.kaye],
+        ["Jobelle", "30%", shares.jobelle],
+        ["Maintenance", "10%", shares.maintenance]
+      ].map(([name, pct, value]) => `
+        <div class="share-card">
+          <span>${safe(name)} · ${safe(pct)}</span>
+          <strong>${peso.format(value)}</strong>
+        </div>`).join("");
+      return shares;
+    }
+
+    function renderExpenses() {
+      const currentMonth = monthKey(new Date());
+      const today = todayKey(new Date());
+      const monthTotal = monthlyExpenses(currentMonth);
+      const todayTotal = state.expenses
+        .filter(expense => todayKey(expense.date || expense.createdAt) === today)
+        .reduce((sum, expense) => sum + Number(expense.amount || 0), 0);
+      const highest = state.expenses.reduce((max, expense) => Math.max(max, Number(expense.amount || 0)), 0);
+      el("expenseMonthTotal").textContent = peso.format(monthTotal);
+      el("expenseTodayTotal").textContent = peso.format(todayTotal);
+      el("expenseCount").textContent = state.expenses.length;
+      el("expenseHighest").textContent = peso.format(highest);
+      el("expenseRows").innerHTML = state.expenses.map(expense => `
+        <tr>
+          <td>${safe(expense.date || todayKey(expense.createdAt))}</td>
+          <td><strong>${safe(expense.category)}</strong></td>
+          <td>${safe(expense.description)}</td>
+          <td>${peso.format(expense.amount)}</td>
+          <td>${safe(expense.loggedBy || "Admin")}</td>
+          <td>
+            <div class="d-flex gap-1 flex-wrap">
+              <button class="btn btn-sm btn-outline-primary fw-bold" data-edit-expense="${expense.id}">Edit</button>
+              <button class="btn btn-sm btn-outline-danger fw-bold" data-delete-expense="${expense.id}">Delete</button>
+            </div>
+          </td>
+        </tr>`).join("") || `<tr><td colspan="6" class="text-center text-secondary py-4">No expenses logged yet.</td></tr>`;
+      document.querySelectorAll("[data-edit-expense]").forEach(btn => btn.addEventListener("click", () => expenseModal(state.expenses.find(e => e.id === btn.dataset.editExpense))));
+      document.querySelectorAll("[data-delete-expense]").forEach(btn => btn.addEventListener("click", () => deleteExpense(btn.dataset.deleteExpense)));
+    }
+
+    async function deleteExpense(id) {
+      const expense = state.expenses.find(e => e.id === id);
+      if (!expense) return;
+      const result = await SwalFire.fire({
+        title: "Delete expense?",
+        html: `<div class="text-start">
+          <strong>${safe(expense.category)}</strong><br>
+          ${safe(expense.description)} · ${peso.format(expense.amount)}
+        </div>`,
+        icon: "warning",
+        showCancelButton: true,
+        confirmButtonText: "Delete",
+        confirmButtonColor: "#d64f4f"
+      });
+      if (!result.isConfirmed) return;
+      state.expenses = state.expenses.filter(e => e.id !== id);
+      await removeDoc("expenses", id, expense.firestoreId);
+      logActivity(`Deleted expense ${peso.format(expense.amount)}`);
+      renderAll();
+    }
+
+    async function expenseModal(expense = null) {
+      const current = expense || { id: `EXP-${Date.now()}`, date: todayKey(new Date()), category: "Materials", description: "", amount: 0, loggedBy: state.user || "JKM Prime", createdAt: new Date().toISOString() };
+      const res = await SwalFire.fire({
+        title: expense ? "Edit Expense" : "Add Expense",
+        html: `
+          <input id="expenseDate" class="swal2-input" type="date" value="${safe(current.date)}">
+          <select id="expenseCategory" class="swal2-select">
+            ${["Materials", "Utilities", "Rent", "Payroll", "Maintenance", "Delivery", "Others"].map(cat => `<option ${cat === current.category ? "selected" : ""}>${cat}</option>`).join("")}
+          </select>
+          <input id="expenseDesc" class="swal2-input" placeholder="Description" value="${safe(current.description)}">
+          <input id="expenseAmount" class="swal2-input" type="number" min="0" step="1" placeholder="Amount" value="${current.amount}">`,
+        preConfirm: () => ({
+          ...current,
+          date: document.getElementById("expenseDate").value || todayKey(new Date()),
+          category: document.getElementById("expenseCategory").value,
+          description: document.getElementById("expenseDesc").value.trim() || "Business expense",
+          amount: Number(document.getElementById("expenseAmount").value || 0),
+          loggedBy: state.user || "JKM Prime",
+          updatedAt: new Date().toISOString()
+        })
+      });
+      if (!res.value || !res.value.amount) return;
+      const index = state.expenses.findIndex(e => e.id === res.value.id);
+      if (index >= 0) state.expenses[index] = res.value;
+      else state.expenses.unshift(res.value);
+      await syncDoc("expenses", res.value);
+      logActivity(`${expense ? "Edited" : "Logged"} expense ${peso.format(res.value.amount)}`);
+      renderAll();
+    }
+
+    async function materialModal(material = null) {
+      const current = material || { id: `M${String(Date.now()).slice(-5)}`, name: "", unit: "pcs", quantityPerPack: 1, stock: 0, pricePerPack: 0, lowStock: 3 };
+      const res = await SwalFire.fire({
+        title: material ? "Edit Material" : "Add Material",
+        html: `
+          <input id="matName" class="swal2-input" placeholder="Material" value="${safe(current.name)}">
+          <input id="matUnit" class="swal2-input" placeholder="Unit" value="${safe(current.unit)}">
+          <input id="matQtyPack" type="number" class="swal2-input" placeholder="Quantity per pack" value="${current.quantityPerPack}">
+          <input id="matStock" type="number" class="swal2-input" placeholder="Stock level" value="${current.stock}">
+          <input id="matPrice" type="number" class="swal2-input" placeholder="Price per pack" value="${current.pricePerPack}">
+          <input id="matLow" type="number" class="swal2-input" placeholder="Low stock threshold" value="${current.lowStock}">`,
+        preConfirm: () => ({
+          ...current,
+          name: document.getElementById("matName").value.trim(),
+          unit: document.getElementById("matUnit").value.trim(),
+          quantityPerPack: Number(document.getElementById("matQtyPack").value || 0),
+          stock: Number(document.getElementById("matStock").value || 0),
+          pricePerPack: Number(document.getElementById("matPrice").value || 0),
+          lowStock: Number(document.getElementById("matLow").value || 0)
+        })
+      });
+      if (res.value?.name) {
+        upsertMaterial(res.value);
+        logActivity(`${material ? "Edited" : "Added"} material ${res.value.name}`);
+      }
+    }
+
+    function renderReconciliation() {
+      const currentSales = monthlySales();
+      const currentExpenses = monthlyExpenses();
+      renderShareCards("reconShareCards", currentSales, currentExpenses);
+      el("reconRows").innerHTML = archiveMonths().map(month => {
+        const sales = monthlySales(month);
+        const expenses = monthlyExpenses(month);
+        const shares = shareBreakdown(sales, expenses);
+        return `<tr>
+          <td><strong>${safe(month)}</strong></td>
+          <td>${peso.format(sales)}</td>
+          <td>${peso.format(expenses)}</td>
+          <td>${peso.format(shares.net)}</td>
+          <td>${peso.format(shares.mark)}</td>
+          <td>${peso.format(shares.kaye)}</td>
+          <td>${peso.format(shares.jobelle)}</td>
+          <td>${peso.format(shares.maintenance)}</td>
+        </tr>`;
+      }).join("") || `<tr><td colspan="8" class="text-center text-secondary py-4">No reconciliation rows yet.</td></tr>`;
+    }
+
+    async function addReconciliation() {
+      const res = await SwalFire.fire({
+        title: "Monthly Summary & Reconciliation",
+        html: `
+          <input id="reconMonth" class="swal2-input" type="month" value="${monthKey(new Date())}">
+          <input id="reconSales" class="swal2-input" type="number" placeholder="Total Sales" value="${monthlySales()}">
+          <input id="reconExpenses" class="swal2-input" type="number" placeholder="Total Expenses" value="${monthlyExpenses()}">`,
+        preConfirm: () => ({
+          id: document.getElementById("reconMonth").value,
+          month: document.getElementById("reconMonth").value,
+          sales: Number(document.getElementById("reconSales").value || 0),
+          expenses: Number(document.getElementById("reconExpenses").value || 0),
+          createdAt: new Date().toISOString()
+        })
+      });
+      if (!res.value?.month) return;
+      const existing = state.reconciliation.findIndex(r => r.month === res.value.month);
+      if (existing >= 0) state.reconciliation[existing] = res.value;
+      else state.reconciliation.unshift(res.value);
+      await syncDoc("reconciliation", res.value);
+      logActivity(`Saved reconciliation ${res.value.month}`);
+      renderReconciliation();
+    }
+
+    function renderQuoteProductOptions() {
+      el("quoteProduct").innerHTML = productCatalog.map(p => `<option value="${p.id}">${safe(p.category)} · ${safe(p.name)} · ${peso.format(p.price)}</option>`).join("");
+      setQuotePrice();
+    }
+
+    function setQuotePrice() {
+      const product = productCatalog.find(p => p.id === el("quoteProduct").value);
+      el("quotePrice").value = product?.price || 0;
+    }
+
+    function renderQuote() {
+      el("quoteRows").innerHTML = state.quote.map(item => `
+        <tr>
+          <td>${safe(item.name)}</td><td>${item.qty}</td><td>${peso.format(item.price)}</td><td>${peso.format(item.price * item.qty)}</td>
+          <td><button class="icon-btn" data-remove-quote="${item.id}" title="Remove"><i data-lucide="x"></i></button></td>
+        </tr>`).join("") || `<tr><td colspan="5" class="text-center text-secondary py-4">No quotation items yet.</td></tr>`;
+      el("quoteTotal").textContent = peso.format(quoteTotal());
+      document.querySelectorAll("[data-remove-quote]").forEach(b => b.addEventListener("click", () => { state.quote = state.quote.filter(i => i.id !== b.dataset.removeQuote); renderQuote(); }));
+      lucide.createIcons();
+    }
+
+    function addQuoteItem() {
+      const product = productCatalog.find(p => p.id === el("quoteProduct").value);
+      if (!product) return;
+      state.quote.push({ id: crypto.randomUUID(), category: product.category, name: product.name, qty: Number(el("quoteQty").value || 1), price: Number(el("quotePrice").value || product.price) });
+      renderQuote();
+    }
+
+    function printQuotation() {
+      if (!state.quote.length) return SwalFire.fire("No items", "Add at least one quotation line.", "info");
+      const customer = el("quoteCustomer").value.trim() || "Valued Customer";
+      const validity = el("quoteValidity").value || new Date(Date.now() + 7 * 86400000).toISOString().slice(0,10);
+      const rows = state.quote.map(i => `<tr><td>${safe(i.name)}</td><td style="text-align:center">${i.qty}</td><td style="text-align:right">${peso.format(i.price)}</td><td style="text-align:right">${peso.format(i.price * i.qty)}</td></tr>`).join("");
+      el("quotationPaper").innerHTML = `
+        <h2>JKM PRIME DIGITAL PRINTS</h2>
+        <div class="mini" style="text-align:center">Business Quotation</div>
+        <hr>
+        <p><strong>Customer:</strong> ${safe(customer)}<br><strong>Validity Date:</strong> ${safe(validity)}<br><strong>Prepared:</strong> ${new Date().toLocaleString()}</p>
+        <table class="print-table">
+          <thead><tr><th style="text-align:left">Item</th><th>Qty</th><th style="text-align:right">Unit Price</th><th style="text-align:right">Amount</th></tr></thead>
+          <tbody>${rows}</tbody>
+        </table>
+        <h3 style="text-align:right;margin-top:18px">Total: ${peso.format(quoteTotal())}</h3>
+        <p class="mini">Prices are valid until the date above and may change with artwork complexity, rush processing, material availability, and approved specifications.</p>`;
+      document.body.classList.add("quotation-print");
+      document.body.classList.remove("receipt-print");
+      window.print();
+      setTimeout(() => document.body.classList.remove("quotation-print"), 300);
+      logActivity(`Generated quotation for ${customer}`);
+    }
+
+    function renderDashboard() {
+      const now = new Date();
+      const startWeek = new Date(now);
+      startWeek.setDate(now.getDate() - now.getDay());
+      const completed = state.orders.filter(o => o.status === "Completed" || o.total);
+      const today = completed.filter(o => todayKey(o.createdAt) === todayKey(now)).reduce((s, o) => s + Number(o.total), 0);
+      const week = completed.filter(o => new Date(o.createdAt) >= startWeek).reduce((s, o) => s + Number(o.total), 0);
+      const month = completed.filter(o => monthKey(o.createdAt) === monthKey(now)).reduce((s, o) => s + Number(o.total), 0);
+      const expenses = monthlyExpenses(monthKey(now));
+      const shares = renderShareCards("dashboardShareCards", month, expenses);
+      el("todayIncome").textContent = peso.format(today);
+      el("weekIncome").textContent = peso.format(week);
+      el("monthIncome").textContent = peso.format(month);
+      el("monthExpenses").textContent = peso.format(expenses);
+      el("dashboardNetProfit").textContent = `Net Profit ${peso.format(shares.net)}`;
+      renderActivities();
+      if (state.view === "dashboard") renderCharts();
+    }
+
+    function groupSum(items, keyFn) {
+      return items.reduce((acc, item) => {
+        const key = keyFn(item);
+        acc[key] = (acc[key] || 0) + Number(item.total || item.amount || 0);
+        return acc;
+      }, {});
+    }
+
+    function renderCharts() {
+      if (!window.Chart) return;
+      if (state.view !== "dashboard") return;
+      const days = [...Array(7)].map((_, i) => {
+        const d = new Date();
+        d.setDate(d.getDate() - (6 - i));
+        return todayKey(d);
+      });
+      const salesByDay = groupSum(state.orders, o => todayKey(o.createdAt));
+      chart("dailyChart", "bar", days.map(d => d.slice(5)), days.map(d => salesByDay[d] || 0), "#2877d1");
+      const productTotals = {};
+      const catTotals = {};
+      state.orders.forEach(o => o.items?.forEach(i => {
+        productTotals[i.name] = (productTotals[i.name] || 0) + i.price * i.qty;
+        catTotals[i.category] = (catTotals[i.category] || 0) + i.price * i.qty;
+      }));
+      const top = Object.entries(productTotals).sort((a,b) => b[1] - a[1]).slice(0, 6);
+      chart("topChart", "doughnut", top.map(t => t[0]), top.map(t => t[1]), ["#0b1f3a", "#2877d1", "#16a085", "#f2b705", "#d64f4f", "#8e44ad"]);
+      const cats = Object.entries(catTotals).sort((a,b) => b[1] - a[1]).slice(0, 8);
+      chart("categoryChart", "bar", cats.map(t => t[0]), cats.map(t => t[1]), "#168a52", true);
+    }
+
+    function chart(id, type, labels, data, color, horizontal = false) {
+      const canvas = el(id);
+      if (!canvas) return;
+      if (state.charts[id]) state.charts[id].destroy();
+      state.charts[id] = new Chart(canvas, {
+        type,
+        data: { labels, datasets: [{ data, backgroundColor: color, borderRadius: 6 }] },
+        options: {
+          responsive: true,
+          maintainAspectRatio: false,
+          indexAxis: horizontal ? "y" : "x",
+          plugins: { legend: { display: type === "doughnut" } },
+          scales: type === "doughnut" ? {} : { y: { beginAtZero: true }, x: { ticks: { maxRotation: 0, autoSkip: true } } }
+        }
+      });
+    }
+
+    function renderActivities() {
+      el("activityRows").innerHTML = state.activities.slice(0, 8).map(a => `<tr><td>${safe(a.user)}</td><td>${safe(a.role)}</td><td>${safe(a.action)}</td><td>${new Date(a.time).toLocaleTimeString()}</td></tr>`).join("") || `<tr><td colspan="4" class="text-center text-secondary py-4">No activity yet.</td></tr>`;
+    }
+
+    async function showOrderQr(id) {
+      const order = state.orders.find(o => o.id === id);
+      const url = trackingUrl(id);
+      const qrMarkup = await createQrMarkup(url, 220);
+      SwalFire.fire({
+        title: `Track ${id}`,
+        html: `
+          <div class="qr-card">
+            <div class="qr-frame">${qrMarkup}</div>
+            <div class="text-secondary">Scan to view live order status${order ? ` for ${safe(order.customer)}` : ""}.</div>
+            <div class="qr-link">${safe(url)}</div>
+          </div>`,
+        confirmButtonText: "Done"
+      });
+    }
+
+    async function trackOrder(id = el("trackingInput").value.trim()) {
+      const order = state.orders.find(o => o.id === id);
+      document.querySelectorAll(".step").forEach(step => step.classList.toggle("active", order && statuses.indexOf(step.dataset.step) <= statuses.indexOf(order.status)));
+      if (!order) {
+        el("trackingResult").innerHTML = `<div class="alert alert-warning">Order not found. Please check the order ID.</div>`;
+        el("qrBox").innerHTML = "";
+        return;
+      }
+      el("trackingResult").innerHTML = `<div class="alert alert-primary"><strong>${safe(order.id)}</strong><br>${safe(order.customer)} · ${peso.format(order.total)}<br>Status: <span class="status-badge status-${order.status.replaceAll(" ", "-")}">${safe(order.status)}</span></div>`;
+      const url = trackingUrl(order.id);
+      el("qrBox").innerHTML = await createQrMarkup(url, 180);
+    }
+
+    function trackingUrl(id) {
+      const cleanUrl = location.href.split("#")[0];
+      return `${cleanUrl}#track=${encodeURIComponent(id)}`;
+    }
+
+    async function createQrMarkup(text, size = 220) {
+      try {
+        if (!window.QRCode) throw new Error("QRCode library not loaded");
+        const canvas = document.createElement("canvas");
+        await QRCode.toCanvas(canvas, text, {
+          width: size,
+          margin: 2,
+          errorCorrectionLevel: "M",
+          color: { dark: "#0b1f3a", light: "#ffffff" }
+        });
+        return `<img src="${canvas.toDataURL("image/png")}" alt="QR code" width="${size}" height="${size}">`;
+      } catch (error) {
+        console.warn("QR render fallback:", error);
+        return `<div class="alert alert-warning m-0">QR preview unavailable. Use the tracking link below.</div>`;
+      }
+    }
+
+    function renderAll() {
+      renderProducts();
+      renderCart();
+      renderOrders();
+      renderMaterials();
+      renderEquipment();
+      renderExpenses();
+      renderReconciliation();
+      renderQuote();
+      renderDashboard();
+      if (el("trackingInput").value.trim()) trackOrder();
+    }
+
+    function bindEvents() {
+      el("adminLoginForm").addEventListener("submit", handleAdminLogin);
+      el("toggleLoginPassword").addEventListener("click", toggleLoginPassword);
+      el("publicTrackBtn").addEventListener("click", openPublicTracking);
+      el("menuBtn").addEventListener("click", () => el("sidebar").classList.toggle("open"));
+      el("newOrderBtn").addEventListener("click", () => showView("pos"));
+      el("quoteBtn").addEventListener("click", () => showView("quotation"));
+      el("trackBtn").addEventListener("click", () => showView("customer"));
+      el("logoutBtn").addEventListener("click", () => { localStorage.removeItem("jkm_session"); state.role = null; state.user = null; setAppAccess(null); });
+      el("productSearch").addEventListener("input", renderProducts);
+      el("cashInput").addEventListener("input", updateChange);
+      el("checkoutBtn").addEventListener("click", checkout);
+      el("clearCartBtn").addEventListener("click", () => { state.cart = []; persistLocal(); renderCart(); });
+      el("refreshOrdersBtn").addEventListener("click", renderAll);
+      el("orderNameFilter").addEventListener("input", () => { state.orderFilters.name = el("orderNameFilter").value.trim(); renderOrders(); });
+      el("orderMonthFilter").addEventListener("change", () => { state.orderFilters.month = el("orderMonthFilter").value; renderOrders(); });
+      el("orderDateFilter").addEventListener("change", () => { state.orderFilters.date = el("orderDateFilter").value; renderOrders(); });
+      el("clearOrderFiltersBtn").addEventListener("click", () => {
+        state.orderFilters = { name: "", month: "", date: "" };
+        el("orderNameFilter").value = "";
+        el("orderMonthFilter").value = "";
+        el("orderDateFilter").value = "";
+        renderOrders();
+      });
+      el("addMaterialBtn").addEventListener("click", () => materialModal());
+      el("addEquipmentBtn").addEventListener("click", () => equipmentModal());
+      el("addExpenseBtn").addEventListener("click", () => expenseModal());
+      el("quoteProduct").addEventListener("change", setQuotePrice);
+      el("addQuoteItemBtn").addEventListener("click", addQuoteItem);
+      el("printQuoteBtn").addEventListener("click", printQuotation);
+      el("clearQuoteBtn").addEventListener("click", () => { state.quote = []; renderQuote(); });
+      el("trackingBtn").addEventListener("click", () => trackOrder());
+      setInterval(() => { el("clockText").textContent = new Date().toLocaleString(); }, 1000);
+    }
+
+    async function bootstrap() {
+      loadLocalData();
+      bindEvents();
+      renderQuoteProductOptions();
+      renderAll();
+      await initFirebase();
+      initSocket();
+      const hashTrack = new URLSearchParams(location.hash.replace(/^#/, "")).get("track") || (location.hash.startsWith("#track=") ? decodeURIComponent(location.hash.replace("#track=", "")) : "");
+      if (hashTrack) {
+        setAppAccess("Public", "Customer");
+      } else {
+        await loginFlow(false);
+      }
+      if (hashTrack) {
+        el("trackingInput").value = hashTrack;
+        showView("customer");
+        trackOrder(hashTrack);
+      }
+      lucide.createIcons();
+    }
+
+    bootstrap();
+  </script>
+</body>
+</html>
