@@ -1106,14 +1106,8 @@
 }
 
     function persistLocal() {
-      store.set("orders", state.orders);
-      store.set("materials", state.materials);
-      store.set("equipment", state.equipment);
-      store.set("expenses", state.expenses);
-      store.set("reconciliation", state.reconciliation);
-      store.set("activities", state.activities.slice(0, 50));
-      store.set("cart", state.cart);
-    }
+ // Firebase only
+}
 
     async function initFirebase() {
       if (Object.values(FIREBASE_CONFIG).some(v => String(v).startsWith("PASTE_"))) {
@@ -1138,115 +1132,100 @@
     }
 
     function subscribeFirestore() {
+
  if (!state.db) return;
 
- onSnapshot(collection(state.db, "orders"), snap => {
-   state.orders = snap.docs.map(d => ({
-     ...d.data(),
-     firestoreId: d.id
-   }));
+ const realtimeOptions = {
+   includeMetadataChanges: true
+ };
 
-   renderAll();
- });
+ onSnapshot(
+   collection(state.db, "orders"),
+   realtimeOptions,
+   snap => {
 
- onSnapshot(collection(state.db, "materials"), snap => {
+     state.orders = snap.docs.map(d => ({
+       ...d.data(),
+       firestoreId: d.id
+     }));
 
-   if (snap.empty) {
-     seedMaterials.forEach(async item => {
-       await setDoc(doc(state.db, "materials", item.id), item);
-     });
-     return;
+     state.orders.sort((a,b)=>
+       new Date(b.createdAt) - new Date(a.createdAt)
+     );
+
+     requestAnimationFrame(renderAll);
    }
+ );
 
-   state.materials = snap.docs.map(d => ({
-     ...d.data(),
-     firestoreId: d.id
-   }));
+ onSnapshot(
+   collection(state.db, "materials"),
+   realtimeOptions,
+   async snap => {
 
-   renderAll();
- });
+     if (snap.empty) {
+       for (const item of seedMaterials) {
+         await setDoc(doc(state.db, "materials", item.id), item);
+       }
+       return;
+     }
 
- onSnapshot(collection(state.db, "equipment"), snap => {
+     state.materials = snap.docs.map(d => ({
+       ...d.data(),
+       firestoreId: d.id
+     }));
 
-   if (snap.empty) {
-     seedEquipment.forEach(async item => {
-       await setDoc(doc(state.db, "equipment", item.id), item);
-     });
-     return;
+     requestAnimationFrame(renderAll);
    }
+ );
 
-   state.equipment = snap.docs.map(d => ({
-     ...d.data(),
-     firestoreId: d.id
-   }));
+ onSnapshot(
+   collection(state.db, "equipment"),
+   realtimeOptions,
+   async snap => {
 
-   renderAll();
- });
+     if (snap.empty) {
+       for (const item of seedEquipment) {
+         await setDoc(doc(state.db, "equipment", item.id), item);
+       }
+       return;
+     }
 
- onSnapshot(collection(state.db, "expenses"), snap => {
-   state.expenses = snap.docs.map(d => ({
-     ...d.data(),
-     firestoreId: d.id
-   }));
+     state.equipment = snap.docs.map(d => ({
+       ...d.data(),
+       firestoreId: d.id
+     }));
 
-   renderAll();
- });
+     requestAnimationFrame(renderAll);
+   }
+ );
 
- onSnapshot(collection(state.db, "reconciliation"), snap => {
-   state.reconciliation = snap.docs.map(d => ({
-     ...d.data(),
-     firestoreId: d.id
-   }));
+ onSnapshot(
+   collection(state.db, "expenses"),
+   realtimeOptions,
+   snap => {
 
-   renderAll();
- });
-}
+     state.expenses = snap.docs.map(d => ({
+       ...d.data(),
+       firestoreId: d.id
+     }));
 
-    function initSocket() {
-      try {
-        state.socket = io(SOCKET_URL, { transports: ["websocket"], timeout: 1200, autoConnect: true });
-        state.socket.on("connect", () => { state.socketReady = true; setSyncLabel(); });
-        state.socket.on("disconnect", () => { state.socketReady = false; setSyncLabel(); });
-        state.socket.on("order:update", order => upsertOrder(order, false));
-        state.socket.on("inventory:update", material => upsertMaterial(material, false));
-      } catch (error) {
-        state.socketReady = false;
-        setSyncLabel();
-      }
-    }
+     requestAnimationFrame(renderAll);
+   }
+ );
 
-    function setSyncLabel() {
-      const label = el("syncLabel");
-      const parts = [];
-      if (state.firebaseReady) parts.push("Firebase");
-      if (state.socketReady) parts.push("Socket");
-      label.textContent = parts.length ? parts.join(" + ") : "Local";
-    }
+ onSnapshot(
+   collection(state.db, "reconciliation"),
+   realtimeOptions,
+   snap => {
 
-  
-async function syncDoc(type, payload) {
-  persistLocal();
+     state.reconciliation = snap.docs.map(d => ({
+       ...d.data(),
+       firestoreId: d.id
+     }));
 
-  if (!state.db) return;
-
-  try {
-
-    const cleanPayload = JSON.parse(JSON.stringify(payload));
-
-    delete cleanPayload.firestoreId;
-
-    await setDoc(
-      doc(state.db, type, payload.id),
-      {
-        ...cleanPayload,
-        updatedAt: serverTimestamp()
-      },
-      { merge: true }
-    );
-
-  } catch (error) {
-    console.warn("Firestore sync skipped:", error);
-  }
+     requestAnimationFrame(renderAll);
+   }
+ );
 }
 
 
@@ -2154,27 +2133,15 @@ async function syncDoc(type, payload) {
       setInterval(() => { el("clockText").textContent = new Date().toLocaleString(); }, 1000);
     }
 
-    async function bootstrap() {
-      loadLocalData();
-      bindEvents();
-      renderQuoteProductOptions();
-      renderAll();
-      await initFirebase();
-      initSocket();
-      const hashTrack = new URLSearchParams(location.hash.replace(/^#/, "")).get("track") || (location.hash.startsWith("#track=") ? decodeURIComponent(location.hash.replace("#track=", "")) : "");
-      if (hashTrack) {
-        setAppAccess("Public", "Customer");
-      } else {
-        await loginFlow(false);
-      }
-      if (hashTrack) {
-        el("trackingInput").value = hashTrack;
-        showView("customer");
-        trackOrder(hashTrack);
-      }
-      lucide.createIcons();
-    }
+    function setSyncLabel() {
+ const label = el("syncLabel");
 
+ if (state.firebaseReady) {
+   label.textContent = "Realtime Connected";
+ } else {
+   label.textContent = "Offline";
+ }
+}
     bootstrap();
   </script>
 </body>
