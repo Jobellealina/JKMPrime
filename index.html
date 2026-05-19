@@ -1169,7 +1169,7 @@
 
     function setSyncLabel(message = "") {
       const label = el("syncLabel");
-      label.textContent = message || (state.firebaseReady ? "Firebase Realtime" : "Connecting");
+      label.textContent = message || (state.firebaseReady ? "Realtime" : "Connecting");
     }
 
     async function syncDoc(type, payload) {
