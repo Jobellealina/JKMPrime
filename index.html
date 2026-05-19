@@ -658,19 +658,17 @@
       <div>
         <img class="logo-img" alt="JKM Prime logo" src="logo.png">
         <h1>JKM Prime Digital Prints</h1>
-        <p>Admin workspace for POS, inventory, sales, expenses, monthly archive, and reconciliation.</p>
+        <p>Admin workspace.</p>
       </div>
       <div class="login-feature-list">
         <span><i data-lucide="badge-check" class="icon"></i> Admin-only secured access</span>
-        <span><i data-lucide="chart-no-axes-combined" class="icon"></i> Automatic monthly profit sharing</span>
         <span><i data-lucide="qr-code" class="icon"></i> Public order tracking without login</span>
       </div>
-      <small>Commercial POS + Business Management System</small>
+      <small>Business Management System</small>
     </aside>
     <main class="login-main">
       <form class="login-card" id="adminLoginForm">
-        <h2>Admin Login</h2>
-        <p class="subtext">Sign in to access dashboard, POS, live orders, and monthly records.</p>
+        <h2>Admin Login</h2><br>
         <div class="login-error" id="loginError">Invalid JKM Prime admin credentials.</div>
         <div class="login-field">
           <label for="loginUsername">Username</label>
@@ -696,7 +694,7 @@
         <img class="logo-img" alt="JKM Prime logo" src="logo.png">
         <div>
           <div class="brand-title">JKM Prime<br>Digital Prints</div>
-          <div class="brand-sub">Commercial POS + Business Suite</div>
+          <div class="brand-sub">Business Suite</div>
         </div>
       </div>
       <div class="role-chip">
@@ -977,13 +975,14 @@
     import { getFirestore, collection, doc, setDoc, deleteDoc, onSnapshot, updateDoc, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.12.4/firebase-firestore.js";
 
     const FIREBASE_CONFIG = {
-      apiKey: "PASTE_FIREBASE_API_KEY",
-      authDomain: "PASTE_PROJECT.firebaseapp.com",
-      projectId: "PASTE_PROJECT_ID",
-      storageBucket: "PASTE_PROJECT.appspot.com",
-      messagingSenderId: "PASTE_SENDER_ID",
-      appId: "PASTE_APP_ID"
-    };
+    apiKey: "AIzaSyAyCSmhRm6G05KoLiEFV-QK4fSZ67ql0UM",
+  authDomain: "jkm-project-tracking.firebaseapp.com",
+  databaseURL: "https://jkm-project-tracking-default-rtdb.firebaseio.com",
+  projectId: "jkm-project-tracking",
+  storageBucket: "jkm-project-tracking.firebasestorage.app",
+  messagingSenderId: "971289237705",
+  appId: "1:971289237705:web:cba8199d385afafafd9518"
+};
     const SOCKET_URL = "http://localhost:3000";
     const LOGIN_USERNAME = "JKM Prime";
     const LOGIN_PASSWORD = "Jkmprime@2026";
