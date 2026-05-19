@@ -974,17 +974,7 @@
   <script type="module">
     import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.4/firebase-app.js";
     import { getAuth, signInAnonymously, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.12.4/firebase-auth.js";
-   import {
- getFirestore,
- collection,
- doc,
- setDoc,
- deleteDoc,
- onSnapshot,
- updateDoc,
- serverTimestamp,
- getDocs
-} from "https://www.gstatic.com/firebasejs/10.12.4/firebase-firestore.js";
+    import { getFirestore, collection, doc, setDoc, deleteDoc, onSnapshot, updateDoc, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.12.4/firebase-firestore.js";
 
     const FIREBASE_CONFIG = {
       apiKey: "PASTE_FIREBASE_API_KEY",
@@ -1076,6 +1066,14 @@
       charts: {}
     };
 
+    const store = {
+      get(key, fallback) {
+        try { return JSON.parse(localStorage.getItem(`jkm_${key}`)) ?? fallback; }
+        catch { return fallback; }
+      },
+      set(key, value) { localStorage.setItem(`jkm_${key}`, JSON.stringify(value)); }
+    };
+
     const el = id => document.getElementById(id);
     const safe = text => String(text ?? "").replace(/[&<>"']/g, ch => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[ch]));
     const todayKey = date => new Date(date).toISOString().slice(0, 10);
@@ -1088,27 +1086,26 @@
     const cartTotal = () => state.cart.reduce((sum, item) => sum + item.price * item.qty, 0);
     const quoteTotal = () => state.quote.reduce((sum, item) => sum + item.price * item.qty, 0);
 
-    async function loadFirebaseData() {
- if (!state.db) return;
+    function loadLocalData() {
+      state.orders = store.get("orders", []);
+      state.materials = store.get("materials", seedMaterials);
+      state.equipment = store.get("equipment", seedEquipment);
+      if (!state.equipment.length) state.equipment = seedEquipment;
+      state.expenses = store.get("expenses", []);
+      state.reconciliation = store.get("reconciliation", []);
+      state.activities = store.get("activities", []);
+      state.cart = store.get("cart", []);
+    }
 
- renderAll();
-
- const materialsSnap = await getDocs(collection(state.db, "materials"));
- if (materialsSnap.empty) {
-   for (const item of seedMaterials) {
-     await setDoc(doc(state.db, "materials", item.id), item);
-   }
- }
-
- const equipmentSnap = await getDocs(collection(state.db, "equipment"));
- if (equipmentSnap.empty) {
-   for (const item of seedEquipment) {
-     await setDoc(doc(state.db, "equipment", item.id), item);
-   }
- }
-}
-
-  
+    function persistLocal() {
+      store.set("orders", state.orders);
+      store.set("materials", state.materials);
+      store.set("equipment", state.equipment);
+      store.set("expenses", state.expenses);
+      store.set("reconciliation", state.reconciliation);
+      store.set("activities", state.activities.slice(0, 50));
+      store.set("cart", state.cart);
+    }
 
     async function initFirebase() {
       if (Object.values(FIREBASE_CONFIG).some(v => String(v).startsWith("PASTE_"))) {
@@ -1135,24 +1132,29 @@
       if (!state.db) return;
       onSnapshot(collection(state.db, "orders"), snap => {
         state.orders = snap.docs.map(d => ({ ...d.data(), firestoreId: d.id }));
+        persistLocal();
         renderAll();
       });
       onSnapshot(collection(state.db, "materials"), snap => {
         if (snap.empty) return;
         state.materials = snap.docs.map(d => ({ ...d.data(), firestoreId: d.id }));
+        persistLocal();
         renderAll();
       });
       onSnapshot(collection(state.db, "expenses"), snap => {
         state.expenses = snap.docs.map(d => ({ ...d.data(), firestoreId: d.id }));
+        persistLocal();
         renderAll();
       });
       onSnapshot(collection(state.db, "equipment"), snap => {
         if (snap.empty) return;
         state.equipment = snap.docs.map(d => ({ ...d.data(), firestoreId: d.id }));
+        persistLocal();
         renderAll();
       });
       onSnapshot(collection(state.db, "reconciliation"), snap => {
         state.reconciliation = snap.docs.map(d => ({ ...d.data(), firestoreId: d.id }));
+        persistLocal();
         renderAll();
       });
     }
@@ -1179,6 +1181,7 @@
     }
 
     async function syncDoc(type, payload) {
+      persistLocal();
       if (state.socketReady) {
         state.socket.emit(type === "materials" ? "inventory:update" : `${type}:update`, payload);
         state.socket.emit("admin:action", { user: state.user, role: state.role, type, payload, at: new Date().toISOString() });
@@ -1193,6 +1196,7 @@
     }
 
     async function removeDoc(type, id, firestoreId = null) {
+      persistLocal();
       if (state.socketReady) state.socket.emit(`${type}:delete`, { id });
       if (!state.db) return;
       try {
@@ -1203,18 +1207,11 @@
     }
 
     function logActivity(action) {
-  state.activities.unshift({
-    id: crypto.randomUUID(),
-    user: state.user || "JKM Prime",
-    role: state.role || "Admin",
-    action,
-    time: new Date().toISOString()
-  });
-
-  state.activities = state.activities.slice(0, 50);
-
-  renderActivities();
-}
+      state.activities.unshift({ id: crypto.randomUUID(), user: state.user || "JKM Prime", role: state.role || "Admin", action, time: new Date().toISOString() });
+      state.activities = state.activities.slice(0, 50);
+      persistLocal();
+      renderActivities();
+    }
 
     function allowedViews(role) {
       if (role === "Admin") return ["dashboard", "pos", "orders", "inventory", "equipment", "expenses", "reconcile", "quotation", "customer"];
@@ -1281,10 +1278,7 @@
       errorBox.classList.remove("show");
       showCmykLoading().then(() => {
         const session = { user: username, role: "Admin" };
-        sessionStorage.setItem(
- "jkm_session",
- JSON.stringify(session)
-);
+        store.set("session", session);
         state.user = username;
         state.role = "Admin";
         logActivity("Logged in as Admin");
@@ -1321,19 +1315,15 @@
       });
     }
     async function loginFlow(force = false) {
-  const session = JSON.parse(
-    sessionStorage.getItem("jkm_session") || "null"
-  );
-
-  if (session && session.role === "Admin" && !force) {
-    setAppAccess("Admin", session.user || LOGIN_USERNAME);
-    logActivity("Session restored");
-    return;
-  }
-
-  setAppAccess(null);
-  el("loginPassword").focus();
-}
+      const session = store.get("session", null);
+      if (session && session.role === "Admin" && !force) {
+        setAppAccess("Admin", session.user || LOGIN_USERNAME);
+        logActivity("Session restored");
+        return;
+      }
+      setAppAccess(null);
+      el("loginPassword").focus();
+    }
 
     function renderProducts() {
       const categories = ["ALL", ...new Set(productCatalog.map(p => p.category))];
@@ -1356,6 +1346,7 @@
       if (existing) existing.qty += 1;
       else state.cart.push({ ...product, qty: 1 });
       logActivity(`Added ${product.name} to cart`);
+      persistLocal();
       renderCart();
     }
 
@@ -1364,7 +1355,7 @@
       if (!item) return;
       item.qty += delta;
       if (item.qty <= 0) state.cart = state.cart.filter(i => i.id !== productId);
-
+      persistLocal();
       renderCart();
     }
 
@@ -1393,7 +1384,7 @@
       updateChange();
       document.querySelectorAll("[data-inc]").forEach(b => b.addEventListener("click", () => changeQty(b.dataset.inc, 1)));
       document.querySelectorAll("[data-dec]").forEach(b => b.addEventListener("click", () => changeQty(b.dataset.dec, -1)));
-      document.querySelectorAll("[data-remove]").forEach(b => b.addEventListener("click", () => { state.cart = state.cart.filter(i => i.id !== b.dataset.remove); renderCart(); }));
+      document.querySelectorAll("[data-remove]").forEach(b => b.addEventListener("click", () => { state.cart = state.cart.filter(i => i.id !== b.dataset.remove); persistLocal(); renderCart(); }));
       lucide.createIcons();
     }
 
@@ -1553,7 +1544,7 @@
       const index = state.orders.findIndex(o => o.id === order.id);
       if (index >= 0) state.orders[index] = order;
       else state.orders.unshift(order);
-
+      persistLocal();
       renderAll();
       if (emit) syncDoc("orders", order);
     }
@@ -1562,6 +1553,7 @@
       const index = state.materials.findIndex(m => m.id === material.id);
       if (index >= 0) state.materials[index] = material;
       else state.materials.push(material);
+      persistLocal();
       renderAll();
       if (emit) syncDoc("materials", material);
     }
@@ -2079,11 +2071,11 @@
       el("newOrderBtn").addEventListener("click", () => showView("pos"));
       el("quoteBtn").addEventListener("click", () => showView("quotation"));
       el("trackBtn").addEventListener("click", () => showView("customer"));
-      el("logoutBtn").addEventListener("click", () => { sessionStorage.removeItem("jkm_session"); state.role = null; state.user = null; setAppAccess(null); });
+      el("logoutBtn").addEventListener("click", () => { localStorage.removeItem("jkm_session"); state.role = null; state.user = null; setAppAccess(null); });
       el("productSearch").addEventListener("input", renderProducts);
       el("cashInput").addEventListener("input", updateChange);
       el("checkoutBtn").addEventListener("click", checkout);
-      el("clearCartBtn").addEventListener("click", () => { state.cart = []; renderCart(); });
+      el("clearCartBtn").addEventListener("click", () => { state.cart = []; persistLocal(); renderCart(); });
       el("refreshOrdersBtn").addEventListener("click", renderAll);
       el("orderNameFilter").addEventListener("input", () => { state.orderFilters.name = el("orderNameFilter").value.trim(); renderOrders(); });
       el("orderMonthFilter").addEventListener("change", () => { state.orderFilters.month = el("orderMonthFilter").value; renderOrders(); });
