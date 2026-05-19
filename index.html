@@ -972,7 +972,7 @@
   <script type="module">
     import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.4/firebase-app.js";
     import { getAuth, signInAnonymously, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.12.4/firebase-auth.js";
-    import { getFirestore, collection, doc, setDoc, deleteDoc, onSnapshot, updateDoc, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.12.4/firebase-firestore.js";
+    import { getFirestore, collection, doc, setDoc, deleteDoc, onSnapshot, updateDoc, getDocs, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.12.4/firebase-firestore.js";
 
     const FIREBASE_CONFIG = {
     apiKey: "AIzaSyAyCSmhRm6G05KoLiEFV-QK4fSZ67ql0UM",
@@ -1086,24 +1086,17 @@
     const quoteTotal = () => state.quote.reduce((sum, item) => sum + item.price * item.qty, 0);
 
     function loadLocalData() {
-      state.orders = store.get("orders", []);
-      state.materials = store.get("materials", seedMaterials);
-      state.equipment = store.get("equipment", seedEquipment);
-      if (!state.equipment.length) state.equipment = seedEquipment;
-      state.expenses = store.get("expenses", []);
-      state.reconciliation = store.get("reconciliation", []);
-      state.activities = store.get("activities", []);
-      state.cart = store.get("cart", []);
+      state.orders = [];
+      state.materials = seedMaterials;
+      state.equipment = seedEquipment;
+      state.expenses = [];
+      state.reconciliation = [];
+      state.activities = [];
+      state.cart = [];
     }
 
     function persistLocal() {
-      store.set("orders", state.orders);
-      store.set("materials", state.materials);
-      store.set("equipment", state.equipment);
-      store.set("expenses", state.expenses);
-      store.set("reconciliation", state.reconciliation);
-      store.set("activities", state.activities.slice(0, 50));
-      store.set("cart", state.cart);
+      return;
     }
 
     async function initFirebase() {
@@ -1115,11 +1108,18 @@
         const app = initializeApp(FIREBASE_CONFIG);
         const auth = getAuth(app);
         state.db = getFirestore(app);
-        await signInAnonymously(auth);
+        try {
+          await signInAnonymously(auth);
+        } catch (authError) {
+          console.warn("Anonymous Firebase Auth is not enabled; continuing with Firestore rules:", authError);
+        }
+        state.firebaseReady = true;
+        setSyncLabel();
         onAuthStateChanged(auth, user => {
-          state.firebaseReady = !!user;
+          state.firebaseReady = !!user || !!state.db;
           setSyncLabel();
         });
+        await seedFirestoreDefaults();
         subscribeFirestore();
       } catch (error) {
         console.warn("Firebase disabled:", error);
@@ -1127,65 +1127,56 @@
       }
     }
 
+    async function seedFirestoreDefaults() {
+      if (!state.db) return;
+      const seedCollection = async (name, rows) => {
+        const snap = await getDocs(collection(state.db, name));
+        if (!snap.empty) return;
+        await Promise.all(rows.map(row => setDoc(doc(state.db, name, row.id), { ...row, seededAt: serverTimestamp(), updatedAt: serverTimestamp() })));
+      };
+      await seedCollection("materials", seedMaterials);
+      await seedCollection("equipment", seedEquipment);
+    }
+
     function subscribeFirestore() {
       if (!state.db) return;
       onSnapshot(collection(state.db, "orders"), snap => {
         state.orders = snap.docs.map(d => ({ ...d.data(), firestoreId: d.id }));
-        persistLocal();
         renderAll();
       });
       onSnapshot(collection(state.db, "materials"), snap => {
-        if (snap.empty) return;
-        state.materials = snap.docs.map(d => ({ ...d.data(), firestoreId: d.id }));
-        persistLocal();
+        state.materials = snap.empty ? seedMaterials : snap.docs.map(d => ({ ...d.data(), firestoreId: d.id }));
         renderAll();
       });
       onSnapshot(collection(state.db, "expenses"), snap => {
         state.expenses = snap.docs.map(d => ({ ...d.data(), firestoreId: d.id }));
-        persistLocal();
         renderAll();
       });
       onSnapshot(collection(state.db, "equipment"), snap => {
-        if (snap.empty) return;
-        state.equipment = snap.docs.map(d => ({ ...d.data(), firestoreId: d.id }));
-        persistLocal();
+        state.equipment = snap.empty ? seedEquipment : snap.docs.map(d => ({ ...d.data(), firestoreId: d.id }));
         renderAll();
       });
       onSnapshot(collection(state.db, "reconciliation"), snap => {
         state.reconciliation = snap.docs.map(d => ({ ...d.data(), firestoreId: d.id }));
-        persistLocal();
         renderAll();
       });
     }
 
     function initSocket() {
-      try {
-        state.socket = io(SOCKET_URL, { transports: ["websocket"], timeout: 1200, autoConnect: true });
-        state.socket.on("connect", () => { state.socketReady = true; setSyncLabel(); });
-        state.socket.on("disconnect", () => { state.socketReady = false; setSyncLabel(); });
-        state.socket.on("order:update", order => upsertOrder(order, false));
-        state.socket.on("inventory:update", material => upsertMaterial(material, false));
-      } catch (error) {
-        state.socketReady = false;
-        setSyncLabel();
-      }
+      state.socketReady = false;
+      setSyncLabel();
     }
 
     function setSyncLabel() {
       const label = el("syncLabel");
-      const parts = [];
-      if (state.firebaseReady) parts.push("Firebase");
-      if (state.socketReady) parts.push("Socket");
-      label.textContent = parts.length ? parts.join(" + ") : "Local";
+      label.textContent = state.firebaseReady ? "Firebase Realtime" : "Connecting";
     }
 
     async function syncDoc(type, payload) {
-      persistLocal();
-      if (state.socketReady) {
-        state.socket.emit(type === "materials" ? "inventory:update" : `${type}:update`, payload);
-        state.socket.emit("admin:action", { user: state.user, role: state.role, type, payload, at: new Date().toISOString() });
+      if (!state.db) {
+        await SwalFire.fire("Firebase not connected", "Check Firestore setup/rules before saving shared data.", "warning");
+        return;
       }
-      if (!state.db) return;
       try {
         if (payload.firestoreId) await updateDoc(doc(state.db, type, payload.firestoreId), payload);
         else await setDoc(doc(state.db, type, payload.id), { ...payload, updatedAt: serverTimestamp() });
@@ -1195,9 +1186,10 @@
     }
 
     async function removeDoc(type, id, firestoreId = null) {
-      persistLocal();
-      if (state.socketReady) state.socket.emit(`${type}:delete`, { id });
-      if (!state.db) return;
+      if (!state.db) {
+        await SwalFire.fire("Firebase not connected", "Check Firestore setup/rules before deleting shared data.", "warning");
+        return;
+      }
       try {
         await deleteDoc(doc(state.db, type, firestoreId || id));
       } catch (error) {
