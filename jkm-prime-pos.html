@@ -1002,19 +1002,211 @@
     const peso = new Intl.NumberFormat("en-PH", { style: "currency", currency: "PHP", maximumFractionDigits: 0 });
     const statuses = ["Pending", "In Progress", "Printing", "Completed"];
     const productCatalog = [
-      ["PHOTO PRINTING", "Wallet Size", 15], ["PHOTO PRINTING", "3R", 20], ["PHOTO PRINTING", "4R", 25], ["PHOTO PRINTING", "5R", 30], ["PHOTO PRINTING", "A4 Photo Print", 60], ["PHOTO PRINTING", "Polaroid Print", 60],
-      ["RUSH ID PRINTING", "Package 1", 35], ["RUSH ID PRINTING", "Package 2", 50], ["RUSH ID PRINTING", "Package 3", 45], ["RUSH ID PRINTING", "Package 4", 45], ["RUSH ID PRINTING", "Package 5", 65],
-      ["DOCUMENT PRINTING", "Short Bond Paper", 7], ["DOCUMENT PRINTING", "A4", 8], ["DOCUMENT PRINTING", "Long", 10],
-      ["CUSTOMIZED T-SHIRT", "Small Logo Print (XS-XL)", 320], ["CUSTOMIZED T-SHIRT", "Single Large Print", 350], ["CUSTOMIZED T-SHIRT", "Front + Back Print", 450], ["CUSTOMIZED T-SHIRT", "Full Front + Full Back", 550],
-      ["CUSTOMIZED MUG", "No Box", 90], ["CUSTOMIZED MUG", "With Box", 120], ["CUSTOMIZED MUG", "Magic Mug", 200],
-      ["CUSTOMIZED JACKET", "Custom Size", 400],
-      ["CUSTOMIZED TUMBLER", "Regular", 180], ["CUSTOMIZED TUMBLER", "Premium", 220],
-      ["CUSTOMIZED REF MAGNETS", "ATM", 25], ["CUSTOMIZED REF MAGNETS", "3x3", 45], ["CUSTOMIZED REF MAGNETS", "3R", 50], ["CUSTOMIZED REF MAGNETS", "4R", 60], ["CUSTOMIZED REF MAGNETS", "5R", 70], ["CUSTOMIZED REF MAGNETS", "Custom", 80],
-      ["CUSTOMIZED TOTE BAG - FLAT", "XS", 149], ["CUSTOMIZED TOTE BAG - FLAT", "S", 159], ["CUSTOMIZED TOTE BAG - FLAT", "M", 169], ["CUSTOMIZED TOTE BAG - FLAT", "L", 179],
-      ["CUSTOMIZED TOTE BAG - WITH BASE", "XS", 159], ["CUSTOMIZED TOTE BAG - WITH BASE", "S", 169], ["CUSTOMIZED TOTE BAG - WITH BASE", "M", 179], ["CUSTOMIZED TOTE BAG - WITH BASE", "L", 189],
-      ["CUSTOMIZED WALLET", "XS", 59], ["CUSTOMIZED WALLET", "S", 69], ["CUSTOMIZED WALLET", "M", 79], ["CUSTOMIZED WALLET", "L", 89],
-      ["CUSTOMIZED BADGE", "Ref Magnet", 45], ["CUSTOMIZED BADGE", "Ref Pin", 45], ["CUSTOMIZED BADGE", "Ref Mirror", 45],
-      ["OTHERS", "Desk Calendar", 150], ["OTHERS", "A4 Sintra Board", 140], ["OTHERS", "A3 Sintra Board", 290], ["OTHERS", "Notebook", 150], ["OTHERS", "Planner", 150]
+      ["PHOTO PRINTING", "Wallet Size", 10],
+["PHOTO PRINTING", "Wallet Size", 15],
+["PHOTO PRINTING", "Wallet Size", 45],
+
+["PHOTO PRINTING", "3R", 10],
+["PHOTO PRINTING", "3R", 20],
+["PHOTO PRINTING", "3R", 50],
+
+["PHOTO PRINTING", "4R", 10],
+["PHOTO PRINTING", "4R", 25],
+["PHOTO PRINTING", "4R", 55],
+
+["PHOTO PRINTING", "5R", 10],
+["PHOTO PRINTING", "5R", 30],
+["PHOTO PRINTING", "5R", 60],
+
+["PHOTO PRINTING", "A4 Photo Print", 40],
+["PHOTO PRINTING", "A4 Photo Print", 60],
+["PHOTO PRINTING", "A4 Photo Print", 90],
+
+["PHOTO PRINTING", "Polaroid Print", 40],
+["PHOTO PRINTING", "Polaroid Print", 60],
+["PHOTO PRINTING", "Polaroid Print", 90],
+
+["RUSH ID PRINTING", "Package 1", 15],
+["RUSH ID PRINTING", "Package 1", 35],
+["RUSH ID PRINTING", "Package 1", 65],
+
+["RUSH ID PRINTING", "Package 2", 30],
+["RUSH ID PRINTING", "Package 2", 50],
+["RUSH ID PRINTING", "Package 2", 80],
+
+["RUSH ID PRINTING", "Package 3", 25],
+["RUSH ID PRINTING", "Package 3", 45],
+["RUSH ID PRINTING", "Package 3", 75],
+
+["RUSH ID PRINTING", "Package 4", 25],
+["RUSH ID PRINTING", "Package 4", 45],
+["RUSH ID PRINTING", "Package 4", 75],
+
+["RUSH ID PRINTING", "Package 5", 45],
+["RUSH ID PRINTING", "Package 5", 65],
+["RUSH ID PRINTING", "Package 5", 95],
+
+["DOCUMENT PRINTING", "Short Bond Paper", 5],
+["DOCUMENT PRINTING", "Short Bond Paper", 7],
+["DOCUMENT PRINTING", "Short Bond Paper", 37],
+
+["DOCUMENT PRINTING", "A4", 5],
+["DOCUMENT PRINTING", "A4", 8],
+["DOCUMENT PRINTING", "A4", 38],
+
+["DOCUMENT PRINTING", "Long", 5],
+["DOCUMENT PRINTING", "Long", 10],
+["DOCUMENT PRINTING", "Long", 40],
+
+["CUSTOMIZED T-SHIRT", "Small Logo Print (XS-XL)", 300],
+["CUSTOMIZED T-SHIRT", "Small Logo Print (XS-XL)", 320],
+["CUSTOMIZED T-SHIRT", "Small Logo Print (XS-XL)", 350],
+
+["CUSTOMIZED T-SHIRT", "Single Large Print", 330],
+["CUSTOMIZED T-SHIRT", "Single Large Print", 350],
+["CUSTOMIZED T-SHIRT", "Single Large Print", 380],
+
+["CUSTOMIZED T-SHIRT", "Front + Back Print", 430],
+["CUSTOMIZED T-SHIRT", "Front + Back Print", 450],
+["CUSTOMIZED T-SHIRT", "Front + Back Print", 480],
+
+["CUSTOMIZED T-SHIRT", "Full Front + Full Back", 530],
+["CUSTOMIZED T-SHIRT", "Full Front + Full Back", 550],
+["CUSTOMIZED T-SHIRT", "Full Front + Full Back", 580],
+
+["CUSTOMIZED MUG", "Mug No Box", 70],
+["CUSTOMIZED MUG", "Mug No Box", 90],
+["CUSTOMIZED MUG", "Mug No Box", 120],
+
+["CUSTOMIZED MUG", "Mug With Box", 100],
+["CUSTOMIZED MUG", "Mug With Box", 120],
+["CUSTOMIZED MUG", "Mug With Box", 150],
+
+["CUSTOMIZED MUG", "Magic Mug", 180],
+["CUSTOMIZED MUG", "Magic Mug", 200],
+["CUSTOMIZED MUG", "Magic Mug", 230],
+
+["CUSTOMIZED JACKET", "Custom Size", 480],
+["CUSTOMIZED JACKET", "Custom Size", 500],
+["CUSTOMIZED JACKET", "Custom Size", 530],
+
+["CUSTOMIZED JACKET", "Custom Size", 780],
+["CUSTOMIZED JACKET", "Custom Size", 800],
+["CUSTOMIZED JACKET", "Custom Size", 830],
+
+["CUSTOMIZED TUMBLER", "Regular", 160],
+["CUSTOMIZED TUMBLER", "Regular", 180],
+["CUSTOMIZED TUMBLER", "Regular", 210],
+
+["CUSTOMIZED TUMBLER", "Premium", 200],
+["CUSTOMIZED TUMBLER", "Premium", 220],
+["CUSTOMIZED TUMBLER", "Premium", 250],
+
+["CUSTOMIZED REF MAGNETS", "ATM", 10],
+["CUSTOMIZED REF MAGNETS", "ATM", 25],
+["CUSTOMIZED REF MAGNETS", "ATM", 55],
+
+["CUSTOMIZED REF MAGNETS", "3x3", 25],
+["CUSTOMIZED REF MAGNETS", "3x3", 45],
+["CUSTOMIZED REF MAGNETS", "3x3", 75],
+
+["CUSTOMIZED REF MAGNETS", "3R", 30],
+["CUSTOMIZED REF MAGNETS", "3R", 50],
+["CUSTOMIZED REF MAGNETS", "3R", 80],
+
+["CUSTOMIZED REF MAGNETS", "4R", 40],
+["CUSTOMIZED REF MAGNETS", "4R", 60],
+["CUSTOMIZED REF MAGNETS", "4R", 90],
+
+["CUSTOMIZED REF MAGNETS", "5R", 50],
+["CUSTOMIZED REF MAGNETS", "5R", 70],
+["CUSTOMIZED REF MAGNETS", "5R", 100],
+
+["CUSTOMIZED REF MAGNETS", "Custom", 60],
+["CUSTOMIZED REF MAGNETS", "Custom", 80],
+["CUSTOMIZED REF MAGNETS", "Custom", 110],
+
+["CUSTOMIZED TOTE BAG - FLAT", "XS", 129],
+["CUSTOMIZED TOTE BAG - FLAT", "XS", 149],
+["CUSTOMIZED TOTE BAG - FLAT", "XS", 179],
+
+["CUSTOMIZED TOTE BAG - FLAT", "S", 139],
+["CUSTOMIZED TOTE BAG - FLAT", "S", 159],
+["CUSTOMIZED TOTE BAG - FLAT", "S", 189],
+
+["CUSTOMIZED TOTE BAG - FLAT", "M", 149],
+["CUSTOMIZED TOTE BAG - FLAT", "M", 169],
+["CUSTOMIZED TOTE BAG - FLAT", "M", 199],
+
+["CUSTOMIZED TOTE BAG - FLAT", "L", 159],
+["CUSTOMIZED TOTE BAG - FLAT", "L", 179],
+["CUSTOMIZED TOTE BAG - FLAT", "L", 209],
+
+["CUSTOMIZED TOTE BAG - WITH BASE", "XS", 139],
+["CUSTOMIZED TOTE BAG - WITH BASE", "XS", 159],
+["CUSTOMIZED TOTE BAG - WITH BASE", "XS", 189],
+
+["CUSTOMIZED TOTE BAG - WITH BASE", "S", 149],
+["CUSTOMIZED TOTE BAG - WITH BASE", "S", 169],
+["CUSTOMIZED TOTE BAG - WITH BASE", "S", 199],
+
+["CUSTOMIZED TOTE BAG - WITH BASE", "M", 159],
+["CUSTOMIZED TOTE BAG - WITH BASE", "M", 179],
+["CUSTOMIZED TOTE BAG - WITH BASE", "M", 209],
+
+["CUSTOMIZED TOTE BAG - WITH BASE", "L", 169],
+["CUSTOMIZED TOTE BAG - WITH BASE", "L", 189],
+["CUSTOMIZED TOTE BAG - WITH BASE", "L", 219],
+
+["CUSTOMIZED WALLET", "XS", 39],
+["CUSTOMIZED WALLET", "XS", 59],
+["CUSTOMIZED WALLET", "XS", 89],
+
+["CUSTOMIZED WALLET", "S", 49],
+["CUSTOMIZED WALLET", "S", 69],
+["CUSTOMIZED WALLET", "S", 99],
+
+["CUSTOMIZED WALLET", "M", 59],
+["CUSTOMIZED WALLET", "M", 79],
+["CUSTOMIZED WALLET", "M", 109],
+
+["CUSTOMIZED WALLET", "L", 69],
+["CUSTOMIZED WALLET", "L", 89],
+["CUSTOMIZED WALLET", "L", 119],
+
+["CUSTOMIZED BADGE", "Ref Magnet", 25],
+["CUSTOMIZED BADGE", "Ref Magnet", 45],
+["CUSTOMIZED BADGE", "Ref Magnet", 75],
+
+["CUSTOMIZED BADGE", "Ref Pin", 25],
+["CUSTOMIZED BADGE", "Ref Pin", 45],
+["CUSTOMIZED BADGE", "Ref Pin", 75],
+
+["CUSTOMIZED BADGE", "Ref Mirror", 25],
+["CUSTOMIZED BADGE", "Ref Mirror", 45],
+["CUSTOMIZED BADGE", "Ref Mirror", 75],
+
+["OTHERS", "Desk Calendar", 130],
+["OTHERS", "Desk Calendar", 150],
+["OTHERS", "Desk Calendar", 180],
+
+["OTHERS", "A4 Sintra Board", 120],
+["OTHERS", "A4 Sintra Board", 140],
+["OTHERS", "A4 Sintra Board", 170],
+
+["OTHERS", "A3 Sintra Board", 270],
+["OTHERS", "A3 Sintra Board", 290],
+["OTHERS", "A3 Sintra Board", 320],
+
+["OTHERS", "Notebook", 60],
+["OTHERS", "Notebook", 70],
+["OTHERS", "Notebook", 130],
+["OTHERS", "Notebook", 150],
+["OTHERS", "Notebook", 180],
+
+["OTHERS", "Planner", 130],
+["OTHERS", "Planner", 150],
+["OTHERS", "Planner", 180]
     ].map((p, index) => ({ id: `P${String(index + 1).padStart(3, "0")}`, category: p[0], name: p[1], price: p[2] }));
 
     const seedMaterials = [
@@ -1169,7 +1361,7 @@
 
     function setSyncLabel(message = "") {
       const label = el("syncLabel");
-      label.textContent = message || (state.firebaseReady ? "Firebase Realtime" : "Connecting");
+      label.textContent = message || (state.firebaseReady ? "Realtime" : "Connecting");
     }
 
     async function syncDoc(type, payload) {
