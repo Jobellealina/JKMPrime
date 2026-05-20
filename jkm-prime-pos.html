@@ -795,26 +795,56 @@
         </div>
       </section>
 
-      <section class="view" id="ordersView">
-        <div class="panel panel-pad">
-          <div class="d-flex justify-content-between align-items-center gap-2 flex-wrap mb-3">
-            <h5 class="m-0 fw-black">Live Orders</h5>
-            <button class="btn btn-outline-primary fw-bold" id="refreshOrdersBtn"><i data-lucide="refresh-cw" class="icon"></i> Refresh</button>
-          </div>
-          <div class="row g-2 mb-3">
-            <div class="col-md-4"><input class="form-control" id="orderNameFilter" placeholder="Filter by customer name"></div>
-            <div class="col-md-3"><input class="form-control" id="orderMonthFilter" type="month"></div>
-            <div class="col-md-3"><input class="form-control" id="orderDateFilter" type="date"></div>
-            <div class="col-md-2 d-grid"><button class="btn btn-outline-secondary fw-bold" id="clearOrderFiltersBtn">Clear</button></div>
-          </div>
-          <div class="table-responsive">
-            <table class="data-table">
-              <thead><tr><th>Order ID</th><th>Customer</th><th>Total</th><th>Status</th><th>Date</th><th>Actions</th></tr></thead>
-              <tbody id="ordersRows"></tbody>
-            </table>
-          </div>
-        </div>
-      </section>
+     <section class="view" id="ordersView">
+  <div class="panel panel-pad">
+    <div class="d-flex justify-content-between align-items-center gap-2 flex-wrap mb-3">
+      <h5 class="m-0 fw-black">Live Orders</h5>
+
+      <div class="d-flex gap-2 flex-wrap">
+        <button class="btn btn-outline-success fw-bold" id="exportOrdersExcelBtn">
+          <i data-lucide="file-spreadsheet" class="icon"></i> Excel
+        </button>
+        <button class="btn btn-outline-danger fw-bold" id="exportOrdersPdfBtn">
+          <i data-lucide="file-down" class="icon"></i> PDF
+        </button>
+        <button class="btn btn-outline-primary fw-bold" id="refreshOrdersBtn">
+          <i data-lucide="refresh-cw" class="icon"></i> Refresh
+        </button>
+      </div>
+    </div>
+
+    <div class="row g-2 mb-3">
+      <div class="col-md-4">
+        <input class="form-control" id="orderNameFilter" placeholder="Filter by customer name">
+      </div>
+      <div class="col-md-3">
+        <input class="form-control" id="orderMonthFilter" type="month">
+      </div>
+      <div class="col-md-3">
+        <input class="form-control" id="orderDateFilter" type="date">
+      </div>
+      <div class="col-md-2 d-grid">
+        <button class="btn btn-outline-secondary fw-bold" id="clearOrderFiltersBtn">Clear</button>
+      </div>
+    </div>
+
+    <div class="table-responsive">
+      <table class="data-table">
+        <thead>
+          <tr>
+            <th>Order ID</th>
+            <th>Customer</th>
+            <th>Total</th>
+            <th>Status</th>
+            <th>Date</th>
+            <th>Actions</th>
+          </tr>
+        </thead>
+        <tbody id="ordersRows"></tbody>
+      </table>
+    </div>
+  </div>
+</section>
 
       <section class="view" id="inventoryView">
         <div class="panel panel-pad">
@@ -969,6 +999,9 @@
   <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.3/dist/chart.umd.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/qrcode@1.5.3/build/qrcode.min.js"></script>
   <script src="https://unpkg.com/lucide@latest/dist/umd/lucide.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/jspdf@2.5.1/dist/jspdf.umd.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/jspdf-autotable@3.8.2/dist/jspdf.plugin.autotable.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
   <script type="module">
     import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.4/firebase-app.js";
     import { getAuth, signInAnonymously, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.12.4/firebase-auth.js";
@@ -1667,36 +1700,261 @@
       setTimeout(() => document.body.classList.remove("receipt-print"), 300);
     }
 
-    function renderOrders() {
-      const filteredOrders = state.orders.filter(order => {
-        const nameMatch = !state.orderFilters.name || String(order.customer || "").toLowerCase().includes(state.orderFilters.name.toLowerCase());
-        const monthMatch = !state.orderFilters.month || monthKey(order.createdAt) === state.orderFilters.month;
-        const dateMatch = !state.orderFilters.date || todayKey(order.createdAt) === state.orderFilters.date;
-        return nameMatch && monthMatch && dateMatch;
-      });
-      el("ordersRows").innerHTML = filteredOrders.map(order => `
-        <tr>
-          <td><strong>${safe(order.id)}</strong></td>
-          <td>${safe(order.customer)}</td>
-          <td>${peso.format(order.total)}</td>
-          <td><span class="status-badge status-${order.status.replaceAll(" ", "-")}">${safe(order.status)}</span></td>
-          <td>${new Date(order.createdAt).toLocaleString()}</td>
-          <td>
-            <div class="d-flex gap-1 flex-wrap">
-              <select class="form-select form-select-sm" data-status="${order.id}" style="width:140px">${statuses.map(s => `<option ${s === order.status ? "selected" : ""}>${s}</option>`).join("")}</select>
-              <button class="icon-btn" data-print="${order.id}" title="Print"><i data-lucide="printer"></i></button>
-              <button class="icon-btn" data-qr="${order.id}" title="QR"><i data-lucide="qr-code"></i></button>
-              <button class="icon-btn" data-delete-order="${order.id}" title="Delete order"><i data-lucide="trash-2"></i></button>
-            </div>
-          </td>
-        </tr>`).join("") || `<tr><td colspan="6" class="text-center text-secondary py-4">No orders match the selected filters.</td></tr>`;
-      document.querySelectorAll("[data-status]").forEach(sel => sel.addEventListener("change", () => updateOrderStatus(sel.dataset.status, sel.value)));
-      document.querySelectorAll("[data-print]").forEach(btn => btn.addEventListener("click", () => printReceipt(state.orders.find(o => o.id === btn.dataset.print))));
-      document.querySelectorAll("[data-qr]").forEach(btn => btn.addEventListener("click", () => showOrderQr(btn.dataset.qr)));
-      document.querySelectorAll("[data-delete-order]").forEach(btn => btn.addEventListener("click", () => deleteOrder(btn.dataset.deleteOrder)));
-      lucide.createIcons();
-    }
+function filteredLiveOrders() {
+  return state.orders.filter(order => {
+    const nameMatch = !state.orderFilters.name || String(order.customer || "").toLowerCase().includes(state.orderFilters.name.toLowerCase());
+    const monthMatch = !state.orderFilters.month || monthKey(order.createdAt) === state.orderFilters.month;
+    const dateMatch = !state.orderFilters.date || todayKey(order.createdAt) === state.orderFilters.date;
+    return nameMatch && monthMatch && dateMatch;
+  });
+}
 
+function orderItemsText(order) {
+  return (order.items || [])
+    .map(item => `${item.name} x${item.qty} @ ${peso.format(item.price)} = ${peso.format(item.price * item.qty)}`)
+    .join("\n");
+}
+
+async function viewOrderDetails(id) {
+  const order = state.orders.find(o => o.id === id);
+  if (!order) return;
+
+  const rows = (order.items || []).map(item => `
+    <tr>
+      <td>${safe(item.category)}</td>
+      <td><strong>${safe(item.name)}</strong></td>
+      <td class="text-center">${safe(item.qty)}</td>
+      <td class="text-end">${peso.format(item.price)}</td>
+      <td class="text-end"><strong>${peso.format(item.price * item.qty)}</strong></td>
+    </tr>
+  `).join("");
+
+  await SwalFire.fire({
+    title: "Order Details",
+    width: 760,
+    html: `
+      <div class="text-start">
+        <div class="mb-3">
+          <div><strong>Order ID:</strong> ${safe(order.id)}</div>
+          <div><strong>Customer:</strong> ${safe(order.customer)}</div>
+          <div><strong>Status:</strong> <span class="status-badge status-${order.status.replaceAll(" ", "-")}">${safe(order.status)}</span></div>
+          <div><strong>Date:</strong> ${new Date(order.createdAt).toLocaleString()}</div>
+        </div>
+
+        <div class="table-responsive">
+          <table class="data-table">
+            <thead>
+              <tr>
+                <th>Category</th>
+                <th>Item</th>
+                <th>Qty</th>
+                <th class="text-end">Price</th>
+                <th class="text-end">Subtotal</th>
+              </tr>
+            </thead>
+            <tbody>${rows || `<tr><td colspan="5" class="text-center text-secondary py-3">No order items.</td></tr>`}</tbody>
+          </table>
+        </div>
+
+        <hr>
+        <div class="big-total"><span>Total</span><span>${peso.format(order.total)}</span></div>
+        <div class="big-total fs-6"><span>Cash</span><span>${peso.format(order.cash || 0)}</span></div>
+        <div class="big-total fs-6"><span>Change</span><span>${peso.format(order.change || 0)}</span></div>
+      </div>
+    `,
+    confirmButtonText: "Close"
+  });
+}
+
+function exportOrdersExcel() {
+  const orders = filteredLiveOrders();
+
+  if (!orders.length) {
+    SwalFire.fire("No orders to export", "No live orders match the selected filters.", "info");
+    return;
+  }
+
+  const summaryRows = orders.map(order => ({
+    "Order ID": order.id,
+    "Customer": order.customer,
+    "Status": order.status,
+    "Date": new Date(order.createdAt).toLocaleString(),
+    "Total": Number(order.total || 0),
+    "Cash": Number(order.cash || 0),
+    "Change": Number(order.change || 0),
+    "Order Details": orderItemsText(order)
+  }));
+
+  const itemRows = orders.flatMap(order => (order.items || []).map(item => ({
+    "Order ID": order.id,
+    "Customer": order.customer,
+    "Category": item.category,
+    "Item": item.name,
+    "Qty": item.qty,
+    "Unit Price": Number(item.price || 0),
+    "Subtotal": Number(item.price || 0) * Number(item.qty || 0),
+    "Status": order.status,
+    "Date": new Date(order.createdAt).toLocaleString()
+  })));
+
+  const wb = XLSX.utils.book_new();
+  const summarySheet = XLSX.utils.json_to_sheet(summaryRows);
+  const itemSheet = XLSX.utils.json_to_sheet(itemRows);
+
+  summarySheet["!cols"] = [
+    { wch: 18 }, { wch: 24 }, { wch: 14 }, { wch: 24 },
+    { wch: 12 }, { wch: 12 }, { wch: 12 }, { wch: 55 }
+  ];
+
+  itemSheet["!cols"] = [
+    { wch: 18 }, { wch: 24 }, { wch: 24 }, { wch: 28 },
+    { wch: 8 }, { wch: 12 }, { wch: 12 }, { wch: 14 }, { wch: 24 }
+  ];
+
+  XLSX.utils.book_append_sheet(wb, summarySheet, "Live Orders Summary");
+  XLSX.utils.book_append_sheet(wb, itemSheet, "Order Items");
+
+  XLSX.writeFile(wb, `JKM-Live-Orders-${todayKey(new Date())}.xlsx`);
+}
+
+async function loadPdfPesoFont(doc) {
+  const fontName = "NotoSans";
+  if (doc.getFontList()[fontName]) {
+    doc.setFont(fontName, "normal");
+    return fontName;
+  }
+
+  const fontUrl = "https://cdn.jsdelivr.net/gh/googlefonts/noto-fonts@main/hinted/ttf/NotoSans/NotoSans-Regular.ttf";
+  const fontBuffer = await fetch(fontUrl).then(res => {
+    if (!res.ok) throw new Error("PDF font failed to load");
+    return res.arrayBuffer();
+  });
+
+  const bytes = new Uint8Array(fontBuffer);
+  let binary = "";
+  const chunkSize = 0x8000;
+
+  for (let i = 0; i < bytes.length; i += chunkSize) {
+    binary += String.fromCharCode(...bytes.subarray(i, i + chunkSize));
+  }
+
+  doc.addFileToVFS("NotoSans-Regular.ttf", btoa(binary));
+  doc.addFont("NotoSans-Regular.ttf", fontName, "normal");
+  doc.setFont(fontName, "normal");
+  return fontName;
+}
+
+function pdfMoney(value) {
+  return `₱${Number(value || 0).toLocaleString("en-PH", { maximumFractionDigits: 0 })}`;
+}
+
+async function exportOrdersPdf() {
+  const orders = filteredLiveOrders();
+
+  if (!orders.length) {
+    SwalFire.fire("No orders to export", "No live orders match the selected filters.", "info");
+    return;
+  }
+
+  const { jsPDF } = window.jspdf;
+  const doc = new jsPDF({ orientation: "landscape", unit: "mm", format: "a4" });
+
+  let pdfFont = "helvetica";
+  try {
+    pdfFont = await loadPdfPesoFont(doc);
+  } catch (error) {
+    console.warn("Peso font unavailable:", error);
+  }
+
+  doc.setFont(pdfFont, "normal");
+  doc.setFontSize(15);
+  doc.text("JKM PRIME DIGITAL PRINTS", 14, 14);
+
+  doc.setFontSize(10);
+  doc.text(`Live Orders Report · Generated ${new Date().toLocaleString()}`, 14, 21);
+
+  const rows = orders.map(order => [
+    order.id,
+    order.customer || "",
+    pdfMoney(order.total),
+    order.status || "",
+    new Date(order.createdAt).toLocaleString(),
+    (order.items || [])
+      .map(item => `${item.name} x${item.qty} @ ${pdfMoney(item.price)} = ${pdfMoney(item.price * item.qty)}`)
+      .join("\n")
+  ]);
+
+  doc.autoTable({
+    startY: 28,
+    head: [["Order ID", "Customer", "Total", "Status", "Date", "Order Details"]],
+    body: rows,
+    styles: {
+      font: pdfFont,
+      fontStyle: "normal",
+      fontSize: 8,
+      cellPadding: 2,
+      valign: "top",
+      overflow: "linebreak"
+    },
+    headStyles: {
+      fillColor: [11, 31, 58],
+      textColor: 255,
+      fontStyle: "normal"
+    },
+    alternateRowStyles: {
+      fillColor: [246, 250, 255]
+    },
+    columnStyles: {
+      0: { cellWidth: 32 },
+      1: { cellWidth: 42 },
+      2: { cellWidth: 24 },
+      3: { cellWidth: 28 },
+      4: { cellWidth: 42 },
+      5: { cellWidth: 110 }
+    },
+    margin: { left: 14, right: 14 }
+  });
+
+  const totalSales = orders.reduce((sum, order) => sum + Number(order.total || 0), 0);
+  const finalY = doc.lastAutoTable.finalY + 8;
+
+  doc.setFont(pdfFont, "normal");
+  doc.setFontSize(11);
+  doc.text(`Total Orders: ${orders.length}`, 14, finalY);
+  doc.text(`Total Sales: ${pdfMoney(totalSales)}`, 70, finalY);
+
+  doc.save(`JKM-Live-Orders-${todayKey(new Date())}.pdf`);
+}
+
+    function renderOrders() {
+  const filteredOrders = filteredLiveOrders();
+
+  el("ordersRows").innerHTML = filteredOrders.map(order => `
+    <tr>
+      <td><strong>${safe(order.id)}</strong></td>
+      <td>${safe(order.customer)}</td>
+      <td>${peso.format(order.total)}</td>
+      <td><span class="status-badge status-${order.status.replaceAll(" ", "-")}">${safe(order.status)}</span></td>
+      <td>${new Date(order.createdAt).toLocaleString()}</td>
+      <td>
+        <div class="d-flex gap-1 flex-wrap">
+          <button class="icon-btn" data-view-order="${order.id}" title="View details"><i data-lucide="eye"></i></button>
+          <select class="form-select form-select-sm" data-status="${order.id}" style="width:140px">${statuses.map(s => `<option ${s === order.status ? "selected" : ""}>${s}</option>`).join("")}</select>
+          <button class="icon-btn" data-print="${order.id}" title="Print"><i data-lucide="printer"></i></button>
+          <button class="icon-btn" data-qr="${order.id}" title="QR"><i data-lucide="qr-code"></i></button>
+          <button class="icon-btn" data-delete-order="${order.id}" title="Delete order"><i data-lucide="trash-2"></i></button>
+        </div>
+      </td>
+    </tr>`).join("") || `<tr><td colspan="6" class="text-center text-secondary py-4">No orders match the selected filters.</td></tr>`;
+
+  document.querySelectorAll("[data-view-order]").forEach(btn => btn.addEventListener("click", () => viewOrderDetails(btn.dataset.viewOrder)));
+  document.querySelectorAll("[data-status]").forEach(sel => sel.addEventListener("change", () => updateOrderStatus(sel.dataset.status, sel.value)));
+  document.querySelectorAll("[data-print]").forEach(btn => btn.addEventListener("click", () => printReceipt(state.orders.find(o => o.id === btn.dataset.print))));
+  document.querySelectorAll("[data-qr]").forEach(btn => btn.addEventListener("click", () => showOrderQr(btn.dataset.qr)));
+  document.querySelectorAll("[data-delete-order]").forEach(btn => btn.addEventListener("click", () => deleteOrder(btn.dataset.deleteOrder)));
+
+  lucide.createIcons();
+}
     async function updateOrderStatus(id, status) {
       const order = state.orders.find(o => o.id === id);
       if (!order) return;
@@ -2270,6 +2528,8 @@
       el("cashInput").addEventListener("input", updateChange);
       el("checkoutBtn").addEventListener("click", checkout);
       el("clearCartBtn").addEventListener("click", () => { state.cart = []; persistLocal(); renderCart(); });
+      el("exportOrdersExcelBtn").addEventListener("click", exportOrdersExcel);
+      el("exportOrdersPdfBtn").addEventListener("click", () => exportOrdersPdf());
       el("refreshOrdersBtn").addEventListener("click", renderAll);
       el("orderNameFilter").addEventListener("input", () => { state.orderFilters.name = el("orderNameFilter").value.trim(); renderOrders(); });
       el("orderMonthFilter").addEventListener("change", () => { state.orderFilters.month = el("orderMonthFilter").value; renderOrders(); });
