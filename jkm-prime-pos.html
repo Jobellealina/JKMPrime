@@ -642,6 +642,229 @@
       body.quotation-print .receipt-paper { display: none; }
       body.receipt-print .quotation-paper { display: none; }
     }
+    .receipt-header {
+  text-align: center;
+}
+
+.receipt-logo {
+  width: 54px;
+  height: 54px;
+  object-fit: contain;
+  display: block;
+  margin: 0 auto 6px;
+}
+
+#receiptPaper {
+  width: 105mm;
+  min-height: 120mm;
+  background: #fff;
+  padding: 7mm;
+  box-sizing: border-box;
+  font-family: Arial, sans-serif;
+  color: #222;
+  overflow: hidden;
+}
+
+/* TOP */
+.receipt-top {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 8px;
+}
+
+.company-name {
+  margin: 0;
+  font-size: 12px;
+  font-weight: 700;
+  line-height: 1.2;
+}
+
+.company-info {
+  margin-top: 2px;
+  font-size: 7px;
+  line-height: 1.4;
+  color: #555;
+}
+
+.logo-box {
+  width: 42px;
+  height: 32px;
+  border: 1px solid #0f4c97;
+  border-radius: 4px;
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.receipt-logo {
+  max-width: 34px;
+  max-height: 24px;
+  object-fit: contain;
+}
+
+/* RECEIPT TITLE */
+.receipt-title {
+  text-align: right;
+  margin-top: 5px;
+}
+
+.receipt-title h1 {
+  margin: 0;
+  font-size: 16px;
+  color: #0f4c97;
+  letter-spacing: 1px;
+  font-weight: 700;
+}
+
+/* INFO */
+.receipt-info {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 8px;
+  gap: 10px;
+}
+
+.billed-title {
+  color: #0f4c97;
+  font-size: 8px;
+  font-weight: 700;
+}
+
+.customer-name {
+  margin-top: 2px;
+  font-size: 9px;
+  font-weight: 600;
+}
+
+.receipt-meta {
+  min-width: 90px;
+  font-size: 7px;
+}
+
+.meta-row {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 2px;
+  gap: 5px;
+}
+
+.meta-label {
+  color: #0f4c97;
+  font-weight: 700;
+}
+
+/* TABLE */
+.receipt-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 8px;
+  font-size: 7px;
+}
+
+.receipt-table thead tr {
+  background: #0f4c97;
+  color: #fff;
+}
+
+.receipt-table th {
+  padding: 4px;
+  text-align: left;
+}
+
+.receipt-table td {
+  padding: 4px;
+  border-bottom: 1px solid #ddd;
+}
+
+.receipt-table th:nth-child(1),
+.receipt-table td:nth-child(1) {
+  width: 12%;
+  text-align: center;
+}
+
+.receipt-table th:nth-child(3),
+.receipt-table td:nth-child(3),
+.receipt-table th:nth-child(4),
+.receipt-table td:nth-child(4) {
+  text-align: right;
+}
+
+/* TOTALS */
+.total-section {
+  width: 48%;
+  margin-left: auto;
+  margin-top: 6px;
+  border-top: 1px solid #0f4c97;
+  padding-top: 4px;
+  font-size: 7px;
+}
+
+.total-row {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 3px;
+}
+
+.grand-total {
+  border-top: 1px solid #0f4c97;
+  padding-top: 4px;
+  color: #0f4c97;
+  font-weight: 700;
+  font-size: 8px;
+}
+
+/* NOTES */
+.receipt-notes {
+  margin-top: 10px;
+}
+
+.notes-title {
+  color: #0f4c97;
+  font-size: 8px;
+  font-weight: 700;
+}
+
+.notes-text {
+  margin-top: 2px;
+  font-size: 6.5px;
+  line-height: 1.4;
+  color: #555;
+}
+
+/* PRINT */
+@page {
+  size: A6 portrait;
+  margin: 0;
+}
+
+@media print {
+  @page {
+    size: A6 portrait;
+    margin: 0;
+  }
+
+  html,
+  body {
+    width: 105mm;
+    height: 148mm;
+    margin: 0;
+    padding: 0;
+    overflow: hidden;
+  }
+
+  #receiptPaper {
+width: 105mm !important;
+min-height: auto !important;
+max-height: none !important;
+    margin: 0;
+    padding: 7mm;
+    box-sizing: border-box;
+    overflow: hidden;
+    page-break-after: avoid;
+  }
+}
   </style>
 </head>
 <body>
@@ -1003,6 +1226,7 @@
   <script src="https://cdn.jsdelivr.net/npm/jspdf@2.5.1/dist/jspdf.umd.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/jspdf-autotable@3.8.2/dist/jspdf.plugin.autotable.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/html2canvas@1.4.1/dist/html2canvas.min.js"></script>
   <script type="module">
     import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.4/firebase-app.js";
     import { getAuth, signInAnonymously, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.12.4/firebase-auth.js";
@@ -1666,40 +1890,368 @@
       renderReceipt(order);
       renderAll();
       await SwalFire.fire({
-        title: "Checkout complete",
-        html: `<strong>${order.id}</strong><br>Total: ${peso.format(order.total)}<br>Change: ${peso.format(order.change)}`,
-        icon: "success",
-        showCancelButton: true,
-        confirmButtonText: "Print Receipt",
-        cancelButtonText: "Done"
-      }).then(res => { if (res.isConfirmed) printReceipt(order); });
-    }
+  title: "Checkout complete",
+  html: `<strong>${order.id}</strong><br>Total: ${peso.format(order.total)}<br>Change: ${peso.format(order.change)}`,
+  icon: "success",
+  showCancelButton: true,
+  showDenyButton: true,
+  confirmButtonText: "Print Receipt",
+  denyButtonText: "Export Image",
+  cancelButtonText: "Done"
+}).then(res => {
+  if (res.isConfirmed) printReceipt(order);
+  if (res.isDenied) exportReceiptImage(order);
+});
+}
+function renderReceipt(order) {
+  const rows = order.items.map(i => `
+    <tr>
+      <td style="
+        padding:5px;
+        text-align:center;
+        border-bottom:1px solid #ddd;
+      ">
+        ${i.qty}
+      </td>
 
-    function renderReceipt(order) {
-      const rows = order.items.map(i => `<tr><td>${safe(i.name)} x ${i.qty}</td><td style="text-align:right">${peso.format(i.price * i.qty)}</td></tr>`).join("");
-      el("receiptPaper").innerHTML = `
-        <h2>JKM PRIME DIGITAL PRINTS</h2>
-        <div class="mini" style="text-align:center">Official Receipt · A6 Print Format</div>
-        <hr>
-        <div class="mini">Order ID: <strong>${safe(order.id)}</strong></div>
-        <div class="mini">Customer: ${safe(order.customer)}</div>
-        <div class="mini">Date/Time: ${new Date(order.createdAt).toLocaleString()}</div>
-        <table class="print-table"><tbody>${rows}</tbody></table>
-        <table class="print-table">
-          <tr><td>Total</td><td style="text-align:right"><strong>${peso.format(order.total)}</strong></td></tr>
-          <tr><td>Cash</td><td style="text-align:right">${peso.format(order.cash)}</td></tr>
-          <tr><td>Change</td><td style="text-align:right">${peso.format(order.change)}</td></tr>
-        </table>
-        <p class="mini" style="text-align:center;margin-top:14px">Thank you for choosing JKM Prime Digital Prints.</p>`;
-    }
+      <td style="
+        padding:5px;
+        border-bottom:1px solid #ddd;
+        word-break:break-word;
+      ">
+        ${safe(i.name)}
+      </td>
 
-    function printReceipt(order) {
-      renderReceipt(order);
-      document.body.classList.add("receipt-print");
-      document.body.classList.remove("quotation-print");
-      window.print();
-      setTimeout(() => document.body.classList.remove("receipt-print"), 300);
-    }
+      <td style="
+        padding:5px;
+        text-align:right;
+        border-bottom:1px solid #ddd;
+        white-space:nowrap;
+      ">
+        ${peso.format(i.price)}
+      </td>
+
+      <td style="
+        padding:5px;
+        text-align:right;
+        border-bottom:1px solid #ddd;
+        white-space:nowrap;
+      ">
+        ${peso.format(i.price * i.qty)}
+      </td>
+    </tr>
+  `).join("");
+
+  el("receiptPaper").innerHTML = `
+    <div style="
+      width:90%;
+      max-width:94.5mm;
+      min-height:148mm;
+
+      background:#fff;
+      padding:7mm;
+      margin:0 auto;
+
+      font-family:Arial,sans-serif;
+      color:#222;
+
+      box-sizing:border-box;
+      overflow:hidden;
+    ">
+
+      <!-- HEADER -->
+      <div style="
+        display:flex;
+        justify-content:space-between;
+        align-items:flex-start;
+        gap:10px;
+      ">
+
+        <div style="flex:1;">
+          <h2 style="
+            margin:0;
+            font-size:13px;
+            font-weight:700;
+            line-height:1.2;
+          ">
+            JKM PRIME DIGITAL PRINTS
+          </h2>
+
+          <div style="
+            margin-top:3px;
+            line-height:1.45;
+            color:#555;
+            font-size:8px;
+          ">
+            Printing Services<br>
+            Taguig City<br>
+            Email: jkmprimedigitalprints@gmail.com
+          </div>
+        </div>
+
+        <div style="
+          border:1px solid #0f4c97;
+          border-radius:6px;
+          width:52px;
+          height:42px;
+
+          display:flex;
+          align-items:center;
+          justify-content:center;
+
+          flex-shrink:0;
+        ">
+          <img
+            src="logo.png"
+            crossorigin="anonymous"
+            alt="logo"
+            style="
+              max-width:42px;
+              max-height:30px;
+              object-fit:contain;
+            "
+          >
+        </div>
+      </div>
+
+      <!-- RECEIPT TITLE -->
+      <div style="
+        text-align:right;
+        margin-top:6px;
+      ">
+        <h1 style="
+          color:#0f4c97;
+          font-size:18px;
+          margin:0;
+          letter-spacing:1px;
+          font-weight:700;
+        ">
+          RECEIPT
+        </h1>
+      </div>
+
+      <!-- CUSTOMER + INFO -->
+      <div style="
+        display:flex;
+        justify-content:space-between;
+        align-items:flex-start;
+        margin-top:10px;
+        gap:10px;
+      ">
+
+        <div style="flex:1;">
+          <div style="
+            color:#0f4c97;
+            font-weight:700;
+            font-size:8px;
+          ">
+            Billed To
+          </div>
+
+          <div style="
+            margin-top:3px;
+            font-size:9px;
+            font-weight:600;
+          ">
+            ${safe(order.customer)}
+          </div>
+        </div>
+
+        <div style="
+          min-width:90px;
+          font-size:7px;
+        ">
+
+          <div style="
+            display:flex;
+            justify-content:space-between;
+            gap:4px;
+            margin-bottom:4px;
+          ">
+            <strong style="color:#0f4c97;">
+              Receipt #
+            </strong>
+
+            <span>${safe(order.id)}</span>
+          </div>
+
+          <div style="
+            display:flex;
+            justify-content:space-between;
+            gap:4px;
+          ">
+            <strong style="color:#0f4c97;">
+              Date
+            </strong>
+
+            <span>
+              ${new Date(order.createdAt).toLocaleDateString()}
+            </span>
+          </div>
+        </div>
+      </div>
+
+      <!-- TABLE -->
+      <table style="
+        width:100%;
+        border-collapse:collapse;
+        margin-top:10px;
+        font-size:7.5px;
+      ">
+
+        <thead>
+          <tr style="
+            background:#0f4c97;
+            color:#fff;
+          ">
+            <th style="
+              padding:5px;
+              width:12%;
+              text-align:center;
+            ">
+              QTY
+            </th>
+
+            <th style="
+              padding:5px;
+              text-align:left;
+            ">
+              Description
+            </th>
+
+            <th style="
+              padding:5px;
+              text-align:right;
+            ">
+              Price
+            </th>
+
+            <th style="
+              padding:5px;
+              text-align:right;
+            ">
+              Amount
+            </th>
+          </tr>
+        </thead>
+
+        <tbody>
+          ${rows}
+        </tbody>
+      </table>
+
+      <!-- TOTALS -->
+      <div style="
+        width:52%;
+        margin-left:auto;
+        margin-top:8px;
+
+        border-top:1px solid #0f4c97;
+        padding-top:5px;
+
+        font-size:7.5px;
+      ">
+
+        <div style="
+          display:flex;
+          justify-content:space-between;
+          margin-bottom:4px;
+        ">
+          <span>Total</span>
+          <span>${peso.format(order.total)}</span>
+        </div>
+
+        <div style="
+          display:flex;
+          justify-content:space-between;
+          margin-bottom:4px;
+        ">
+          <span>Cash</span>
+          <span>${peso.format(order.cash)}</span>
+        </div>
+
+        <div style="
+          display:flex;
+          justify-content:space-between;
+
+          border-top:1px solid #0f4c97;
+          padding-top:5px;
+
+          color:#0f4c97;
+          font-weight:700;
+          font-size:8px;
+        ">
+          <span>Change</span>
+          <span>${peso.format(order.change)}</span>
+        </div>
+      </div>
+<br><br>
+      <!-- FOOTER -->
+      <div style="
+        margin-top:12px;
+      ">
+        <div style="
+          color:#0f4c97;
+          font-size:8px;
+          font-weight:700;
+        ">
+          Notes
+        </div>
+
+        <p style="
+          margin-top:3px;
+          font-size:7px;
+          line-height:1.4;
+          color:#555;
+        ">
+          Thank you for choosing JKM Prime Digital Prints.
+          Please retain this receipt for reference.
+        </p>
+      </div>
+
+    </div>
+  `;
+}
+    async function exportReceiptImage(order) {
+  if (!order) return;
+
+  renderReceipt(order);
+
+  const stage = document.createElement("div");
+  stage.className = "receipt-export-stage";
+
+  const receiptClone = el("receiptPaper").cloneNode(true);
+  receiptClone.style.display = "block";
+  stage.appendChild(receiptClone);
+  document.body.appendChild(stage);
+
+  try {
+    const images = [...receiptClone.querySelectorAll("img")];
+    await Promise.all(images.map(img => {
+      if (img.complete) return Promise.resolve();
+      return new Promise(resolve => {
+        img.onload = resolve;
+        img.onerror = resolve;
+      });
+    }));
+
+    const canvas = await html2canvas(receiptClone, {
+      backgroundColor: "#ffffff",
+      scale: 3,
+      useCORS: true
+    });
+
+    const link = document.createElement("a");
+    link.download = `${order.id}-receipt.png`;
+    link.href = canvas.toDataURL("image/png");
+    link.click();
+  } catch (error) {
+    console.error("Receipt image export failed:", error);
+    SwalFire.fire("Export failed", "Hindi na-export ang receipt image. Check logo file or browser permissions.", "error");
+  } finally {
+    stage.remove();
+  }
+}
 
 function filteredLiveOrders() {
   return state.orders.filter(order => {
@@ -1942,8 +2494,9 @@ async function exportOrdersPdf() {
           <button class="icon-btn" data-view-order="${order.id}" title="View details"><i data-lucide="eye"></i></button>
           <select class="form-select form-select-sm" data-status="${order.id}" style="width:140px">${statuses.map(s => `<option ${s === order.status ? "selected" : ""}>${s}</option>`).join("")}</select>
           <button class="icon-btn" data-print="${order.id}" title="Print"><i data-lucide="printer"></i></button>
-          <button class="icon-btn" data-qr="${order.id}" title="QR"><i data-lucide="qr-code"></i></button>
-          <button class="icon-btn" data-delete-order="${order.id}" title="Delete order"><i data-lucide="trash-2"></i></button>
+<button class="icon-btn" data-export-receipt="${order.id}" title="Export receipt image"><i data-lucide="image-down"></i></button>
+<button class="icon-btn" data-qr="${order.id}" title="QR"><i data-lucide="qr-code"></i></button>
+<button class="icon-btn" data-delete-order="${order.id}" title="Delete order"><i data-lucide="trash-2"></i></button>
         </div>
       </td>
     </tr>`).join("") || `<tr><td colspan="6" class="text-center text-secondary py-4">No orders match the selected filters.</td></tr>`;
@@ -1951,6 +2504,16 @@ async function exportOrdersPdf() {
   document.querySelectorAll("[data-view-order]").forEach(btn => btn.addEventListener("click", () => viewOrderDetails(btn.dataset.viewOrder)));
   document.querySelectorAll("[data-status]").forEach(sel => sel.addEventListener("change", () => updateOrderStatus(sel.dataset.status, sel.value)));
   document.querySelectorAll("[data-print]").forEach(btn => btn.addEventListener("click", () => printReceipt(state.orders.find(o => o.id === btn.dataset.print))));
+  document.querySelectorAll("[data-print]").forEach(btn => btn.addEventListener("click", () => printReceipt(state.orders.find(o => o.id === btn.dataset.print))));
+
+document.querySelectorAll("[data-export-receipt]").forEach(btn =>
+  btn.addEventListener("click", () =>
+    exportReceiptImage(state.orders.find(o => o.id === btn.dataset.exportReceipt))
+  )
+);
+
+document.querySelectorAll("[data-qr]").forEach(btn => btn.addEventListener("click", () => showOrderQr(btn.dataset.qr)));
+document.querySelectorAll("[data-delete-order]").forEach(btn => btn.addEventListener("click", () => deleteOrder(btn.dataset.deleteOrder)));
   document.querySelectorAll("[data-qr]").forEach(btn => btn.addEventListener("click", () => showOrderQr(btn.dataset.qr)));
   document.querySelectorAll("[data-delete-order]").forEach(btn => btn.addEventListener("click", () => deleteOrder(btn.dataset.deleteOrder)));
 
