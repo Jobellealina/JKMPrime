@@ -23,6 +23,93 @@
       --shadow: 0 14px 42px rgba(11, 31, 58, .10);
       --radius: 8px;
     }
+    
+    .jkm-modal-card {
+  text-align: left;
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  background: #f8fbff;
+  padding: 14px;
+}
+
+.jkm-modal-head {
+  background: var(--navy);
+  color: #fff;
+  border-radius: var(--radius);
+  padding: 13px 14px;
+  margin-bottom: 12px;
+}
+
+.jkm-modal-head strong {
+  display: block;
+  font-size: 1rem;
+  font-weight: 900;
+}
+
+.jkm-modal-head span {
+  display: block;
+  color: #c9def7;
+  font-size: .82rem;
+  margin-top: 3px;
+}
+
+.jkm-form-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 10px;
+}
+
+.jkm-field {
+  display: grid;
+  gap: 5px;
+}
+
+.jkm-field.full {
+  grid-column: 1 / -1;
+}
+
+.jkm-field label {
+  color: var(--navy);
+  font-weight: 900;
+  font-size: .78rem;
+  text-transform: uppercase;
+}
+
+.jkm-field input,
+.jkm-field select {
+  width: 100%;
+  height: 46px;
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  background: #fff;
+  color: var(--navy);
+  padding: 0 12px;
+  font-weight: 800;
+  outline: none;
+}
+
+.jkm-field input:focus,
+.jkm-field select:focus {
+  border-color: var(--blue);
+  box-shadow: 0 0 0 4px rgba(40,119,209,.12);
+}
+
+.jkm-modal-total {
+  margin-top: 12px;
+  border-radius: var(--radius);
+  background: #fff;
+  border: 1px solid #dbe8f8;
+  padding: 11px 12px;
+  display: flex;
+  justify-content: space-between;
+  gap: 12px;
+  font-weight: 900;
+  color: var(--navy);
+}
+
+@media (max-width: 560px) {
+  .jkm-form-grid { grid-template-columns: 1fr; }
+}
     * { box-sizing: border-box; }
     body {
       margin: 0;
@@ -33,6 +120,381 @@
       font-weight: 500;
       letter-spacing: 0;
     }
+    .price-edit-card {
+  text-align: left;
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  background: #f8fbff;
+  padding: 14px;
+}
+
+.price-edit-name {
+  font-weight: 900;
+  color: var(--navy);
+  font-size: 1rem;
+  line-height: 1.2;
+}
+
+.price-edit-category {
+  color: var(--muted);
+  font-size: .82rem;
+  margin-top: 3px;
+}
+
+.price-edit-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 10px;
+  margin-top: 12px;
+}
+
+.price-edit-box {
+  border: 1px solid #dbe8f8;
+  background: #fff;
+  border-radius: var(--radius);
+  padding: 10px;
+}
+
+.price-edit-box span {
+  display: block;
+  color: var(--muted);
+  font-size: .72rem;
+  font-weight: 900;
+  text-transform: uppercase;
+}
+
+.price-edit-box strong {
+  display: block;
+  color: var(--navy);
+  font-size: 1.1rem;
+  margin-top: 4px;
+}
+
+.price-edit-input-wrap {
+  margin-top: 14px;
+  text-align: left;
+}
+
+.price-edit-input-wrap label {
+  color: var(--navy);
+  font-weight: 900;
+  margin-bottom: 6px;
+}
+
+.price-edit-input {
+  width: 100%;
+  height: 52px;
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  padding: 0 14px;
+  font-size: 1.15rem;
+  font-weight: 900;
+  color: var(--navy);
+  outline: none;
+}
+
+.price-edit-input:focus {
+  border-color: var(--blue);
+  box-shadow: 0 0 0 4px rgba(40,119,209,.12);
+}
+
+.price-edit-total {
+  margin-top: 12px;
+  border-radius: var(--radius);
+  background: var(--navy);
+  color: #fff;
+  padding: 12px;
+  display: flex;
+  justify-content: space-between;
+  gap: 12px;
+  font-weight: 900;
+}
+    .sales-quote-logo-img {
+  width: 16mm;
+  height: 16mm;
+  object-fit: contain;
+  flex: 0 0 auto;
+  border-radius: 50%;
+}
+    .sales-quote {
+  width: 148mm;
+  height: 210mm;
+  min-height: 210mm;
+  margin: 0;
+  background: #fff;
+  color: #222;
+  font-family: Arial, Helvetica, sans-serif;
+  box-sizing: border-box;
+  overflow: hidden;
+}
+
+.sales-quote-header {
+  display: grid;
+  grid-template-columns: 55mm 1fr;
+  min-height: 24mm;
+}
+
+.sales-quote-logo {
+  background: #f1f1f1;
+  padding: 6mm;
+  display: flex;
+  align-items: center;
+  gap: 3mm;
+}
+
+
+.sales-quote-logo-text strong {
+  display: block;
+  color: #000;
+  font-size: 4.6mm;
+  line-height: 1;
+  font-weight: 900;
+}
+
+.sales-quote-logo-text span {
+  display: block;
+  margin-top: 1.5mm;
+  letter-spacing: 1.3mm;
+  font-size: 2.3mm;
+  font-weight: 700;
+}
+
+.sales-quote-header-note {
+  background: #0b1f3a;
+  color: #fff;
+  padding: 6mm;
+  font-size: 2.8mm;
+  line-height: 1.35;
+}
+
+.sales-quote-body {
+  padding: 7mm 10mm 5mm;
+}
+
+.sales-quote-title {
+  margin: 0;
+  color: #2b2b2b;
+  font-size: 8mm;
+  font-weight: 900;
+  letter-spacing: 0;
+}
+
+.sales-quote-title-line {
+  height: .7mm;
+  background: #0b1f3a;
+  margin: 2mm 0 6mm;
+}
+
+.sales-quote-meta {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10mm;
+  font-size: 2.8mm;
+  line-height: 1.35;
+  margin-bottom: 5mm;
+}
+
+.sales-quote-meta p {
+  margin: 0;
+}
+
+.sales-quote-meta-right {
+  display: grid;
+  grid-template-columns: 1fr 25mm;
+  gap: 2mm;
+  text-align: right;
+}
+
+.sales-quote-meta-right strong {
+  font-weight: 900;
+}
+
+.sales-quote-parties {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 14mm;
+  margin-bottom: 5mm;
+}
+
+.sales-quote-party-title {
+  width: 34mm;
+  background: #0b1f3a;
+  color: #fff;
+  text-align: center;
+  padding: 1.6mm;
+  font-size: 3mm;
+  font-weight: 900;
+  letter-spacing: .3mm;
+  margin-bottom: 3mm;
+}
+
+.sales-quote-party {
+  font-size: 2.8mm;
+  line-height: 1.35;
+}
+
+.sales-quote-party p {
+  margin: 0;
+}
+
+.sales-quote-party strong {
+  display: block;
+  margin-bottom: 2mm;
+}
+
+.sales-quote-table {
+  width: 100%;
+  border-collapse: collapse;
+  table-layout: fixed;
+  font-size: 2.8mm;
+  margin-top: 2mm;
+}
+
+.sales-quote-table th {
+  background: #0b1f3a;
+  color: #fff;
+  padding: 1.5mm;
+  border: .25mm solid #0b1f3a;
+  font-weight: 900;
+  letter-spacing: .3mm;
+  text-align: center;
+}
+
+.sales-quote-table td {
+  height: 5.5mm;
+  border: .25mm solid #bbb;
+  padding: 1mm 1.5mm;
+  vertical-align: middle;
+}
+
+.sales-quote-table td:nth-child(1),
+.sales-quote-table td:nth-child(3),
+.sales-quote-table td:nth-child(4),
+.sales-quote-table td:nth-child(5) {
+  text-align: center;
+}
+
+.sales-quote-summary {
+  width: 51mm;
+  margin-left: auto;
+  border-collapse: collapse;
+  font-size: 2.8mm;
+}
+
+.sales-quote-summary td {
+  border: .25mm solid #bbb;
+  padding: 1mm 1.5mm;
+}
+
+.sales-quote-summary td:first-child {
+  font-weight: 900;
+  text-align: right;
+}
+
+.sales-quote-summary .sales-quote-total td {
+  background: #0b1f3a;
+  color: #fff;
+  font-weight: 900;
+}
+
+.sales-quote-terms {
+  margin-top: 5mm;
+  font-size: 2.6mm;
+  line-height: 1.35;
+}
+
+.sales-quote-terms strong {
+  display: block;
+  margin-bottom: 2mm;
+  font-size: 3mm;
+}
+
+.sales-quote-terms p {
+  margin: 0;
+}
+
+.sales-quote-thanks {
+  text-align: center;
+  margin-top: 4mm;
+  font-weight: 900;
+  font-size: 3mm;
+}
+
+.sales-quote-site {
+  text-align: center;
+  margin-top: 3mm;
+  letter-spacing: 1.5mm;
+  font-size: 2.5mm;
+}
+
+.sales-quote-bottom {
+  height: 4mm;
+  background: #0b1f3a;
+}
+.quotation-layout {
+  display: grid;
+  grid-template-columns: 50% 50%;
+  gap: 14px;
+  align-items: start;
+}
+
+.quotation-left,
+.quotation-right {
+  min-width: 0;
+}
+
+.quotation-left {
+  display: grid;
+  gap: 14px;
+}
+
+.quotation-preview-panel {
+  overflow: hidden;
+}
+
+.quotation-preview-wrap {
+  width: 100%;
+  height: calc(100vh - 150px);
+  min-height: 520px;
+  overflow: hidden;
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  background: #eef4fb;
+  padding: 10px;
+  position: relative;
+}
+
+.quotation-preview-wrap .quotation-paper {
+  position: absolute;
+  inset: 10px;
+  width: auto;
+  height: auto;
+  min-height: 0;
+  padding: 0;
+  margin: 0;
+  background: transparent;
+  box-shadow: none;
+  overflow: hidden;
+}
+
+.quotation-preview-wrap .sales-quote {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%) scale(var(--quote-scale, .5));
+  transform-origin: center center;
+}
+.quotation-placeholder {
+  min-height: 180px;
+  display: grid;
+  place-items: center;
+  text-align: center;
+  color: var(--muted);
+  font-weight: 800;
+  background: #fff;
+  border: 1px dashed var(--line);
+  border-radius: var(--radius);
+}
     button, input, select, textarea { letter-spacing: 0; }
     .app-shell {
       display: grid;
@@ -432,11 +894,23 @@
       font-family: "Segoe UI", Arial, sans-serif;
       padding: 8mm;
     }
-    .quotation-paper { width: 190mm; min-height: 250mm; padding: 14mm; }
     .receipt-paper h2, .quotation-paper h2 { margin: 0; font-size: 18px; text-align: center; }
     .receipt-paper .mini, .quotation-paper .mini { font-size: 11px; color: #444; }
     .print-table { width: 100%; border-collapse: collapse; margin-top: 12px; font-size: 12px; }
     .print-table th, .print-table td { border-bottom: 1px solid #ddd; padding: 6px 4px; }
+
+
+    .quotation-placeholder {
+      min-height: 180px;
+      display: grid;
+      place-items: center;
+      text-align: center;
+      color: var(--muted);
+      font-weight: 800;
+      background: #fff;
+      border: 1px dashed var(--line);
+      border-radius: var(--radius);
+    }
     .tracking-card {
       max-width: 760px;
       margin: 28px auto;
@@ -1157,65 +1631,123 @@ max-height: none !important;
         </div>
       </section>
 
-      <section class="view" id="quotationView">
-        <div class="content-grid">
-          <div class="panel panel-pad">
-            <h5 class="fw-black mb-3">Quotation Generator</h5>
-            <div class="row g-2 mb-3">
-              <div class="col-md-6"><input class="form-control" id="quoteCustomer" placeholder="Customer / Business name"></div>
-              <div class="col-md-6"><input class="form-control" id="quoteValidity" type="date"></div>
-            </div>
-            <div class="row g-2 mb-3">
-              <div class="col-md-5"><select class="form-select" id="quoteProduct"></select></div>
-              <div class="col-md-2"><input class="form-control" id="quoteQty" type="number" min="1" value="1"></div>
-              <div class="col-md-3"><input class="form-control" id="quotePrice" type="number" min="0" step="1" placeholder="Price"></div>
-              <div class="col-md-2 d-grid"><button class="btn btn-primary fw-bold" id="addQuoteItemBtn">Add</button></div>
-            </div>
-            <div class="table-responsive">
-              <table class="data-table">
-                <thead><tr><th>Item</th><th>Qty</th><th>Price</th><th>Total</th><th></th></tr></thead>
-                <tbody id="quoteRows"></tbody>
-              </table>
-            </div>
+<section class="view" id="quotationView">
+  <div class="quotation-layout">
+
+    <div class="quotation-left">
+      <div class="panel panel-pad">
+        <h5 class="fw-black mb-3">Quotation Generator</h5>
+
+        <div class="row g-2 mb-3">
+          <div class="col-md-6">
+            <input class="form-control" id="quoteCustomer" placeholder="Customer">
           </div>
-          <div class="panel panel-pad">
-            <h5 class="fw-black mb-3">Quotation Total</h5>
-            <div class="big-total mb-3"><span>Total</span><span id="quoteTotal">₱0</span></div>
-            <div class="d-grid gap-2">
-              <button class="btn btn-success btn-lg fw-bold" id="printQuoteBtn"><i data-lucide="printer" class="icon"></i> Print Quotation</button>
-              <button class="btn btn-outline-secondary fw-bold" id="clearQuoteBtn"><i data-lucide="eraser" class="icon"></i> Clear</button>
-            </div>
+          <div class="col-md-6">
+            <input class="form-control" id="quoteValidity" type="date">
           </div>
         </div>
-      </section>
 
-      <section class="view" id="customerView">
-        <div class="panel panel-pad tracking-card">
-          <div class="text-center">
-            <h3 class="fw-black text-primary">Order Tracking</h3>
-            <p class="text-secondary mb-3">Scan a QR code or enter your order ID.</p>
+        <div class="row g-2 mb-3">
+          <div class="col-md-5">
+            <select class="form-select" id="quoteProduct"></select>
           </div>
-          <div class="row g-2 mb-3">
-            <div class="col-md-9"><input class="form-control form-control-lg" id="trackingInput" placeholder="Example: JKM-20260519-001"></div>
-            <div class="col-md-3 d-grid"><button class="btn btn-primary btn-lg fw-bold" id="trackingBtn">Track</button></div>
+          <div class="col-md-2">
+            <input class="form-control" id="quoteQty" type="number" min="1" value="1">
           </div>
-          <div class="text-center mb-3" id="qrBox"></div>
-          <div id="trackingResult"></div>
-          <div class="tracking-steps">
-            <div class="step" data-step="Pending">Pending</div>
-            <div class="step" data-step="In Progress">In Progress</div>
-            <div class="step" data-step="Printing">Printing</div>
-            <div class="step" data-step="Completed">Completed</div>
+          <div class="col-md-3">
+            <input class="form-control" id="quotePrice" type="number" min="0" step="1" placeholder="Price">
+          </div>
+          <div class="col-md-2 d-grid">
+            <button class="btn btn-primary fw-bold" id="addQuoteItemBtn">Add</button>
           </div>
         </div>
-      </section>
-    </main>
-  </div>
 
-  <div class="print-area">
-    <div class="receipt-paper" id="receiptPaper"></div>
-    <div class="quotation-paper" id="quotationPaper"></div>
+        <div class="table-responsive">
+          <table class="data-table">
+            <thead>
+              <tr>
+                <th>Item</th>
+                <th>Qty</th>
+                <th>Price</th>
+                <th>Total</th>
+                <th></th>
+              </tr>
+            </thead>
+            <tbody id="quoteRows"></tbody>
+          </table>
+        </div>
+      </div>
+
+      <div class="panel panel-pad">
+        <h5 class="fw-black mb-3">Quotation Total</h5>
+        <div class="big-total mb-3">
+          <span>Total</span>
+          <span id="quoteTotal">₱0</span>
+        </div>
+
+        <div class="d-grid gap-2">
+          <button class="btn btn-success btn-lg fw-bold" id="printQuoteBtn">
+            <i data-lucide="file-text" class="icon"></i> Generate Quotation
+          </button>
+          <button class="btn btn-primary fw-bold" id="saveQuoteImageBtn">
+            <i data-lucide="download" class="icon"></i> Save as Image
+          </button>
+          <button class="btn btn-outline-secondary fw-bold" id="clearQuoteBtn">
+            <i data-lucide="eraser" class="icon"></i> Clear
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <div class="quotation-right">
+      <div class="panel panel-pad quotation-preview-panel">
+        <h5 class="fw-black mb-3">Quotation Preview</h5>
+
+        <div class="quotation-preview-wrap">
+          <div class="quotation-paper" id="quotationPaper">
+            <div class="quotation-placeholder">Generate quotation preview here.</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
   </div>
+</section>
+
+<section class="view" id="customerView">
+  <div class="panel panel-pad tracking-card">
+    <div class="text-center">
+      <h3 class="fw-black text-primary">Order Tracking</h3>
+      <p class="text-secondary mb-3">Scan a QR code or enter your order ID.</p>
+    </div>
+
+    <div class="row g-2 mb-3">
+      <div class="col-md-9">
+        <input class="form-control form-control-lg" id="trackingInput" placeholder="Example: JKM-20260519-001">
+      </div>
+      <div class="col-md-3 d-grid">
+        <button class="btn btn-primary btn-lg fw-bold" id="trackingBtn">Track</button>
+      </div>
+    </div>
+
+    <div class="text-center mb-3" id="qrBox"></div>
+    <div id="trackingResult"></div>
+
+    <div class="tracking-steps">
+      <div class="step" data-step="Pending">Pending</div>
+      <div class="step" data-step="In Progress">In Progress</div>
+      <div class="step" data-step="Printing">Printing</div>
+      <div class="step" data-step="Completed">Completed</div>
+    </div>
+  </div>
+</section>
+</main>
+</div>
+
+<div class="print-area">
+  <div class="receipt-paper" id="receiptPaper"></div>
+</div>
+
 
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11.12.4/dist/sweetalert2.all.min.js"></script>
@@ -1260,211 +1792,73 @@ max-height: none !important;
     const peso = new Intl.NumberFormat("en-PH", { style: "currency", currency: "PHP", maximumFractionDigits: 0 });
     const statuses = ["Pending", "In Progress", "Printing", "Completed"];
     const productCatalog = [
-      ["PHOTO PRINTING", "Wallet Size", 10],
 ["PHOTO PRINTING", "Wallet Size", 15],
-["PHOTO PRINTING", "Wallet Size", 45],
-
-["PHOTO PRINTING", "3R", 10],
 ["PHOTO PRINTING", "3R", 20],
-["PHOTO PRINTING", "3R", 50],
-
-["PHOTO PRINTING", "4R", 10],
 ["PHOTO PRINTING", "4R", 25],
-["PHOTO PRINTING", "4R", 55],
-
-["PHOTO PRINTING", "5R", 10],
 ["PHOTO PRINTING", "5R", 30],
-["PHOTO PRINTING", "5R", 60],
-
-["PHOTO PRINTING", "A4 Photo Print", 40],
 ["PHOTO PRINTING", "A4 Photo Print", 60],
-["PHOTO PRINTING", "A4 Photo Print", 90],
-
-["PHOTO PRINTING", "Polaroid Print", 40],
 ["PHOTO PRINTING", "Polaroid Print", 60],
-["PHOTO PRINTING", "Polaroid Print", 90],
 
-["RUSH ID PRINTING", "Package 1", 15],
 ["RUSH ID PRINTING", "Package 1", 35],
-["RUSH ID PRINTING", "Package 1", 65],
-
-["RUSH ID PRINTING", "Package 2", 30],
 ["RUSH ID PRINTING", "Package 2", 50],
-["RUSH ID PRINTING", "Package 2", 80],
-
-["RUSH ID PRINTING", "Package 3", 25],
 ["RUSH ID PRINTING", "Package 3", 45],
-["RUSH ID PRINTING", "Package 3", 75],
-
-["RUSH ID PRINTING", "Package 4", 25],
 ["RUSH ID PRINTING", "Package 4", 45],
-["RUSH ID PRINTING", "Package 4", 75],
-
-["RUSH ID PRINTING", "Package 5", 45],
 ["RUSH ID PRINTING", "Package 5", 65],
-["RUSH ID PRINTING", "Package 5", 95],
 
-["DOCUMENT PRINTING", "Short Bond Paper", 5],
 ["DOCUMENT PRINTING", "Short Bond Paper", 7],
-["DOCUMENT PRINTING", "Short Bond Paper", 37],
-
-["DOCUMENT PRINTING", "A4", 5],
 ["DOCUMENT PRINTING", "A4", 8],
-["DOCUMENT PRINTING", "A4", 38],
-
-["DOCUMENT PRINTING", "Long", 5],
 ["DOCUMENT PRINTING", "Long", 10],
-["DOCUMENT PRINTING", "Long", 40],
 
-["CUSTOMIZED T-SHIRT", "Small Logo Print (XS-XL)", 300],
 ["CUSTOMIZED T-SHIRT", "Small Logo Print (XS-XL)", 320],
-["CUSTOMIZED T-SHIRT", "Small Logo Print (XS-XL)", 350],
-
-["CUSTOMIZED T-SHIRT", "Single Large Print", 330],
 ["CUSTOMIZED T-SHIRT", "Single Large Print", 350],
-["CUSTOMIZED T-SHIRT", "Single Large Print", 380],
-
-["CUSTOMIZED T-SHIRT", "Front + Back Print", 430],
 ["CUSTOMIZED T-SHIRT", "Front + Back Print", 450],
-["CUSTOMIZED T-SHIRT", "Front + Back Print", 480],
-
-["CUSTOMIZED T-SHIRT", "Full Front + Full Back", 530],
 ["CUSTOMIZED T-SHIRT", "Full Front + Full Back", 550],
-["CUSTOMIZED T-SHIRT", "Full Front + Full Back", 580],
 
-["CUSTOMIZED MUG", "Mug No Box", 70],
 ["CUSTOMIZED MUG", "Mug No Box", 90],
-["CUSTOMIZED MUG", "Mug No Box", 120],
+["CUSTOMIZED MUG", "Mug With Box", 110],
+["CUSTOMIZED MUG", "Magic Mug", 190],
 
-["CUSTOMIZED MUG", "Mug With Box", 100],
-["CUSTOMIZED MUG", "Mug With Box", 120],
-["CUSTOMIZED MUG", "Mug With Box", 150],
-
-["CUSTOMIZED MUG", "Magic Mug", 180],
-["CUSTOMIZED MUG", "Magic Mug", 200],
-["CUSTOMIZED MUG", "Magic Mug", 230],
-
-["CUSTOMIZED JACKET", "Custom Size", 480],
 ["CUSTOMIZED JACKET", "Custom Size", 500],
-["CUSTOMIZED JACKET", "Custom Size", 530],
 
-["CUSTOMIZED JACKET", "Custom Size", 780],
-["CUSTOMIZED JACKET", "Custom Size", 800],
-["CUSTOMIZED JACKET", "Custom Size", 830],
-
-["CUSTOMIZED TUMBLER", "Regular", 160],
 ["CUSTOMIZED TUMBLER", "Regular", 180],
-["CUSTOMIZED TUMBLER", "Regular", 210],
-
-["CUSTOMIZED TUMBLER", "Premium", 200],
 ["CUSTOMIZED TUMBLER", "Premium", 220],
-["CUSTOMIZED TUMBLER", "Premium", 250],
 
-["CUSTOMIZED REF MAGNETS", "ATM", 10],
 ["CUSTOMIZED REF MAGNETS", "ATM", 25],
-["CUSTOMIZED REF MAGNETS", "ATM", 55],
-
-["CUSTOMIZED REF MAGNETS", "3x3", 25],
 ["CUSTOMIZED REF MAGNETS", "3x3", 45],
-["CUSTOMIZED REF MAGNETS", "3x3", 75],
-
-["CUSTOMIZED REF MAGNETS", "3R", 30],
 ["CUSTOMIZED REF MAGNETS", "3R", 50],
-["CUSTOMIZED REF MAGNETS", "3R", 80],
-
-["CUSTOMIZED REF MAGNETS", "4R", 40],
 ["CUSTOMIZED REF MAGNETS", "4R", 60],
-["CUSTOMIZED REF MAGNETS", "4R", 90],
-
-["CUSTOMIZED REF MAGNETS", "5R", 50],
 ["CUSTOMIZED REF MAGNETS", "5R", 70],
-["CUSTOMIZED REF MAGNETS", "5R", 100],
+["CUSTOMIZED REF MAGNETS", "Photo Strips", 45],
 
-["CUSTOMIZED REF MAGNETS", "Custom", 60],
-["CUSTOMIZED REF MAGNETS", "Custom", 80],
-["CUSTOMIZED REF MAGNETS", "Custom", 110],
-
-["CUSTOMIZED TOTE BAG - FLAT", "XS", 129],
 ["CUSTOMIZED TOTE BAG - FLAT", "XS", 149],
-["CUSTOMIZED TOTE BAG - FLAT", "XS", 179],
-
-["CUSTOMIZED TOTE BAG - FLAT", "S", 139],
 ["CUSTOMIZED TOTE BAG - FLAT", "S", 159],
-["CUSTOMIZED TOTE BAG - FLAT", "S", 189],
-
-["CUSTOMIZED TOTE BAG - FLAT", "M", 149],
 ["CUSTOMIZED TOTE BAG - FLAT", "M", 169],
-["CUSTOMIZED TOTE BAG - FLAT", "M", 199],
-
-["CUSTOMIZED TOTE BAG - FLAT", "L", 159],
 ["CUSTOMIZED TOTE BAG - FLAT", "L", 179],
-["CUSTOMIZED TOTE BAG - FLAT", "L", 209],
 
-["CUSTOMIZED TOTE BAG - WITH BASE", "XS", 139],
 ["CUSTOMIZED TOTE BAG - WITH BASE", "XS", 159],
-["CUSTOMIZED TOTE BAG - WITH BASE", "XS", 189],
-
-["CUSTOMIZED TOTE BAG - WITH BASE", "S", 149],
 ["CUSTOMIZED TOTE BAG - WITH BASE", "S", 169],
-["CUSTOMIZED TOTE BAG - WITH BASE", "S", 199],
-
-["CUSTOMIZED TOTE BAG - WITH BASE", "M", 159],
 ["CUSTOMIZED TOTE BAG - WITH BASE", "M", 179],
-["CUSTOMIZED TOTE BAG - WITH BASE", "M", 209],
-
-["CUSTOMIZED TOTE BAG - WITH BASE", "L", 169],
 ["CUSTOMIZED TOTE BAG - WITH BASE", "L", 189],
-["CUSTOMIZED TOTE BAG - WITH BASE", "L", 219],
 
-["CUSTOMIZED WALLET", "XS", 39],
 ["CUSTOMIZED WALLET", "XS", 59],
-["CUSTOMIZED WALLET", "XS", 89],
-
-["CUSTOMIZED WALLET", "S", 49],
 ["CUSTOMIZED WALLET", "S", 69],
-["CUSTOMIZED WALLET", "S", 99],
-
-["CUSTOMIZED WALLET", "M", 59],
 ["CUSTOMIZED WALLET", "M", 79],
-["CUSTOMIZED WALLET", "M", 109],
-
-["CUSTOMIZED WALLET", "L", 69],
 ["CUSTOMIZED WALLET", "L", 89],
-["CUSTOMIZED WALLET", "L", 119],
 
-["CUSTOMIZED BADGE", "Ref Magnet", 25],
 ["CUSTOMIZED BADGE", "Ref Magnet", 45],
-["CUSTOMIZED BADGE", "Ref Magnet", 75],
-
-["CUSTOMIZED BADGE", "Ref Pin", 25],
 ["CUSTOMIZED BADGE", "Ref Pin", 45],
-["CUSTOMIZED BADGE", "Ref Pin", 75],
-
-["CUSTOMIZED BADGE", "Ref Mirror", 25],
 ["CUSTOMIZED BADGE", "Ref Mirror", 45],
-["CUSTOMIZED BADGE", "Ref Mirror", 75],
 
-["OTHERS", "Desk Calendar", 130],
 ["OTHERS", "Desk Calendar", 150],
-["OTHERS", "Desk Calendar", 180],
-
-["OTHERS", "A4 Sintra Board", 120],
 ["OTHERS", "A4 Sintra Board", 140],
-["OTHERS", "A4 Sintra Board", 170],
+["OTHERS", "A3 Sintra Board", 280],
 
-["OTHERS", "A3 Sintra Board", 270],
-["OTHERS", "A3 Sintra Board", 290],
-["OTHERS", "A3 Sintra Board", 320],
-
-["OTHERS", "Notebook", 60],
-["OTHERS", "Notebook", 70],
-["OTHERS", "Notebook", 130],
-["OTHERS", "Notebook", 150],
-["OTHERS", "Notebook", 180],
-
-["OTHERS", "Planner", 130],
-["OTHERS", "Planner", 150],
-["OTHERS", "Planner", 180]
+["OTHERS", "A5 Staple Notebook", 89],
+["OTHERS", "A5 Loopwire Notebook", 99],
+["OTHERS", "B5 Staple Notebook", 149],
+["OTHERS", "5x7 Loopwire Notebook", 89],
+["OTHERS", "4x6 Loopwire Notebook", 79],
+["OTHERS", "Planner", 150]
     ].map((p, index) => ({ id: `P${String(index + 1).padStart(3, "0")}`, category: p[0], name: p[1], price: p[2] }));
 
     const seedMaterials = [
@@ -1796,6 +2190,77 @@ max-height: none !important;
       persistLocal();
       renderCart();
     }
+    async function editCartPrice(cartItemId) {
+  const item = state.cart.find(i => i.id === cartItemId);
+  if (!item) return;
+
+  const originalPrice = item.originalPrice || productCatalog.find(p => p.id === item.productId || p.id === item.id)?.price || item.price;
+
+  const res = await SwalFire.fire({
+    title: "Edit Item Price",
+    html: `
+      <div class="price-edit-card">
+        <div class="price-edit-name">${safe(item.name)}</div>
+        <div class="price-edit-category">${safe(item.category)}</div>
+
+        <div class="price-edit-grid">
+          <div class="price-edit-box">
+            <span>Default Price</span>
+            <strong>${peso.format(originalPrice)}</strong>
+          </div>
+          <div class="price-edit-box">
+            <span>Quantity</span>
+            <strong>${safe(item.qty)}</strong>
+          </div>
+        </div>
+
+        <div class="price-edit-input-wrap">
+          <label for="cartItemPrice">Custom Unit Price</label>
+          <input id="cartItemPrice" class="price-edit-input" type="number" min="0" step="1" value="${item.price}">
+        </div>
+
+        <div class="price-edit-total">
+          <span>New Subtotal</span>
+          <span id="priceEditSubtotal">${peso.format(item.price * item.qty)}</span>
+        </div>
+      </div>
+    `,
+    showCancelButton: true,
+    confirmButtonText: "Save Price",
+    cancelButtonText: "Cancel",
+    didOpen: () => {
+      const input = document.getElementById("cartItemPrice");
+      const subtotal = document.getElementById("priceEditSubtotal");
+
+      input.focus();
+      input.select();
+
+      input.addEventListener("input", () => {
+        const price = Number(input.value || 0);
+        subtotal.textContent = peso.format(price * item.qty);
+      });
+    },
+    preConfirm: () => {
+      const price = Number(document.getElementById("cartItemPrice").value || 0);
+
+      if (price < 0) {
+        Swal.showValidationMessage("Price cannot be negative");
+        return false;
+      }
+
+      return price;
+    }
+  });
+
+  if (!res.value && res.value !== 0) return;
+
+  item.price = res.value;
+  item.customPrice = item.price !== originalPrice;
+  item.originalPrice = originalPrice;
+
+  persistLocal();
+  renderCart();
+}
 
     function changeQty(productId, delta) {
       const item = state.cart.find(i => i.id === productId);
@@ -1814,8 +2279,12 @@ max-height: none !important;
         el("cartList").innerHTML = state.cart.map(item => `
           <div class="cart-item">
             <div class="d-flex justify-content-between gap-2">
-              <div><strong>${safe(item.name)}</strong><div class="text-secondary small">${safe(item.category)}</div></div>
-              <strong>${peso.format(item.price * item.qty)}</strong>
+             <div>
+  <strong>${safe(item.name)}</strong>
+  <div class="text-secondary small">
+    ${safe(item.category)} · ${peso.format(item.price)} each${item.customPrice ? " · Custom" : ""}
+  </div>
+</div>
             </div>
             <div class="qty-row">
               <div class="qty-controls">
@@ -1823,7 +2292,10 @@ max-height: none !important;
                 <strong>${item.qty}</strong>
                 <button data-inc="${item.id}" title="Increase"><i data-lucide="plus"></i></button>
               </div>
-              <button class="icon-btn" data-remove="${item.id}" title="Remove"><i data-lucide="x"></i></button>
+              <div class="d-flex gap-1">
+  <button class="icon-btn" data-edit-price="${item.id}" title="Edit price"><i data-lucide="pencil"></i></button>
+  <button class="icon-btn" data-remove="${item.id}" title="Remove"><i data-lucide="x"></i></button>
+</div>
             </div>
           </div>`).join("");
       }
@@ -1832,6 +2304,7 @@ max-height: none !important;
       document.querySelectorAll("[data-inc]").forEach(b => b.addEventListener("click", () => changeQty(b.dataset.inc, 1)));
       document.querySelectorAll("[data-dec]").forEach(b => b.addEventListener("click", () => changeQty(b.dataset.dec, -1)));
       document.querySelectorAll("[data-remove]").forEach(b => b.addEventListener("click", () => { state.cart = state.cart.filter(i => i.id !== b.dataset.remove); persistLocal(); renderCart(); }));
+      document.querySelectorAll("[data-edit-price]").forEach(b => b.addEventListener("click", () => editCartPrice(b.dataset.editPrice)));
       lucide.createIcons();
     }
 
@@ -2638,36 +3111,59 @@ document.querySelectorAll("[data-delete-order]").forEach(btn => btn.addEventList
     }
 
     async function equipmentModal(item = null) {
-      const current = item || { id: `EQ-${Date.now()}`, item: "", amount: 0, contributedBy: "Mark", dateLabel: new Date().toLocaleString(), createdAt: new Date().toISOString() };
-      if (!current.id) current.id = current.firebaseId || `EQ-${Date.now()}`;
-      const res = await SwalFire.fire({
-        title: item ? "Edit Equipment / Material" : "Add Equipment / Material",
-        html: `
-          <input id="equipItem" class="swal2-input" placeholder="Item" value="${safe(current.item)}">
-          <input id="equipAmount" class="swal2-input" type="number" min="0" step="1" placeholder="Amount" value="${current.amount}">
-          <select id="equipBy" class="swal2-select">
-            <option ${current.contributedBy === "Mark" ? "selected" : ""}>Mark</option>
-            <option ${current.contributedBy === "Kaye & Jobelle" ? "selected" : ""}>Kaye & Jobelle</option>
-          </select>
-          <input id="equipDate" class="swal2-input" placeholder="Date label" value="${safe(current.dateLabel || new Date().toLocaleString())}">`,
-        preConfirm: () => ({
-          ...current,
-          item: document.getElementById("equipItem").value.trim(),
-          amount: Number(document.getElementById("equipAmount").value || 0),
-          contributedBy: document.getElementById("equipBy").value,
-          dateLabel: document.getElementById("equipDate").value.trim() || new Date().toLocaleString(),
-          updatedAt: new Date().toISOString()
-        })
-      });
-      if (!res.value?.item || !res.value.amount) return;
-      const index = state.equipment.findIndex(e => (e.firebaseId || e.id) === (res.value.firebaseId || res.value.id));
-      if (index >= 0) state.equipment[index] = res.value;
-      else state.equipment.push(res.value);
-      await syncDoc("equipment", res.value);
-      logActivity(`${item ? "Edited" : "Added"} equipment/material ${res.value.item}`);
-      renderAll();
-    }
+  const current = item || { id: `EQ-${Date.now()}`, item: "", amount: 0, contributedBy: "Mark", dateLabel: new Date().toLocaleString(), createdAt: new Date().toISOString() };
+  if (!current.id) current.id = current.firebaseId || `EQ-${Date.now()}`;
 
+  const res = await SwalFire.fire({
+    title: item ? "Edit Equipment / Material" : "Add Equipment / Material",
+    html: `
+      <div class="jkm-modal-card">
+        <div class="jkm-modal-head">
+          <strong>${item ? "Update investment record" : "New investment record"}</strong>
+          <span>Track equipment, tools, and contributed materials.</span>
+        </div>
+        <div class="jkm-form-grid">
+          <div class="jkm-field full">
+            <label>Item</label>
+            <input id="equipItem" value="${safe(current.item)}">
+          </div>
+          <div class="jkm-field">
+            <label>Amount</label>
+            <input id="equipAmount" type="number" min="0" step="1" value="${current.amount}">
+          </div>
+          <div class="jkm-field">
+            <label>Contributed By</label>
+            <select id="equipBy">
+              <option ${current.contributedBy === "Mark" ? "selected" : ""}>Mark</option>
+              <option ${current.contributedBy === "Kaye & Jobelle" ? "selected" : ""}>Kaye & Jobelle</option>
+            </select>
+          </div>
+          <div class="jkm-field full">
+            <label>Date Label</label>
+            <input id="equipDate" value="${safe(current.dateLabel || new Date().toLocaleString())}">
+          </div>
+        </div>
+      </div>`,
+    showCancelButton: true,
+    confirmButtonText: item ? "Save Changes" : "Add Record",
+    preConfirm: () => ({
+      ...current,
+      item: document.getElementById("equipItem").value.trim(),
+      amount: Number(document.getElementById("equipAmount").value || 0),
+      contributedBy: document.getElementById("equipBy").value,
+      dateLabel: document.getElementById("equipDate").value.trim() || new Date().toLocaleString(),
+      updatedAt: new Date().toISOString()
+    })
+  });
+
+  if (!res.value?.item || !res.value.amount) return;
+  const index = state.equipment.findIndex(e => (e.firebaseId || e.id) === (res.value.firebaseId || res.value.id));
+  if (index >= 0) state.equipment[index] = res.value;
+  else state.equipment.push(res.value);
+  await syncDoc("equipment", res.value);
+  logActivity(`${item ? "Edited" : "Added"} equipment/material ${res.value.item}`);
+  renderAll();
+}
     async function deleteEquipment(id) {
       const item = state.equipment.find(e => (e.firebaseId || e.id) === id);
       if (!item) return;
@@ -2793,62 +3289,116 @@ document.querySelectorAll("[data-delete-order]").forEach(btn => btn.addEventList
     }
 
     async function expenseModal(expense = null) {
-      const current = expense || { id: `EXP-${Date.now()}`, date: todayKey(new Date()), category: "Materials", description: "", amount: 0, loggedBy: state.user || "JKM Prime", createdAt: new Date().toISOString() };
-      const res = await SwalFire.fire({
-        title: expense ? "Edit Expense" : "Add Expense",
-        html: `
-          <input id="expenseDate" class="swal2-input" type="date" value="${safe(current.date)}">
-          <select id="expenseCategory" class="swal2-select">
-            ${["Materials", "Utilities", "Rent", "Payroll", "Maintenance", "Delivery", "Others"].map(cat => `<option ${cat === current.category ? "selected" : ""}>${cat}</option>`).join("")}
-          </select>
-          <input id="expenseDesc" class="swal2-input" placeholder="Description" value="${safe(current.description)}">
-          <input id="expenseAmount" class="swal2-input" type="number" min="0" step="1" placeholder="Amount" value="${current.amount}">`,
-        preConfirm: () => ({
-          ...current,
-          date: document.getElementById("expenseDate").value || todayKey(new Date()),
-          category: document.getElementById("expenseCategory").value,
-          description: document.getElementById("expenseDesc").value.trim() || "Business expense",
-          amount: Number(document.getElementById("expenseAmount").value || 0),
-          loggedBy: state.user || "JKM Prime",
-          updatedAt: new Date().toISOString()
-        })
-      });
-      if (!res.value || !res.value.amount) return;
-      const index = state.expenses.findIndex(e => e.id === res.value.id);
-      if (index >= 0) state.expenses[index] = res.value;
-      else state.expenses.unshift(res.value);
-      await syncDoc("expenses", res.value);
-      logActivity(`${expense ? "Edited" : "Logged"} expense ${peso.format(res.value.amount)}`);
-      renderAll();
-    }
+  const current = expense || { id: `EXP-${Date.now()}`, date: todayKey(new Date()), category: "Materials", description: "", amount: 0, loggedBy: state.user || "JKM Prime", createdAt: new Date().toISOString() };
+
+  const res = await SwalFire.fire({
+    title: expense ? "Edit Expense" : "Add Expense",
+    html: `
+      <div class="jkm-modal-card">
+        <div class="jkm-modal-head">
+          <strong>${expense ? "Update business expense" : "Log new expense"}</strong>
+          <span>Keep monthly profit and reconciliation accurate.</span>
+        </div>
+        <div class="jkm-form-grid">
+          <div class="jkm-field">
+            <label>Date</label>
+            <input id="expenseDate" type="date" value="${safe(current.date)}">
+          </div>
+          <div class="jkm-field">
+            <label>Category</label>
+            <select id="expenseCategory">
+              ${["Materials", "Utilities", "Rent", "Payroll", "Maintenance", "Delivery", "Others"].map(cat => `<option ${cat === current.category ? "selected" : ""}>${cat}</option>`).join("")}
+            </select>
+          </div>
+          <div class="jkm-field full">
+            <label>Description</label>
+            <input id="expenseDesc" value="${safe(current.description)}">
+          </div>
+          <div class="jkm-field full">
+            <label>Amount</label>
+            <input id="expenseAmount" type="number" min="0" step="1" value="${current.amount}">
+          </div>
+        </div>
+        <div class="jkm-modal-total"><span>Current Amount</span><span>${peso.format(current.amount || 0)}</span></div>
+      </div>`,
+    showCancelButton: true,
+    confirmButtonText: expense ? "Save Expense" : "Log Expense",
+    preConfirm: () => ({
+      ...current,
+      date: document.getElementById("expenseDate").value || todayKey(new Date()),
+      category: document.getElementById("expenseCategory").value,
+      description: document.getElementById("expenseDesc").value.trim() || "Business expense",
+      amount: Number(document.getElementById("expenseAmount").value || 0),
+      loggedBy: state.user || "JKM Prime",
+      updatedAt: new Date().toISOString()
+    })
+  });
+
+  if (!res.value || !res.value.amount) return;
+  const index = state.expenses.findIndex(e => e.id === res.value.id);
+  if (index >= 0) state.expenses[index] = res.value;
+  else state.expenses.unshift(res.value);
+  await syncDoc("expenses", res.value);
+  logActivity(`${expense ? "Edited" : "Logged"} expense ${peso.format(res.value.amount)}`);
+  renderAll();
+}
 
     async function materialModal(material = null) {
-      const current = material || { id: `M${String(Date.now()).slice(-5)}`, name: "", unit: "pcs", quantityPerPack: 1, stock: 0, pricePerPack: 0, lowStock: 3 };
-      const res = await SwalFire.fire({
-        title: material ? "Edit Material" : "Add Material",
-        html: `
-          <input id="matName" class="swal2-input" placeholder="Material" value="${safe(current.name)}">
-          <input id="matUnit" class="swal2-input" placeholder="Unit" value="${safe(current.unit)}">
-          <input id="matQtyPack" type="number" class="swal2-input" placeholder="Quantity per pack" value="${current.quantityPerPack}">
-          <input id="matStock" type="number" class="swal2-input" placeholder="Stock level" value="${current.stock}">
-          <input id="matPrice" type="number" class="swal2-input" placeholder="Price per pack" value="${current.pricePerPack}">
-          <input id="matLow" type="number" class="swal2-input" placeholder="Low stock threshold" value="${current.lowStock}">`,
-        preConfirm: () => ({
-          ...current,
-          name: document.getElementById("matName").value.trim(),
-          unit: document.getElementById("matUnit").value.trim(),
-          quantityPerPack: Number(document.getElementById("matQtyPack").value || 0),
-          stock: Number(document.getElementById("matStock").value || 0),
-          pricePerPack: Number(document.getElementById("matPrice").value || 0),
-          lowStock: Number(document.getElementById("matLow").value || 0)
-        })
-      });
-      if (res.value?.name) {
-        upsertMaterial(res.value);
-        logActivity(`${material ? "Edited" : "Added"} material ${res.value.name}`);
-      }
-    }
+  const current = material || { id: `M${String(Date.now()).slice(-5)}`, name: "", unit: "pcs", quantityPerPack: 1, stock: 0, pricePerPack: 0, lowStock: 3 };
 
+  const res = await SwalFire.fire({
+    title: material ? "Edit Material" : "Add Material",
+    html: `
+      <div class="jkm-modal-card">
+        <div class="jkm-modal-head">
+          <strong>${material ? "Update inventory item" : "New inventory item"}</strong>
+          <span>Manage stock level, pack size, and low-stock alert.</span>
+        </div>
+        <div class="jkm-form-grid">
+          <div class="jkm-field full">
+            <label>Material</label>
+            <input id="matName" value="${safe(current.name)}">
+          </div>
+          <div class="jkm-field">
+            <label>Unit</label>
+            <input id="matUnit" value="${safe(current.unit)}">
+          </div>
+          <div class="jkm-field">
+            <label>Qty / Pack</label>
+            <input id="matQtyPack" type="number" value="${current.quantityPerPack}">
+          </div>
+          <div class="jkm-field">
+            <label>Stock</label>
+            <input id="matStock" type="number" value="${current.stock}">
+          </div>
+          <div class="jkm-field">
+            <label>Low Alert</label>
+            <input id="matLow" type="number" value="${current.lowStock}">
+          </div>
+          <div class="jkm-field full">
+            <label>Price / Pack</label>
+            <input id="matPrice" type="number" value="${current.pricePerPack}">
+          </div>
+        </div>
+      </div>`,
+    showCancelButton: true,
+    confirmButtonText: material ? "Save Material" : "Add Material",
+    preConfirm: () => ({
+      ...current,
+      name: document.getElementById("matName").value.trim(),
+      unit: document.getElementById("matUnit").value.trim(),
+      quantityPerPack: Number(document.getElementById("matQtyPack").value || 0),
+      stock: Number(document.getElementById("matStock").value || 0),
+      pricePerPack: Number(document.getElementById("matPrice").value || 0),
+      lowStock: Number(document.getElementById("matLow").value || 0)
+    })
+  });
+
+  if (res.value?.name) {
+    upsertMaterial(res.value);
+    logActivity(`${material ? "Edited" : "Added"} material ${res.value.name}`);
+  }
+}
     function renderReconciliation() {
       const currentSales = monthlySales();
       const currentExpenses = monthlyExpenses();
@@ -2921,29 +3471,197 @@ document.querySelectorAll("[data-delete-order]").forEach(btn => btn.addEventList
       state.quote.push({ id: crypto.randomUUID(), category: product.category, name: product.name, qty: Number(el("quoteQty").value || 1), price: Number(el("quotePrice").value || product.price) });
       renderQuote();
     }
+function fitQuotationPreview() {
+  const wrap = document.querySelector(".quotation-preview-wrap");
+  const quote = document.querySelector(".sales-quote");
+  if (!wrap || !quote) return;
 
+  quote.style.transform = "translate(-50%, -50%) scale(1)";
+
+  const availableWidth = wrap.clientWidth - 24;
+  const availableHeight = wrap.clientHeight - 24;
+  const scaleX = availableWidth / quote.offsetWidth;
+  const scaleY = availableHeight / quote.offsetHeight;
+  const scale = Math.min(scaleX, scaleY, 1);
+
+  quote.style.setProperty("--quote-scale", scale);
+  quote.style.transform = `translate(-50%, -50%) scale(${scale})`;
+}
     function printQuotation() {
-      if (!state.quote.length) return SwalFire.fire("No items", "Add at least one quotation line.", "info");
-      const customer = el("quoteCustomer").value.trim() || "Valued Customer";
-      const validity = el("quoteValidity").value || new Date(Date.now() + 7 * 86400000).toISOString().slice(0,10);
-      const rows = state.quote.map(i => `<tr><td>${safe(i.name)}</td><td style="text-align:center">${i.qty}</td><td style="text-align:right">${peso.format(i.price)}</td><td style="text-align:right">${peso.format(i.price * i.qty)}</td></tr>`).join("");
-      el("quotationPaper").innerHTML = `
-        <h2>JKM PRIME DIGITAL PRINTS</h2>
-        <div class="mini" style="text-align:center">Business Quotation</div>
-        <hr>
-        <p><strong>Customer:</strong> ${safe(customer)}<br><strong>Validity Date:</strong> ${safe(validity)}<br><strong>Prepared:</strong> ${new Date().toLocaleString()}</p>
-        <table class="print-table">
-          <thead><tr><th style="text-align:left">Item</th><th>Qty</th><th style="text-align:right">Unit Price</th><th style="text-align:right">Amount</th></tr></thead>
-          <tbody>${rows}</tbody>
-        </table>
-        <h3 style="text-align:right;margin-top:18px">Total: ${peso.format(quoteTotal())}</h3>
-        <p class="mini">Prices are valid until the date above and may change with artwork complexity, rush processing, material availability, and approved specifications.</p>`;
-      document.body.classList.add("quotation-print");
-      document.body.classList.remove("receipt-print");
-      window.print();
-      setTimeout(() => document.body.classList.remove("quotation-print"), 300);
-      logActivity(`Generated quotation for ${customer}`);
-    }
+  if (!state.quote.length) return SwalFire.fire("No items", "Add at least one quotation line.", "info");
+
+  const customer = el("quoteCustomer").value.trim() || "Valued Customer";
+  const validity = el("quoteValidity").value || new Date(Date.now() + 7 * 86400000).toISOString().slice(0,10);
+  const prepared = new Date();
+  const quoteNo = `QT-${prepared.toISOString().slice(0,10).replaceAll("-", "")}-001`;
+  const displayDate = prepared.toLocaleDateString("en-US", { month: "long", day: "2-digit", year: "numeric" });
+
+  const priceLines = state.quote.map(i =>
+    `<li><strong>${i.qty} pcs - ${peso.format(i.price)} each</strong> (${safe(i.name)}; total ${peso.format(i.price * i.qty)})</li>`
+  ).join("");
+
+  const specLines = state.quote.map(i =>
+    `<li>${safe(i.name)} - ${safe(i.qty)} pcs</li>`
+  ).join("");
+
+  const minQty = Math.min(...state.quote.map(i => Number(i.qty) || 0).filter(Boolean));
+  const moqText = minQty ? `${minQty} pieces` : "100 pieces";
+
+  el("quotationPaper").innerHTML = `
+  <article class="sales-quote">
+    <header class="sales-quote-header">
+<div class="sales-quote-logo">
+<!-- <img src="logo.png" alt="JKM Prime Digital Prints Logo" class="sales-quote-logo-img"> -->
+  <div class="sales-quote-logo-text">
+    <strong>JKM PRIME</strong>
+    <span>DIGITAL PRINTS</span>
+  </div>
+</div>
+      <div class="sales-quote-header-note">
+        Quality digital printing services for custom products, business materials,
+        souvenirs, and personalized print orders.
+      </div>
+    </header>
+
+    <main class="sales-quote-body">
+      <h1 class="sales-quote-title">SALES QUOTATION</h1>
+      <div class="sales-quote-title-line"></div>
+
+      <section class="sales-quote-meta">
+        <div>
+          <p>Taguig City</p>
+          <p>jkmprimedigitalprints@gmail.com</p>
+          <p>JKM Prime Digital Prints</p>
+        </div>
+        <div class="sales-quote-meta-right">
+          <strong>Quotation No:</strong><span>${safe(quoteNo)}</span>
+          <strong>Quotation Date:</strong><span>${safe(displayDate)}</span>
+        </div>
+      </section>
+<br>
+      <section class="sales-quote-parties">
+        <div>
+          <div class="sales-quote-party-title">BILL FROM</div>
+          <div class="sales-quote-party">
+            <strong>JKM Prime Digital Prints</strong>
+            <p>Taguig City</p>
+            <p>jkmprimedigitalprints@gmail.com</p>
+          </div>
+        </div>
+
+        <div>
+          <div class="sales-quote-party-title">BILL TO</div>
+          <div class="sales-quote-party">
+            <strong>${safe(customer)}</strong>
+            <p>Customer / Business Name</p>
+            <p>Quotation request</p>
+          </div>
+        </div>
+      </section>
+<br>
+      <table class="sales-quote-table">
+        <thead>
+          <tr>
+            <th style="width:13%">SR #</th>
+            <th>ITEM DETAILS</th>
+            <th style="width:20%">QTY</th>
+            <th style="width:20%">UNIT RATE</th>
+            <th style="width:20%">TOTAL</th>
+          </tr>
+        </thead>
+        <tbody>
+          ${state.quote.map((i, index) => `
+            <tr>
+              <td>${index + 1}</td>
+              <td>${safe(i.name)}</td>
+              <td>${safe(i.qty)}</td>
+              <td>${peso.format(i.price)}</td>
+              <td>${peso.format(i.price * i.qty)}</td>
+            </tr>
+          `).join("")}
+          ${Array.from({ length: Math.max(0, 7 - state.quote.length) }, () => `
+            <tr><td></td><td></td><td></td><td></td><td></td></tr>
+          `).join("")}
+        </tbody>
+      </table>
+
+      <table class="sales-quote-summary">
+        <tr><td>Sub Total:</td><td>${peso.format(quoteTotal())}</td></tr>
+        <tr class="sales-quote-total"><td>Total:</td><td>${peso.format(quoteTotal())}</td></tr>
+      </table>
+
+      <section class="sales-quote-terms">
+        <strong>Terms & Conditions:</strong>
+        <p>
+          A 50% down payment is required to confirm the order.<br>
+          Production will begin after payment confirmation.<br>
+          Remaining balance must be settled before delivery or release.
+        </p>
+      </section>
+
+      <div class="sales-quote-thanks">Thank you for your purchase!</div>
+      <div class="sales-quote-site">JKM PRIME DIGITAL PRINTS</div>
+    </main>
+
+    <div class="sales-quote-bottom"></div>
+  </article>
+`;
+
+  el("quotationPaper").scrollIntoView({ behavior: "smooth", block: "start" });
+  requestAnimationFrame(fitQuotationPreview);
+  logActivity(`Generated quotation for ${customer}`);
+}
+
+async function saveQuotationImage() {
+  const quote = el("quotationPaper").querySelector(".sales-quote");
+
+  if (!quote) {
+    return SwalFire.fire("No quotation", "Generate a quotation first before saving.", "info");
+  }
+
+  try {
+    const stage = document.createElement("div");
+    stage.className = "receipt-export-stage";
+
+    const quoteClone = quote.cloneNode(true);
+    quoteClone.style.position = "static";
+    quoteClone.style.transform = "none";
+    quoteClone.style.margin = "0";
+    quoteClone.style.background = "#ffffff";
+
+    stage.appendChild(quoteClone);
+    document.body.appendChild(stage);
+
+    const images = [...quoteClone.querySelectorAll("img")];
+
+    await Promise.all(images.map(img => {
+      img.removeAttribute("crossorigin");
+
+      if (img.complete) return Promise.resolve();
+
+      return new Promise(resolve => {
+        img.onload = resolve;
+        img.onerror = resolve;
+      });
+    }));
+
+    const canvas = await html2canvas(quoteClone, {
+      backgroundColor: "#ffffff",
+      scale: 2,
+      useCORS: false
+    });
+
+    const link = document.createElement("a");
+    link.download = `quotation-${new Date().toISOString().slice(0, 10)}.png`;
+    link.href = canvas.toDataURL("image/png");
+    link.click();
+
+    stage.remove();
+  } catch (error) {
+    console.error("Quotation image export failed:", error);
+    SwalFire.fire("Save failed", "error");
+  }
+}
 
     function renderDashboard() {
       const now = new Date();
@@ -3110,8 +3828,14 @@ document.querySelectorAll("[data-delete-order]").forEach(btn => btn.addEventList
       el("addExpenseBtn").addEventListener("click", () => expenseModal());
       el("quoteProduct").addEventListener("change", setQuotePrice);
       el("addQuoteItemBtn").addEventListener("click", addQuoteItem);
-      el("printQuoteBtn").addEventListener("click", printQuotation);
-      el("clearQuoteBtn").addEventListener("click", () => { state.quote = []; renderQuote(); });
+    el("printQuoteBtn").addEventListener("click", printQuotation);
+el("saveQuoteImageBtn").addEventListener("click", saveQuotationImage);
+el("clearQuoteBtn").addEventListener("click", () => {
+  state.quote = [];
+  renderQuote();
+  el("quotationPaper").innerHTML = `<div class="quotation-placeholder">Generate quotation preview here.</div>`;
+  window.addEventListener("resize", fitQuotationPreview);
+});
       el("trackingBtn").addEventListener("click", () => trackOrder());
       setInterval(() => { el("clockText").textContent = new Date().toLocaleString(); }, 1000);
     }
