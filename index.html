@@ -23,7 +23,199 @@
       --shadow: 0 14px 42px rgba(11, 31, 58, .10);
       --radius: 8px;
     }
-    
+    .tracking-progress-card {
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  background: #fff;
+  padding: 14px;
+  display: grid;
+  gap: 12px;
+}
+
+.tracking-progress-bar {
+  height: 12px;
+  border-radius: 999px;
+  background: #e8f1fb;
+  overflow: hidden;
+}
+
+.tracking-progress-fill {
+  height: 100%;
+  border-radius: 999px;
+  background: linear-gradient(90deg, var(--blue), var(--green));
+}
+
+.tracking-note-box {
+  border: 1px solid #dbe8f8;
+  border-radius: var(--radius);
+  background: #f8fbff;
+  padding: 11px 12px;
+  color: var(--ink);
+  font-weight: 700;
+}
+
+.tracking-photo-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(110px, 1fr));
+  gap: 10px;
+}
+
+.tracking-photo-grid img {
+  width: 100%;
+  aspect-ratio: 1 / 1;
+  object-fit: cover;
+  border-radius: var(--radius);
+  border: 1px solid var(--line);
+  background: #fff;
+}
+
+.order-update-preview {
+  max-width: 100%;
+  max-height: 170px;
+  object-fit: contain;
+  border-radius: var(--radius);
+  border: 1px solid var(--line);
+  margin-top: 8px;
+}
+    .srp-layout {
+  display: grid;
+  grid-template-columns: minmax(0, .95fr) minmax(360px, 1.05fr);
+  gap: 14px;
+  align-items: start;
+}
+
+.srp-form-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 10px;
+}
+
+.srp-result {
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  background: #f8fbff;
+  padding: 14px;
+  display: grid;
+  gap: 8px;
+}
+
+.srp-result strong {
+  color: var(--navy);
+  font-size: clamp(1.3rem, 2.4vw, 2rem);
+}
+
+.srp-material-row {
+  border: 1px solid #dbe8f8;
+  border-radius: var(--radius);
+  background: #fff;
+  padding: 10px;
+  display: grid;
+  grid-template-columns: 1fr auto;
+  gap: 8px;
+  align-items: center;
+}
+
+.srp-timer {
+  min-height: 48px;
+  border-radius: var(--radius);
+  background: var(--navy);
+  color: #fff;
+  display: grid;
+  place-items: center;
+  font-weight: 900;
+}
+
+.pricelist-board {
+  background: #fff;
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  padding: 16px;
+}
+
+.pricelist-head {
+  background: var(--navy);
+  color: #fff;
+  border-radius: var(--radius);
+  padding: 14px;
+  margin-bottom: 12px;
+}
+
+@media (max-width: 980px) {
+  .srp-layout {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 560px) {
+  .srp-form-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .srp-material-row {
+    grid-template-columns: 1fr;
+  }
+}
+.srp-loading-modal {
+  border-radius: 8px;
+  padding: 26px;
+}
+
+.srp-loading-box {
+  display: grid;
+  gap: 16px;
+  place-items: center;
+  text-align: center;
+}
+
+.srp-loading-orbit {
+  width: 92px;
+  height: 92px;
+  border-radius: 50%;
+  border: 8px solid #eaf4ff;
+  border-top-color: var(--blue);
+  border-right-color: var(--green);
+  animation: srpSpin .9s linear infinite;
+  position: relative;
+}
+
+.srp-loading-orbit::after {
+  content: "₱";
+  position: absolute;
+  inset: 14px;
+  border-radius: 50%;
+  background: var(--navy);
+  color: #fff;
+  display: grid;
+  place-items: center;
+  font-size: 1.7rem;
+  font-weight: 900;
+}
+
+.srp-loading-steps {
+  width: 100%;
+  display: grid;
+  gap: 8px;
+  text-align: left;
+}
+
+.srp-loading-step {
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  padding: 10px 12px;
+  color: var(--muted);
+  font-weight: 800;
+  background: #f8fbff;
+}
+
+.srp-loading-step.active {
+  color: var(--navy);
+  border-color: #9bc7f5;
+  background: #eef7ff;
+}
+
+@keyframes srpSpin {
+  to { transform: rotate(360deg); }
+}
     .jkm-modal-card {
   text-align: left;
   border: 1px solid var(--line);
@@ -1046,31 +1238,7 @@
       margin-bottom: 12px;
     }
     .login-error.show { display: block; }
-    .qr-card {
-      display: grid;
-      gap: 12px;
-      justify-items: center;
-    }
-    .qr-frame {
-      width: 240px;
-      min-height: 240px;
-      display: grid;
-      place-items: center;
-      border: 1px solid var(--line);
-      border-radius: var(--radius);
-      background: white;
-      padding: 10px;
-    }
-    .qr-link {
-      width: 100%;
-      word-break: break-all;
-      border: 1px solid var(--line);
-      border-radius: var(--radius);
-      background: #f8fbff;
-      color: var(--muted);
-      padding: 10px;
-      font-size: .84rem;
-    }
+
     .mobile-menu { display: none; }
     @media (max-width: 1120px) {
       .metric-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
@@ -1379,7 +1547,7 @@ max-height: none !important;
         </div>
         <div class="d-grid gap-2 mt-3">
           <button class="btn btn-primary btn-lg fw-bold" type="submit"><i data-lucide="log-in" class="icon"></i> Login</button>
-          <button class="btn btn-outline-dark fw-bold" type="button" id="publicTrackBtn"><i data-lucide="qr-code" class="icon"></i> Track Order</button>
+          <button class="btn btn-outline-dark fw-bold" type="button" id="publicTrackBtn"><i data-lucide="search" class="icon"></i> Track Order</button>
         </div>
         <div class="login-note">Customers do not need an account. Use Track Order to check order status.</div>
       </form>
@@ -1414,7 +1582,7 @@ max-height: none !important;
         <div class="top-actions">
           <button class="btn btn-primary fw-bold" id="newOrderBtn"><i data-lucide="shopping-cart" class="icon"></i> POS</button>
           <button class="btn btn-outline-primary fw-bold" id="quoteBtn"><i data-lucide="file-text" class="icon"></i> Quotation</button>
-          <button class="btn btn-outline-dark fw-bold" id="trackBtn"><i data-lucide="qr-code" class="icon"></i> Track</button>
+          <button class="btn btn-outline-dark fw-bold" id="trackBtn"><i data-lucide="search" class="icon"></i> Track</button>
         </div>
       </div>
 
@@ -1631,6 +1799,7 @@ max-height: none !important;
         </div>
       </section>
 
+
 <section class="view" id="quotationView">
   <div class="quotation-layout">
 
@@ -1714,11 +1883,107 @@ max-height: none !important;
   </div>
 </section>
 
+<section class="view" id="srpView">
+  <div class="srp-layout">
+    <div class="panel panel-pad">
+      <div class="d-flex justify-content-between align-items-center gap-2 flex-wrap mb-3">
+        <div>
+          <h5 class="m-0 fw-black">Aesthetic Automated SRP Generator</h5>
+          <div class="text-secondary small">Select materials from inventory, add costs, then generate SRP.</div>
+        </div>
+      </div>
+
+     <div class="srp-form-grid mb-3">
+  <input class="form-control" id="srpProductName" placeholder="Product name">
+
+  <select class="form-select" id="srpOutputQty">
+    <option value="1">Output: 1 pc</option>
+    <option value="5">Output: 5 pcs</option>
+    <option value="10">Output: 10 pcs</option>
+    <option value="25">Output: 25 pcs</option>
+    <option value="50">Output: 50 pcs</option>
+    <option value="100">Output: 100 pcs</option>
+  </select>
+
+  <select class="form-select" id="srpLaborPreset"></select>
+  <select class="form-select" id="srpElectricityPreset"></select>
+  <select class="form-select" id="srpMaintenancePreset"></select>
+  <select class="form-select" id="srpMarkupPreset"></select>
+</div>
+
+      <div class="row g-2 mb-3">
+        <div class="col-md-7">
+          <select class="form-select" id="srpMaterialSelect"></select>
+        </div>
+        <div class="col-md-3">
+          <select class="form-select" id="srpMaterialQty">
+              <option value="1">Use 1 pc/unit</option>
+              <option value="2">Use 2 pcs/units</option>
+              <option value="5">Use 5 pcs/units</option>
+              <option value="10">Use 10 pcs/units</option>
+              <option value="25">Use 25 pcs/units</option>
+              <option value="50">Use 50 pcs/units</option>
+              <option value="100">Use 100 pcs/units</option>
+</select>
+        </div>
+        <div class="col-md-2 d-grid">
+          <button class="btn btn-outline-primary fw-bold" id="addSrpMaterialBtn" type="button">Add</button>
+        </div>
+      </div>
+
+      <div id="srpSelectedMaterials" class="d-grid gap-2 mb-3"></div>
+
+      <div class="srp-timer mb-3" id="srpTimer">Ready to generate</div>
+
+      <div class="d-grid gap-2">
+        <button class="btn btn-primary fw-bold" id="generateSrpBtn" type="button">
+          Generate SRP
+        </button>
+      </div>
+    </div>
+
+    <div class="panel panel-pad">
+      <div class="srp-result mb-3" id="srpResult">
+        <span class="text-secondary fw-bold">Generated SRP will appear here.</span>
+      </div>
+
+      <div class="d-flex justify-content-between align-items-center gap-2 flex-wrap mb-2">
+        <h5 class="m-0 fw-black">Price List</h5>
+        <button class="btn btn-outline-primary fw-bold" id="savePriceListImageBtn" type="button">
+          Save as Image
+        </button>
+      </div>
+
+      <div class="pricelist-board" id="priceListExport">
+        <div class="pricelist-head">
+          <strong>JKM Prime Digital Prints</strong>
+          <div>Automated SRP Price List</div>
+        </div>
+        <div class="table-responsive">
+          <table class="data-table">
+            <thead>
+              <tr>
+                  <th>Product</th>
+                  <th>Cost / Pc</th>
+                  <th>SRP / Pc</th>
+                  <th>Qty</th>
+                  <th>Total SRP</th>
+                  <th>Action</th>
+                </tr>
+            </thead>
+            <tbody id="srpPriceRows"></tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
 <section class="view" id="customerView">
   <div class="panel panel-pad tracking-card">
     <div class="text-center">
       <h3 class="fw-black text-primary">Order Tracking</h3>
-      <p class="text-secondary mb-3">Scan a QR code or enter your order ID.</p>
+      <p class="text-secondary mb-3">Enter your order ID to check your order status.</p>
     </div>
 
     <div class="row g-2 mb-3">
@@ -1730,7 +1995,6 @@ max-height: none !important;
       </div>
     </div>
 
-    <div class="text-center mb-3" id="qrBox"></div>
     <div id="trackingResult"></div>
 
     <div class="tracking-steps">
@@ -1753,7 +2017,6 @@ max-height: none !important;
   <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11.12.4/dist/sweetalert2.all.min.js"></script>
   <script src="https://cdn.socket.io/4.7.5/socket.io.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.3/dist/chart.umd.min.js"></script>
-  <script src="https://cdn.jsdelivr.net/npm/qrcode@1.5.3/build/qrcode.min.js"></script>
   <script src="https://unpkg.com/lucide@latest/dist/umd/lucide.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/jspdf@2.5.1/dist/jspdf.umd.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/jspdf-autotable@3.8.2/dist/jspdf.plugin.autotable.min.js"></script>
@@ -1897,6 +2160,9 @@ max-height: none !important;
       category: "ALL",
       cart: [],
       quote: [],
+      srpMaterials: [],
+      srpList: [],
+      srpGenerating: false,
       orders: [],
       materials: [],
       equipment: [],
@@ -2057,7 +2323,7 @@ max-height: none !important;
     }
 
     function allowedViews(role) {
-      if (role === "Admin") return ["dashboard", "pos", "orders", "inventory", "equipment", "expenses", "reconcile", "quotation", "customer"];
+      if (role === "Admin") return ["dashboard", "pos", "orders", "inventory", "equipment", "expenses", "reconcile", "quotation", "srp", "customer"];
       return ["customer"];
     }
 
@@ -2071,7 +2337,8 @@ max-height: none !important;
         ["expenses", "Expenses", "wallet-cards", ["Admin"]],
         ["reconcile", "Reconciliation", "calculator", ["Admin"]],
         ["quotation", "Quotation", "file-text", ["Admin"]],
-        ["customer", "Order Tracking", "qr-code", ["Admin", "Public"]]
+        ["srp", "SRP Generator", "calculator", ["Admin"]],
+       ["customer", "Order Tracking", "search", ["Admin", "Public"]]
       ].filter(item => item[3].includes(state.role));
     }
 
@@ -2351,6 +2618,10 @@ max-height: none !important;
         cash,
         change: cash - total,
         status: "Pending",
+        finishedQty: 0,
+        targetQty: state.cart.reduce((sum, item) => sum + Number(item.qty || 0), 0),
+        trackingNotes: "",
+        trackingPhotos: [],
         admin: state.user,
         role: state.role,
         createdAt: new Date().toISOString()
@@ -2747,6 +3018,7 @@ async function viewOrderDetails(id) {
   const order = state.orders.find(o => o.id === id);
   if (!order) return;
 
+  const progressSummary = `${Number(order.finishedQty || 0)} / ${orderTotalQty(order)} pcs (${orderProgressPercent(order)}%)`;
   const rows = (order.items || []).map(item => `
     <tr>
       <td>${safe(item.category)}</td>
@@ -2768,7 +3040,12 @@ async function viewOrderDetails(id) {
           <div><strong>Status:</strong> <span class="status-badge status-${order.status.replaceAll(" ", "-")}">${safe(order.status)}</span></div>
           <div><strong>Date:</strong> ${new Date(order.createdAt).toLocaleString()}</div>
         </div>
-
+         
+<div class="alert alert-primary">
+  Production Progress: <strong>${progressSummary}</strong><br>
+  Notes: ${safe(order.trackingNotes || "No notes yet.")}
+</div>
+        
         <div class="table-responsive">
           <table class="data-table">
             <thead>
@@ -2954,6 +3231,121 @@ async function exportOrdersPdf() {
   doc.save(`JKM-Live-Orders-${todayKey(new Date())}.pdf`);
 }
 
+function fileToDataUrl(file) {
+  return new Promise((resolve, reject) => {
+    if (!file) return resolve("");
+    const reader = new FileReader();
+    reader.onload = () => resolve(reader.result);
+    reader.onerror = reject;
+    reader.readAsDataURL(file);
+  });
+}
+
+function orderTotalQty(order) {
+  return Number(order.targetQty || (order.items || []).reduce((sum, item) => sum + Number(item.qty || 0), 0));
+}
+
+function orderProgressPercent(order) {
+  const total = Math.max(1, orderTotalQty(order));
+  const done = Math.min(total, Number(order.finishedQty || 0));
+  return Math.round((done / total) * 100);
+}
+
+async function updateOrderProgress(id) {
+  const order = state.orders.find(o => o.id === id);
+  if (!order) return;
+
+  const totalQty = orderTotalQty(order);
+  const photos = Array.isArray(order.trackingPhotos) ? order.trackingPhotos : [];
+
+  const res = await SwalFire.fire({
+    title: `Update ${order.id}`,
+    html: `
+      <div class="jkm-modal-card">
+        <div class="jkm-modal-head">
+          <strong>Production Progress</strong>
+          <span>${safe(order.customer)} · ${safe(order.status)}</span>
+        </div>
+
+        <div class="jkm-form-grid">
+          <div class="jkm-field">
+            <label>Finished Pieces</label>
+            <input id="progressDone" type="number" min="0" value="${Number(order.finishedQty || 0)}">
+          </div>
+
+          <div class="jkm-field">
+            <label>Total Pieces</label>
+            <input id="progressTotal" type="number" min="1" value="${totalQty}">
+          </div>
+
+          <div class="jkm-field full">
+            <label>Notes</label>
+            <input id="progressNotes" value="${safe(order.trackingNotes || "")}" placeholder="Example: Printing done, for cutting na.">
+          </div>
+
+          <div class="jkm-field full">
+            <label>Upload Picture</label>
+            <input id="progressPhoto" type="file" accept="image/*">
+            <div id="progressPhotoPreview"></div>
+          </div>
+        </div>
+      </div>
+    `,
+    showCancelButton: true,
+    confirmButtonText: "Save Update",
+    customClass: { popup: "professional-modal" },
+    didOpen: () => {
+      const fileInput = document.getElementById("progressPhoto");
+      const preview = document.getElementById("progressPhotoPreview");
+
+      fileInput.addEventListener("change", () => {
+        const file = fileInput.files?.[0];
+        if (!file) {
+          preview.innerHTML = "";
+          return;
+        }
+
+        const url = URL.createObjectURL(file);
+        preview.innerHTML = `<img class="order-update-preview" src="${url}" alt="Progress preview">`;
+      });
+    },
+    preConfirm: async () => {
+      const file = document.getElementById("progressPhoto").files?.[0];
+      const imageData = await fileToDataUrl(file);
+
+      return {
+        finishedQty: Number(document.getElementById("progressDone").value || 0),
+        targetQty: Number(document.getElementById("progressTotal").value || totalQty),
+        trackingNotes: document.getElementById("progressNotes").value.trim(),
+        imageData
+      };
+    }
+  });
+
+  if (!res.value) return;
+
+  order.finishedQty = Math.max(0, res.value.finishedQty);
+  order.targetQty = Math.max(1, res.value.targetQty);
+  order.trackingNotes = res.value.trackingNotes;
+  order.trackingPhotos = photos;
+
+  if (res.value.imageData) {
+    order.trackingPhotos.unshift({
+      src: res.value.imageData,
+      note: res.value.trackingNotes,
+      createdAt: new Date().toISOString()
+    });
+  }
+
+  order.updatedAt = new Date().toISOString();
+
+  await syncDoc("orders", order);
+  logActivity(`Updated production progress for ${order.id}`);
+  renderAll();
+
+  SwalFire.fire("Saved", "Customer tracking has been updated.", "success");
+}
+
     function renderOrders() {
   const filteredOrders = filteredLiveOrders();
 
@@ -2967,16 +3359,21 @@ async function exportOrdersPdf() {
       <td>
         <div class="d-flex gap-1 flex-wrap">
           <button class="icon-btn" data-view-order="${order.id}" title="View details"><i data-lucide="eye"></i></button>
+          <button class="icon-btn" data-update-progress="${order.id}" title="Update progress">
+  <i data-lucide="clipboard-pen"></i>
+</button>
           <select class="form-select form-select-sm" data-status="${order.id}" style="width:140px">${statuses.map(s => `<option ${s === order.status ? "selected" : ""}>${s}</option>`).join("")}</select>
           <button class="icon-btn" data-print="${order.id}" title="Print"><i data-lucide="printer"></i></button>
 <button class="icon-btn" data-export-receipt="${order.id}" title="Export receipt image"><i data-lucide="image-down"></i></button>
-<button class="icon-btn" data-qr="${order.id}" title="QR"><i data-lucide="qr-code"></i></button>
 <button class="icon-btn" data-delete-order="${order.id}" title="Delete order"><i data-lucide="trash-2"></i></button>
         </div>
       </td>
     </tr>`).join("") || `<tr><td colspan="6" class="text-center text-secondary py-4">No orders match the selected filters.</td></tr>`;
 
   document.querySelectorAll("[data-view-order]").forEach(btn => btn.addEventListener("click", () => viewOrderDetails(btn.dataset.viewOrder)));
+  document.querySelectorAll("[data-update-progress]").forEach(btn => {
+  btn.addEventListener("click", () => updateOrderProgress(btn.dataset.updateProgress));
+});
   document.querySelectorAll("[data-status]").forEach(sel => sel.addEventListener("change", () => updateOrderStatus(sel.dataset.status, sel.value)));
   document.querySelectorAll("[data-print]").forEach(btn => btn.addEventListener("click", () => printReceipt(state.orders.find(o => o.id === btn.dataset.print))));
   document.querySelectorAll("[data-print]").forEach(btn => btn.addEventListener("click", () => printReceipt(state.orders.find(o => o.id === btn.dataset.print))));
@@ -2987,9 +3384,7 @@ document.querySelectorAll("[data-export-receipt]").forEach(btn =>
   )
 );
 
-document.querySelectorAll("[data-qr]").forEach(btn => btn.addEventListener("click", () => showOrderQr(btn.dataset.qr)));
 document.querySelectorAll("[data-delete-order]").forEach(btn => btn.addEventListener("click", () => deleteOrder(btn.dataset.deleteOrder)));
-  document.querySelectorAll("[data-qr]").forEach(btn => btn.addEventListener("click", () => showOrderQr(btn.dataset.qr)));
   document.querySelectorAll("[data-delete-order]").forEach(btn => btn.addEventListener("click", () => deleteOrder(btn.dataset.deleteOrder)));
 
   lucide.createIcons();
@@ -3191,11 +3586,29 @@ document.querySelectorAll("[data-delete-order]").forEach(btn => btn.addEventList
         .reduce((sum, order) => sum + Number(order.total || 0), 0);
     }
 
-    function monthlyExpenses(month = monthKey(new Date())) {
-      return state.expenses
-        .filter(expense => monthKey(expense.date || expense.createdAt) === month)
-        .reduce((sum, expense) => sum + Number(expense.amount || 0), 0);
-    }
+  function isMaintenanceExpense(expense) {
+  return String(expense.category || "").toLowerCase() === "maintenance";
+}
+
+function monthlyExpenses(month = monthKey(new Date())) {
+  return state.expenses
+    .filter(expense => monthKey(expense.date || expense.createdAt) === month)
+    .reduce((sum, expense) => sum + Number(expense.amount || 0), 0);
+}
+
+function monthlyOperatingExpenses(month = monthKey(new Date())) {
+  return state.expenses
+    .filter(expense => monthKey(expense.date || expense.createdAt) === month)
+    .filter(expense => !isMaintenanceExpense(expense))
+    .reduce((sum, expense) => sum + Number(expense.amount || 0), 0);
+}
+
+function monthlyMaintenanceExpenses(month = monthKey(new Date())) {
+  return state.expenses
+    .filter(expense => monthKey(expense.date || expense.createdAt) === month)
+    .filter(isMaintenanceExpense)
+    .reduce((sum, expense) => sum + Number(expense.amount || 0), 0);
+}
 
     function archiveMonths() {
       const months = new Set([ARCHIVE_START_MONTH, monthKey(new Date())]);
@@ -3213,19 +3626,24 @@ document.querySelectorAll("[data-delete-order]").forEach(btn => btn.addEventList
       return [...months].filter(Boolean).sort().reverse();
     }
 
-    function shareBreakdown(sales, expenses) {
-      const net = Number(sales || 0) - Number(expenses || 0);
-      return {
-        net,
-        mark: net * .30,
-        kaye: net * .30,
-        jobelle: net * .30,
-        maintenance: net * .10
-      };
-    }
+    function shareBreakdown(sales, expenses, maintenanceExpenses = 0) {
+  const net = Number(sales || 0) - Number(expenses || 0);
+  const maintenanceShare = net * .10;
+  const maintenanceBalance = maintenanceShare - Number(maintenanceExpenses || 0);
 
-    function renderShareCards(targetId, sales, expenses) {
-      const shares = shareBreakdown(sales, expenses);
+  return {
+    net,
+    mark: net * .30,
+    kaye: net * .30,
+    jobelle: net * .30,
+    maintenance: maintenanceBalance,
+    maintenanceShare,
+    maintenanceExpenses: Number(maintenanceExpenses || 0)
+  };
+}
+
+function renderShareCards(targetId, sales, expenses, maintenanceExpenses = 0) {
+  const shares = shareBreakdown(sales, expenses, maintenanceExpenses);
       el(targetId).innerHTML = [
         ["Mark", "30%", shares.mark],
         ["Kaye", "30%", shares.kaye],
@@ -3403,12 +3821,14 @@ document.querySelectorAll("[data-delete-order]").forEach(btn => btn.addEventList
 }
     function renderReconciliation() {
       const currentSales = monthlySales();
-      const currentExpenses = monthlyExpenses();
-      renderShareCards("reconShareCards", currentSales, currentExpenses);
+const currentExpenses = monthlyOperatingExpenses();
+const currentMaintenanceExpenses = monthlyMaintenanceExpenses();
+renderShareCards("reconShareCards", currentSales, currentExpenses, currentMaintenanceExpenses);
       el("reconRows").innerHTML = archiveMonths().map(month => {
         const sales = monthlySales(month);
-        const expenses = monthlyExpenses(month);
-        const shares = shareBreakdown(sales, expenses);
+        const expenses = monthlyOperatingExpenses(month);
+const maintenanceExpenses = monthlyMaintenanceExpenses(month);
+const shares = shareBreakdown(sales, expenses, maintenanceExpenses);
         return `<tr>
           <td><strong>${safe(month)}</strong></td>
           <td>${peso.format(sales)}</td>
@@ -3668,8 +4088,9 @@ async function saveQuotationImage() {
       const today = completed.filter(o => todayKey(o.createdAt) === todayKey(now)).reduce((s, o) => s + Number(o.total), 0);
       const week = completed.filter(o => new Date(o.createdAt) >= startWeek).reduce((s, o) => s + Number(o.total), 0);
       const month = completed.filter(o => monthKey(o.createdAt) === monthKey(now)).reduce((s, o) => s + Number(o.total), 0);
-      const expenses = monthlyExpenses(monthKey(now));
-      const shares = renderShareCards("dashboardShareCards", month, expenses);
+     const expenses = monthlyOperatingExpenses(monthKey(now));
+const maintenanceExpenses = monthlyMaintenanceExpenses(monthKey(now));
+const shares = renderShareCards("dashboardShareCards", month, expenses, maintenanceExpenses);
       el("todayIncome").textContent = peso.format(today);
       el("weekIncome").textContent = peso.format(week);
       el("monthIncome").textContent = peso.format(month);
@@ -3730,56 +4151,411 @@ async function saveQuotationImage() {
       el("activityRows").innerHTML = state.activities.slice(0, 8).map(a => `<tr><td>${safe(a.user)}</td><td>${safe(a.role)}</td><td>${safe(a.action)}</td><td>${new Date(a.time).toLocaleTimeString()}</td></tr>`).join("") || `<tr><td colspan="4" class="text-center text-secondary py-4">No activity yet.</td></tr>`;
     }
 
-    async function showOrderQr(id) {
-      const order = state.orders.find(o => o.id === id);
-      const url = trackingUrl(id);
-      const qrMarkup = await createQrMarkup(url, 220);
-      SwalFire.fire({
-        title: `Track ${id}`,
-        html: `
-          <div class="qr-card">
-            <div class="qr-frame">${qrMarkup}</div>
-            <div class="text-secondary">Scan to view live order status${order ? ` for ${safe(order.customer)}` : ""}.</div>
-            <div class="qr-link">${safe(url)}</div>
-          </div>`,
-        confirmButtonText: "Done"
-      });
-    }
-
     async function trackOrder(id = el("trackingInput").value.trim()) {
-      const order = state.orders.find(o => o.id === id);
-      document.querySelectorAll(".step").forEach(step => step.classList.toggle("active", order && statuses.indexOf(step.dataset.step) <= statuses.indexOf(order.status)));
-      if (!order) {
-        el("trackingResult").innerHTML = `<div class="alert alert-warning">Order not found. Please check the order ID.</div>`;
-        el("qrBox").innerHTML = "";
-        return;
-      }
-      el("trackingResult").innerHTML = `<div class="alert alert-primary"><strong>${safe(order.id)}</strong><br>${safe(order.customer)} · ${peso.format(order.total)}<br>Status: <span class="status-badge status-${order.status.replaceAll(" ", "-")}">${safe(order.status)}</span></div>`;
-      const url = trackingUrl(order.id);
-      el("qrBox").innerHTML = await createQrMarkup(url, 180);
-    }
+  const order = state.orders.find(o => o.id === id);
 
+  document.querySelectorAll(".step").forEach(step => {
+    step.classList.toggle(
+      "active",
+      order && statuses.indexOf(step.dataset.step) <= statuses.indexOf(order.status)
+    );
+  });
+
+  if (!order) {
+    el("trackingResult").innerHTML = `<div class="alert alert-warning">Order not found. Please check the order ID.</div>`;
+    el("qrBox").innerHTML = "";
+    return;
+  }
+
+  const totalQty = orderTotalQty(order);
+  const finishedQty = Math.min(totalQty, Number(order.finishedQty || 0));
+  const percent = orderProgressPercent(order);
+
+  const itemsHtml = (order.items || []).map(item => `
+    <tr>
+      <td><strong>${safe(item.name)}</strong><div class="text-secondary small">${safe(item.category)}</div></td>
+      <td class="text-center">${safe(item.qty)}</td>
+      <td class="text-end">${peso.format(item.price)}</td>
+      <td class="text-end"><strong>${peso.format(item.price * item.qty)}</strong></td>
+    </tr>
+  `).join("");
+
+  const photosHtml = (order.trackingPhotos || []).map(photo => `
+    <a href="${photo.src}" target="_blank" title="${safe(photo.note || "Progress photo")}">
+      <img src="${photo.src}" alt="Progress photo">
+    </a>
+  `).join("");
+
+  el("trackingResult").innerHTML = `
+    <div class="tracking-progress-card">
+      <div class="d-flex justify-content-between align-items-start gap-2 flex-wrap">
+        <div>
+          <div class="text-secondary small fw-bold">ORDER ID</div>
+          <h4 class="m-0 fw-black text-primary">${safe(order.id)}</h4>
+          <div class="mt-1"><strong>${safe(order.customer)}</strong></div>
+        </div>
+        <span class="status-badge status-${order.status.replaceAll(" ", "-")}">${safe(order.status)}</span>
+      </div>
+
+      <div>
+        <div class="d-flex justify-content-between small fw-bold mb-1">
+          <span>Production Progress</span>
+          <span>${finishedQty} / ${totalQty} pcs · ${percent}%</span>
+        </div>
+        <div class="tracking-progress-bar">
+          <div class="tracking-progress-fill" style="width:${percent}%"></div>
+        </div>
+      </div>
+
+      <div class="table-responsive">
+        <table class="data-table">
+          <thead>
+            <tr>
+              <th>Order</th>
+              <th>Qty</th>
+              <th>Unit</th>
+              <th>Total</th>
+            </tr>
+          </thead>
+          <tbody>
+            ${itemsHtml || `<tr><td colspan="4" class="text-center text-secondary py-3">No order items listed.</td></tr>`}
+          </tbody>
+        </table>
+      </div>
+
+      <div class="d-flex justify-content-between gap-2 flex-wrap">
+        <div><span class="text-secondary small fw-bold">TOTAL</span><br><strong>${peso.format(order.total)}</strong></div>
+        <div><span class="text-secondary small fw-bold">DATE</span><br><strong>${new Date(order.createdAt).toLocaleString()}</strong></div>
+      </div>
+
+      <div>
+        <div class="text-secondary small fw-bold mb-1">ADMIN NOTES</div>
+        <div class="tracking-note-box">${safe(order.trackingNotes || "No notes yet.")}</div>
+      </div>
+
+      <div>
+        <div class="text-secondary small fw-bold mb-2">PROGRESS PHOTOS</div>
+        <div class="tracking-photo-grid">
+          ${photosHtml || `<div class="text-secondary small">No uploaded photos yet.</div>`}
+        </div>
+      </div>
+    </div>
+  `;
+}
     function trackingUrl(id) {
       const cleanUrl = location.href.split("#")[0];
       return `${cleanUrl}#track=${encodeURIComponent(id)}`;
     }
 
-    async function createQrMarkup(text, size = 220) {
-      try {
-        if (!window.QRCode) throw new Error("QRCode library not loaded");
-        const canvas = document.createElement("canvas");
-        await QRCode.toCanvas(canvas, text, {
-          width: size,
-          margin: 2,
-          errorCorrectionLevel: "M",
-          color: { dark: "#0b1f3a", light: "#ffffff" }
+const srpPresets = {
+  labor: [
+    { label: "No labor - ₱0", value: 0 },
+    { label: "Light work - ₱20", value: 20 },
+    { label: "Standard work - ₱50", value: 50 },
+    { label: "Detailed work - ₱100", value: 100 },
+    { label: "Rush/custom work - ₱150", value: 150 }
+  ],
+  electricity: [
+    { label: "No electricity - ₱0", value: 0 },
+    { label: "Small print/run - ₱5", value: 5 },
+    { label: "Standard print/run - ₱15", value: 15 },
+    { label: "Heavy machine use - ₱30", value: 30 },
+    { label: "Long production - ₱50", value: 50 }
+  ],
+  maintenance: [
+    { label: "No maintenance - ₱0", value: 0 },
+    { label: "Light wear - ₱5", value: 5 },
+    { label: "Standard wear - ₱15", value: 15 },
+    { label: "Machine-heavy wear - ₱30", value: 30 },
+    { label: "Premium allowance - ₱50", value: 50 }
+  ],
+  markup: [
+    { label: "Budget SRP - 25%", value: 25 },
+    { label: "Standard SRP - 40%", value: 40 },
+    { label: "Good profit - 60%", value: 60 },
+    { label: "Premium/custom - 80%", value: 80 },
+    { label: "Rush/high demand - 100%", value: 100 }
+  ]
+};
+
+function renderSrpPresets() {
+  const fill = (id, rows) => {
+    const select = el(id);
+    if (!select) return;
+    select.innerHTML = rows.map(row => `<option value="${row.value}">${safe(row.label)}</option>`).join("");
+  };
+
+  fill("srpLaborPreset", srpPresets.labor);
+  fill("srpElectricityPreset", srpPresets.electricity);
+  fill("srpMaintenancePreset", srpPresets.maintenance);
+  fill("srpMarkupPreset", srpPresets.markup);
+}
+
+function materialUnitCost(material) {
+  return Number(material.pricePerPack || 0) / Math.max(1, Number(material.quantityPerPack || 1));
+}
+
+function renderSrpMaterialOptions() {
+  const select = el("srpMaterialSelect");
+  if (!select) return;
+
+  select.innerHTML = state.materials.map(m => {
+    const unitCost = materialUnitCost(m);
+    return `<option value="${m.id}">
+      ${safe(m.name)} - ${peso.format(unitCost)} per pc/unit - Stock: ${safe(m.stock)}
+    </option>`;
+  }).join("");
+}
+
+function addSrpMaterial() {
+  const material = state.materials.find(m => m.id === el("srpMaterialSelect").value);
+  if (!material) return;
+
+  const neededQty = Number(el("srpMaterialQty").value || 0);
+  if (neededQty <= 0) return SwalFire.fire("Invalid qty", "Enter material quantity needed.", "info");
+
+  const unitCost = materialUnitCost(material);
+
+  state.srpMaterials.push({
+    id: crypto.randomUUID(),
+    materialId: material.id,
+    name: material.name,
+    unit: material.unit,
+    neededQty,
+    unitCost,
+    totalCost: unitCost * neededQty
+  });
+
+  renderSrpMaterials();
+}
+
+function renderSrpMaterials() {
+  const box = el("srpSelectedMaterials");
+  if (!box) return;
+
+  box.innerHTML = state.srpMaterials.map(item => `
+    <div class="srp-material-row">
+      <div>
+        <strong>${safe(item.name)}</strong>
+        <div class="text-secondary small">
+          Needed: ${safe(item.neededQty)} ${safe(item.unit)} · ${peso.format(item.unitCost)} each · ${peso.format(item.totalCost)}
+        </div>
+      </div>
+      <button class="icon-btn" data-remove-srp-material="${item.id}" title="Remove">
+        <i data-lucide="x"></i>
+      </button>
+    </div>
+  `).join("") || `<div class="text-secondary text-center py-3">No selected materials yet.</div>`;
+
+  document.querySelectorAll("[data-remove-srp-material]").forEach(btn => {
+    btn.addEventListener("click", () => {
+      state.srpMaterials = state.srpMaterials.filter(item => item.id !== btn.dataset.removeSrpMaterial);
+      renderSrpMaterials();
+    });
+  });
+
+  lucide.createIcons();
+}
+
+function calculateSrp() {
+  const productName = el("srpProductName").value.trim() || "Custom Product";
+  const outputQty = Math.max(1, Number(el("srpOutputQty").value || 1));
+  const labor = Number(el("srpLaborPreset").value || 0);
+const electricity = Number(el("srpElectricityPreset").value || 0);
+const maintenance = Number(el("srpMaintenancePreset").value || 0);
+const markup = Number(el("srpMarkupPreset").value || 0);
+
+  const materialCost = state.srpMaterials.reduce((sum, item) => sum + Number(item.totalCost || 0), 0);
+  const totalCost = materialCost + labor + electricity + maintenance;
+  const costPerPc = totalCost / outputQty;
+  const srpPerPc = costPerPc * (1 + markup / 100);
+  const totalSrp = srpPerPc * outputQty;
+
+  return {
+    id: crypto.randomUUID(),
+    productName,
+    outputQty,
+    materialCost,
+    labor,
+    electricity,
+    maintenance,
+    markup,
+    totalCost,
+    costPerPc,
+    srpPerPc,
+    totalSrp,
+    materials: structuredClone(state.srpMaterials),
+    createdAt: new Date().toISOString()
+  };
+}
+
+function renderSrpResult(item) {
+  el("srpResult").innerHTML = `
+    <span class="text-secondary fw-bold">${safe(item.productName)}</span>
+    <strong>${peso.format(item.srpPerPc)} / pc</strong>
+    <div class="row g-2">
+      <div class="col-6"><div class="small text-secondary">Cost / Pc</div><b>${peso.format(item.costPerPc)}</b></div>
+      <div class="col-6"><div class="small text-secondary">Total SRP</div><b>${peso.format(item.totalSrp)}</b></div>
+      <div class="col-6"><div class="small text-secondary">Materials</div><b>${peso.format(item.materialCost)}</b></div>
+      <div class="col-6"><div class="small text-secondary">Markup</div><b>${safe(item.markup)}%</b></div>
+    </div>
+  `;
+}
+
+async function generateSrpWithTimer() {
+  if (state.srpGenerating) return;
+
+  if (!state.srpMaterials.length) {
+    return SwalFire.fire("No materials", "Select at least one material from inventory.", "info");
+  }
+
+  state.srpGenerating = true;
+  el("srpTimer").textContent = "Generating SRP...";
+
+  const steps = [
+    "Reading selected materials",
+    "Computing cost per pc",
+    "Applying labor and machine presets",
+    "Finalizing selling price"
+  ];
+
+  let currentStep = 0;
+
+  SwalFire.fire({
+    title: "Generating SRP",
+    html: `
+      <div class="srp-loading-box">
+        <div class="srp-loading-orbit"></div>
+        <div>
+          <strong id="srpLoadingTitle">Preparing calculation...</strong>
+          <div class="text-secondary small">Please wait while the system computes your final price.</div>
+        </div>
+        <div class="srp-loading-steps">
+          ${steps.map((step, index) => `
+            <div class="srp-loading-step" id="srpStep${index}">
+              ${index + 1}. ${step}
+            </div>
+          `).join("")}
+        </div>
+      </div>
+    `,
+    showConfirmButton: false,
+    allowOutsideClick: false,
+    allowEscapeKey: false,
+    customClass: {
+      popup: "srp-loading-modal professional-modal"
+    },
+    didOpen: () => {
+      const updateStep = () => {
+        steps.forEach((_, index) => {
+          const stepEl = document.getElementById(`srpStep${index}`);
+          if (stepEl) stepEl.classList.toggle("active", index <= currentStep);
         });
-        return `<img src="${canvas.toDataURL("image/png")}" alt="QR code" width="${size}" height="${size}">`;
-      } catch (error) {
-        console.warn("QR render fallback:", error);
-        return `<div class="alert alert-warning m-0">QR preview unavailable. Use the tracking link below.</div>`;
-      }
+
+        const title = document.getElementById("srpLoadingTitle");
+        if (title) title.textContent = steps[currentStep];
+
+        el("srpTimer").textContent = steps[currentStep];
+
+        currentStep += 1;
+
+        if (currentStep >= steps.length) {
+          clearInterval(stepTimer);
+
+          setTimeout(() => {
+            try {
+              const item = calculateSrp();
+
+              state.srpList.unshift(item);
+              renderSrpResult(item);
+              renderPriceList();
+
+              state.srpMaterials = [];
+              renderSrpMaterials();
+
+              el("srpTimer").textContent = "SRP generated and added to price list.";
+              state.srpGenerating = false;
+
+              SwalFire.fire({
+                icon: "success",
+                title: "SRP Generated",
+                html: `
+                  <strong>${safe(item.productName)}</strong><br>
+                  SRP per pc: <b>${peso.format(item.srpPerPc)}</b><br>
+                  Total SRP: <b>${peso.format(item.totalSrp)}</b>
+                `,
+                confirmButtonText: "Done",
+                customClass: { popup: "professional-modal" }
+              });
+
+              logActivity(`Generated SRP for ${item.productName}`);
+            } catch (error) {
+              console.error("SRP generation failed:", error);
+              state.srpGenerating = false;
+              el("srpTimer").textContent = "SRP generation failed.";
+
+              SwalFire.fire(
+                "SRP failed",
+                "May kulang na field or may JS error. Check product/output/material selections.",
+                "error"
+              );
+            }
+          }, 700);
+        }
+      };
+
+      updateStep();
+      var stepTimer = setInterval(updateStep, 850);
     }
+  });
+}
+
+function renderPriceList() {
+  const rows = el("srpPriceRows");
+  if (!rows) return;
+
+  rows.innerHTML = state.srpList.map(item => `
+    <tr>
+      <td><strong>${safe(item.productName)}</strong></td>
+      <td>${peso.format(item.costPerPc)}</td>
+      <td><strong>${peso.format(item.srpPerPc)}</strong></td>
+      <td>${safe(item.outputQty)}</td>
+      <td>${peso.format(item.totalSrp)}</td>
+      <td>
+        <button class="icon-btn" data-delete-srp="${item.id}" title="Delete SRP">
+          <i data-lucide="trash-2"></i>
+        </button>
+      </td>
+    </tr>
+  `).join("") || `<tr><td colspan="6" class="text-center text-secondary py-4">No generated SRP yet.</td></tr>`;
+
+  document.querySelectorAll("[data-delete-srp]").forEach(btn => {
+    btn.addEventListener("click", () => {
+      state.srpList = state.srpList.filter(item => item.id !== btn.dataset.deleteSrp);
+      renderPriceList();
+    });
+  });
+
+  lucide.createIcons();
+}
+
+async function savePriceListImage() {
+  if (!state.srpList.length) {
+    return SwalFire.fire("No price list", "Generate at least one SRP first.", "info");
+  }
+
+  const board = el("priceListExport");
+  const canvas = await html2canvas(board, {
+    backgroundColor: "#ffffff",
+    scale: 2,
+    useCORS: false
+  });
+
+  const link = document.createElement("a");
+  link.download = `srp-pricelist-${new Date().toISOString().slice(0, 10)}.png`;
+  link.href = canvas.toDataURL("image/png");
+  link.click();
+}
 
     function renderAll() {
       renderProducts();
@@ -3790,6 +4566,10 @@ async function saveQuotationImage() {
       renderExpenses();
       renderReconciliation();
       renderQuote();
+      renderSrpPresets();
+      renderSrpMaterialOptions();
+      renderSrpMaterials();
+      renderPriceList();
       renderDashboard();
       if (el("trackingInput").value.trim()) trackOrder();
     }
@@ -3801,6 +4581,9 @@ async function saveQuotationImage() {
       el("menuBtn").addEventListener("click", () => el("sidebar").classList.toggle("open"));
       el("newOrderBtn").addEventListener("click", () => showView("pos"));
       el("quoteBtn").addEventListener("click", () => showView("quotation"));
+      el("addSrpMaterialBtn").addEventListener("click", addSrpMaterial);
+el("generateSrpBtn").addEventListener("click", generateSrpWithTimer);
+el("savePriceListImageBtn").addEventListener("click", savePriceListImage);
       el("trackBtn").addEventListener("click", () => showView("customer"));
       el("logoutBtn").addEventListener("click", () => { localStorage.removeItem("jkm_session"); state.role = null; state.user = null; setAppAccess(null); });
       el("productSearch").addEventListener("input", renderProducts);
